@@ -1,0 +1,42 @@
+package com.bjtu.bookstore.service.impl;
+
+import com.bjtu.bookstore.entity.User;
+import com.bjtu.bookstore.mapper.UserMapper;
+import com.bjtu.bookstore.service.UserLoginInterface;
+import com.bjtu.bookstore.utils.encodeUtils.EncodeUtil;
+import com.bjtu.bookstore.utils.exceptionHandler.exception.DefinitionException;
+import com.bjtu.bookstore.utils.exceptionHandler.exception.ErrorEnum;
+import com.bjtu.bookstore.utils.token.JWTUtils;
+import com.bjtu.bookstore.utils.token.JwtUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ * @program: questionPlatform_back_end
+ * @description: username password login impl
+ * @author: CodingLiOOT
+ * @create: 2021-06-17 20:47
+ * @version: 1.0
+ **/
+@Component("password")
+public class PasswordLoginImpl implements UserLoginInterface {
+
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private EncodeUtil encodeUtil;
+    @Autowired
+    private JwtUserServiceImpl jwtUserService;
+    @Autowired
+    private JWTUtils jwtUtils;
+
+    @Override
+    public String userLogin(User user) {
+        User userBean = userMapper.selectUserByUserName(user.getUsername());
+        if (userBean == null || !encodeUtil.verifyEncode(user.getPassword(), userBean.getMail(), userBean.getPassword())) {
+            throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
+        }
+        JwtUser userDetails = (JwtUser) jwtUserService.loadUserByUsername(user.getUsername());
+        return jwtUtils.generateToken(userDetails);
+    }
+}

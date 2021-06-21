@@ -1,0 +1,42 @@
+server:
+  port: 8090
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  mvc:
+    static-path-pattern: /static/**
+  mail:
+    host: smtp.sina.com
+    username: gk2018bingo@sina.com
+    password: 2989ce3b3c5c9f4a
+    default-encoding: utf-8
+  datasource:
+    url: jdbc:mysql://rm-bp1gv201ox35t76r3uo.mysql.rds.aliyuncs.com:3306/bookstore?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: Ljz123hhh
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.bjtu.bookstore.entity
+logging:
+  config: ./src/main/resources/log4j2-spring.xml
+  level:
+    cn.jay.repository: trace
+
+jwt:
+  header: token
+  secret: CodingLiOOT
+  expiration: 2400000
+
+encode:
+  secret: CodingLiOOT
+mail:
+  fromMail:
+    addr: gk2018bingo@sina.com
+    subject: 主题：邮件验证码
