@@ -1,45 +1,36 @@
 <template>
-  <div class="register-wrapper">
-    <div class="register-content">
-      <div class="register-main">
+  <div class="forgetPassword-wrapper">
+    <div class="forgetPassword-content">
+      <div class="forgetPassword-main">
         <router-link to="/login" style="float: right">返回登录</router-link>
-        <h2 class="register-main-title" align="left">注册</h2>
+        <h2 class="forgetPassword-main-title" align="left">忘记密码</h2>
         <el-form
-          :model="RegisterForm"
-          :rules="RegisterRule"
-          ref="RegisterForm"
-          @keyup.enter.native="register()"
+          :model="ForgetForm"
+          :rules="ForgetRule"
+          ref="ForgetForm"
+          @keyup.enter.native="forgetPassword()"
           status-icon
         >
-          <el-form-item prop="userName">
-            <el-input
-              v-model="RegisterForm.userName"
-              placeholder="帐号"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
-              v-model="RegisterForm.password"
-              type="password"
-              placeholder="密码"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="confirmPassword">
-            <el-input
-              v-model="RegisterForm.confirmPassword"
-              type="password"
-              placeholder="确认密码"
-            ></el-input>
-          </el-form-item>
           <el-form-item prop="email">
+            <el-input v-model="ForgetForm.email" placeholder="邮箱"></el-input>
+          </el-form-item>
+          <el-form-item prop="newPassword">
             <el-input
-              v-model="RegisterForm.email"
-              placeholder="邮箱"
+              v-model="ForgetForm.newPassword"
+              type="password"
+              placeholder="新密码"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="confirmNewPassword">
+            <el-input
+              v-model="ForgetForm.confirmNewPassword"
+              type="password"
+              placeholder="确认新密码"
             ></el-input>
           </el-form-item>
           <el-form-item prop="emailCode" :inline="true">
             <el-input
-              v-model="RegisterForm.emailCode"
+              v-model="ForgetForm.emailCode"
               placeholder="验证码"
               style="width: 230px"
             ></el-input>
@@ -53,9 +44,9 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              class="register-btn-submit"
+              class="forgetPassword-btn-submit"
               type="primary"
-              @click="register()"
+              @click="forgetPassword()"
               >注册</el-button
             >
           </el-form-item>
@@ -100,8 +91,9 @@ export default {
         callback(new Error('请输入密码'))
       }
       const regPass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-      if (this.RegisterForm.confirmPassword !== '') {
-        this.$refs.RegisterForm.validateField('confirmPassword')
+
+      if (this.ForgetForm.confirmNewPassword !== '') {
+        this.$refs.ForgetForm.validateField('confirmNewPassword')
       }
       if (!regPass.test(value)) {
         callback(new Error('至少八位字符，包含大小写字母和数字，不含特殊字符'))
@@ -118,7 +110,7 @@ export default {
     let validConfirmPass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.RegisterForm.password) {
+      } else if (value !== this.ForgetForm.newPassword) {
         callback(new Error('两次输入密码不一致！'))
       } else {
         callback()
@@ -144,14 +136,14 @@ export default {
     }
 
     return {
-      RegisterForm: {
+      ForgetForm: {
         userName: '',
-        password: '',
-        confirmPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
         email: '',
         emailCode: '',
       },
-      RegisterRule: {
+      ForgetRule: {
         userName: [
           {
             validator: validateUsername,
@@ -163,7 +155,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        password: [
+        newPassword: [
           {
             validator: validatePass,
             trigger: 'change',
@@ -178,7 +170,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        confirmPassword: [
+        confirmNewPassword: [
           {
             validator: validConfirmPass,
             trigger: 'change',
@@ -199,6 +191,10 @@ export default {
             trigger: 'change',
           },
           {
+            validator: validEmail,
+            trigger: 'blur',
+          },
+          {
             required: true,
             message: '请输入邮箱',
             trigger: 'blur',
@@ -217,20 +213,20 @@ export default {
       btnTxt: '发送验证码',
     }
   },
-  name: 'Register',
+  name: 'Forget',
 
   methods: {
-    register() {
-      this.$refs.RegisterForm.validate((valid) => {
+    forgetPassword() {
+      this.$refs.ForgetForm.validate((valid) => {
         if (valid) {
           this.$API
-            .p_Register({
-              username: this.RegisterForm.userName,
-              password: this.RegisterForm.password,
-              mail: this.RegisterForm.email,
-              verifyCode: this.RegisterForm.emailCode,
+            .p_Forget({
+              newPassword: this.ForgetForm.newPassword,
+              mail: this.ForgetForm.email,
+              verifyCode: this.ForgetForm.emailCode,
             })
             .then((res) => {
+              alertSuccess('修改成功')
               this.$router.replace('/login')
             })
             .catch({})
@@ -242,16 +238,16 @@ export default {
 
     //发送邮箱验证码，30秒后重新发送
     sendCode() {
-      this.$refs.RegisterForm.validateField('email', (valid) => {
-        if (valid) {
+      this.$refs.ForgetForm.validateField('email', (valid) => {
+        if (!valid) {
           this.time = 30
           this.timer()
           this.$API
             .p_SendCode({
-              mail: this.RegisterForm.email,
+              mail: this.ForgetForm.email,
             })
-            .then((res) => {
-              alertSuccess('注册成功')
+            .then((data) => {
+              alertSuccess()
             })
         }
       })
@@ -274,7 +270,7 @@ export default {
 </script>
 
 <style scoped>
-.register-wrapper {
+.forgetPassword-wrapper {
   position: absolute;
   top: 0;
   right: 0;
@@ -285,7 +281,7 @@ export default {
   background-size: 100% 100%;
 }
 
-.register-content {
+.forgetPassword-content {
   position: absolute;
   top: 0;
   right: 0;
@@ -298,7 +294,7 @@ export default {
   opacity: 0.8;
 }
 
-.register-main {
+.forgetPassword-main {
   color: beige;
   padding: 20px 20px 10px 20px;
 }
@@ -323,7 +319,7 @@ a:hover {
   color: coral;
 }
 
-.register-btn-submit {
+.forgetPassword-btn-submit {
   margin-top: 0;
 }
 </style>

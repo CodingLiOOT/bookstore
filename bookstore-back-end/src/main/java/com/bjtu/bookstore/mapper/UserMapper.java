@@ -5,6 +5,7 @@ import com.bjtu.bookstore.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,5 +34,8 @@ public interface UserMapper {
     @Insert("insert into user (ID,username,password,createdDate,mail,state,type) " +
             "values (#{ID},#{username},#{password},NOW(),#{mail},1,1)")
     void register(User user);
+
+    @Update("update user set password = #{password} where username = #{username}")
+    void updatePassword(String username, String password);
 
 }

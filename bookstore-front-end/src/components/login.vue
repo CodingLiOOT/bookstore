@@ -84,6 +84,7 @@
   </div>
 </template>
 <script>
+import { alertSuccess, alertError } from '../utils/message'
 export default {
   data() {
     return {
@@ -136,8 +137,6 @@ export default {
   methods: {
     login() {
       if (this.type === '0') {
-        //console.log(this.dataForm.userName);
-        //console.log(this.dataForm.password);
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$API
@@ -147,10 +146,10 @@ export default {
                 loginType: 'password',
               })
               .then((data) => {
+                alertSuccess('登陆成功')
                 this.$store.commit('login', data)
                 //this.$router.replace('/index')
-                let redirect
-                redirect = decodeURIComponent(
+                let redirect = decodeURIComponent(
                   this.$route.query.redirect || '/index'
                 )
                 this.$router.push({
@@ -174,6 +173,7 @@ export default {
                 loginType: 'mail',
               })
               .then((data) => {
+                alertSuccess('登陆成功')
                 this.$store.commit('login', data)
                 //this.$router.replace('/index')
                 let redirect = decodeURIComponent(
@@ -198,13 +198,19 @@ export default {
     },
     //发送邮箱验证码，30秒后重新发送
     sendCode() {
-      this.time = 30
-      this.timer()
-      this.$API
-        .p_SendCode({
-          mail: this.emailDataForm.email,
-        })
-        .then()
+      this.$refs.emailDataForm.validateField('email', (valid) => {
+        if (valid) {
+          this.time = 30
+          this.timer()
+          this.$API
+            .p_SendCode({
+              mail: this.emailDataForm.email,
+            })
+            .then((res) => {
+              alertSuccess('发送成功')
+            })
+        }
+      })
     },
     //发送手机验证码倒计时
     timer() {

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -41,16 +42,27 @@ public class UserServiceImpl implements UserService {
         return userLoginServiceMap.get(user.getLoginType()).userLogin(user);
     }
 
-
     @Override
     public void register(User user) {
         List<User> users = userMapper.selectUserByNameOrMail(user.getUsername(), user.getMail());
-        if (users.size() != 0) {
-            throw new DefinitionException(ErrorEnum.DUPLICATE_USERNAME_OR_MAIL);
-        }
+        Optional.ofNullable(users).filter(u -> u.size() != 0)
+                .<DefinitionException>orElseThrow(() -> {
+                    throw new DefinitionException(ErrorEnum.DUPLICATE_USERNAME_OR_MAIL);
+                });
         verifyCodeUtils.verifyCode(user.getMail(), user.getVerifyCode());
         user.setID(UUID.randomUUID().toString());
         user.setPassword(encodeUtil.genCode(user.getPassword(), user.getMail()));
         userMapper.register(user);
+    }
+
+    @Override
+    public void forgetPassword(User user) {
+        String username = Optional.ofNullable(userMapper.selectUsernameByMail(user.getMail()))
+                .<DefinitionException>orElseThrow(() -> {
+                    throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
+                });
+        verifyCodeUtils.verifyCode(user.getMail(), user.getVerifyCode());
+        String newPassword = encodeUtil.genCode(user.getNewPassword(), user.getMail());
+        userMapper.updatePassword(username, newPassword);
     }
 }

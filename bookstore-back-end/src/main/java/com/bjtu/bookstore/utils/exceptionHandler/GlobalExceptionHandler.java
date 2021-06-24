@@ -17,16 +17,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @version: 1.0
  **/
 @RestControllerAdvice
+@ResponseBody
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    @ResponseBody
     public ResponseEntity IllegalArgumentExceptionHandler(IllegalArgumentException e) {
         return DefinitionExceptionHandler(new DefinitionException(ErrorEnum.BODY_NOT_MATCH));
     }
 
+    @ExceptionHandler(value = IllegalStateException.class)
+    public ResponseEntity IllegalArgumentExceptionHandler(IllegalStateException e) {
+        return DefinitionExceptionHandler(new DefinitionException(ErrorEnum.BODY_NOT_MATCH));
+    }
+
+    @ExceptionHandler(value = NullPointerException.class)
+    public ResponseEntity NullpointerExceptionHandler(NullPointerException e) {
+        return DefinitionExceptionHandler(new DefinitionException(ErrorEnum.BODY_NOT_MATCH));
+    }
+
     @ExceptionHandler(value = DefinitionException.class)
-    @ResponseBody
     public ResponseEntity DefinitionExceptionHandler(DefinitionException de) {
         return ResponseEntity
                 .status(de.getResultCode())
@@ -34,7 +43,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
-    @ResponseBody
     public ResponseEntity AccessDeniedExceptionHandler(AccessDeniedException ae) {
         return ResponseEntity
                 .status(ErrorEnum.ACCESS_DENY.getResultCode())
@@ -42,7 +50,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    @ResponseBody
     public ResponseEntity<Result> OtherExceptionHandler(Exception e) {
         e.printStackTrace();
         return ResponseEntity

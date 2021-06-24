@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from "../vuex";
+import store from "../vuex"
 
 
 Vue.use(Router)
@@ -12,63 +12,68 @@ if (sessionStorage.getItem('token')) {
   store.commit('login', {
     user: sessionStorage.getItem('user'),
     token: sessionStorage.getItem('token')
-  });
+  })
 }
 
 const router = new Router({
   mode: 'history',
   routes: [{
-      path: '/',
-      name: 'login',
-      component: () => import("../components/login")
+    path: '/',
+    name: 'login',
+    component: () => import("../components/login")
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: () => import("../components/Home")
+  },
+  {
+    path: '/index',
+    name: 'index',
+    meta: {
+      requiresAuth: true
     },
-    {
-      path: '/home',
-      name: 'Home',
-      component: () => import("../components/Home")
+    component: () => import("../components/index")
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      requiresAuth: false
     },
-    {
-      path: '/index',
-      name: 'index',
-      meta: {
-        requiresAuth: true
-      },
-      component: () => import("../components/index")
-    },
-    {
-      path: '/login',
-      name: 'login',
-      meta: {
-        requiresAuth: false
-      },
-      component: () => import("../components/login")
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import("../components/Register")
-    },
-    {
-      path: '/fileDemo',
-      name: 'fileDemo',
-      component: () => import("../components/FileDemo")
-    }
+    component: () => import("../components/login")
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import("../components/Register")
+  },
+  {
+    path: '/forget',
+    name: 'forget',
+    component: () => import("../components/forget")
+  },
+  {
+    path: '/fileDemo',
+    name: 'fileDemo',
+    component: () => import("../components/FileDemo")
+  }
   ],
 })
 router.beforeEach((to, from, next) => {
   if (to.matched.some((r) => r.meta.requiresAuth)) {
     if (store.state.token) {
-      next();
+      next()
     } else {
       next({
         path: '/login',
         query: {
           redirect: to.fullPath
         }
-      });
+      })
     }
   } else {
-    next();
+    next()
   }
 })
 

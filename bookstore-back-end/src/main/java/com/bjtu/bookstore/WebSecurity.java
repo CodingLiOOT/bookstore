@@ -47,6 +47,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/login").permitAll()
                 .antMatchers("/api/user/sendVerifyCode").permitAll()
                 .antMatchers("/api/user/register").permitAll()
+                .antMatchers("/api/user/forgetPassword").permitAll()
                 .antMatchers("/api/test/**").permitAll()
 
                 .antMatchers("/api/judgement/**").permitAll()

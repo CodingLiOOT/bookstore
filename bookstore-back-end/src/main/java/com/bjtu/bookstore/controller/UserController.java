@@ -4,7 +4,9 @@ import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.service.MailService;
 import com.bjtu.bookstore.service.UserService;
 import com.bjtu.bookstore.utils.resultUtils.ResponseResultBody;
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,15 @@ public class UserController {
     @Autowired
     private MailService mailService;
 
-    @CrossOrigin
-    @ResponseResultBody
     @PostMapping(value = "/login")
     public Pair<String, String> login(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+        Preconditions.checkState(
+                !(StringUtils.equals(user.getLoginType(), "mail")
+                        && StringUtils.isNoneBlank(user.getMail(), user.getVerifyCode())
+                ||!(StringUtils.equals(user.getLoginType(),"password")
+                        && StringUtils.isNoneBlank(user.getUsername(),user.getPassword()))));
+
         return Pair.of("token", userService.userLogin(user));
     }
 
@@ -38,13 +45,23 @@ public class UserController {
     @PostMapping(value = "/sendVerifyCode")
     public void sendVerifyCode(@RequestBody User user) {
         mailService.sendMail(user.getMail());
-        //applicationEventPublisher.publishEvent(new VerifyCodeEvent("",user.getMail()));
     }
 
 
     @PostMapping(value = "/register")
     public void register(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+        Preconditions.checkState(StringUtils.isNoneBlank(user.getMail(), user.getVerifyCode()));
+
         userService.register(user);
+    }
+
+    @PostMapping(value = "/forgetPassword")
+    public void forgetPassword(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+        Preconditions.checkState(StringUtils.isNoneBlank(user.getMail(),user.getNewPassword(), user.getVerifyCode()));
+
+        userService.forgetPassword(user);
     }
 
 }

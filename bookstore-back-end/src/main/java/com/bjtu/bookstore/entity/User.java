@@ -29,6 +29,8 @@ public class User implements Serializable {
 
     private String password;
 
+    private String newPassword;
+
     private String type;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
