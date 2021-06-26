@@ -1,66 +1,61 @@
 <template>
-  <div class="register-wrapper">
-    <div class="register-content">
-      <div class="register-main">
-        <router-link to="/login" style="float: right">返回登录</router-link>
-        <h2 class="register-main-title" align="left">注册</h2>
-        <el-form
-          :model="RegisterForm"
-          :rules="RegisterRule"
-          ref="RegisterForm"
-          @keyup.enter.native="register()"
-          status-icon
-        >
-          <el-form-item prop="userName">
-            <el-input
-              v-model="RegisterForm.userName"
-              placeholder="帐号"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
-              v-model="RegisterForm.password"
-              type="password"
-              placeholder="密码"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="confirmPassword">
-            <el-input
-              v-model="RegisterForm.confirmPassword"
-              type="password"
-              placeholder="确认密码"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="email">
-            <el-input
-              v-model="RegisterForm.email"
-              placeholder="邮箱"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="emailCode" :inline="true">
-            <el-input
-              v-model="RegisterForm.emailCode"
-              placeholder="验证码"
-              style="width: 230px"
-            ></el-input>
-            <el-button
-              :disabled="disabled"
-              @click="sendCode"
-              class="sendcode"
-              style="width: 125px"
-              >{{ btnTxt }}</el-button
-            >
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              class="register-btn-submit"
-              type="primary"
-              @click="register()"
-              >注册</el-button
-            >
-          </el-form-item>
-        </el-form>
-      </div>
+  <div class="register-content">
+    <div class="register-main">
+      <router-link to="/user/login" style="float: right">返回登录</router-link>
+      <h2 class="register-main-title" align="left">注册</h2>
+      <el-form
+        :model="RegisterForm"
+        :rules="RegisterRule"
+        ref="RegisterForm"
+        @keyup.enter.native="register()"
+        status-icon
+      >
+        <el-form-item prop="userName">
+          <el-input
+            v-model="RegisterForm.userName"
+            placeholder="帐号"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="RegisterForm.password"
+            type="password"
+            placeholder="密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="confirmPassword">
+          <el-input
+            v-model="RegisterForm.confirmPassword"
+            type="password"
+            placeholder="确认密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="email">
+          <el-input v-model="RegisterForm.email" placeholder="邮箱"></el-input>
+        </el-form-item>
+        <el-form-item prop="emailCode" :inline="true">
+          <el-input
+            v-model="RegisterForm.emailCode"
+            placeholder="验证码"
+            style="width: 230px"
+          ></el-input>
+          <el-button
+            :disabled="disabled"
+            @click="sendCode"
+            class="sendcode"
+            style="width: 125px"
+            >{{ btnTxt }}</el-button
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            class="register-btn-submit"
+            type="primary"
+            @click="register()"
+            >注册</el-button
+          >
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -251,7 +246,7 @@ export default {
               mail: this.RegisterForm.email,
             })
             .then((res) => {
-              alertSuccess('注册成功')
+              alertSuccess('发送成功')
             })
         }
       })
@@ -274,17 +269,6 @@ export default {
 </script>
 
 <style scoped>
-.register-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  background: rgba(38, 50, 56, 0.6) url(../assets/login_bg.jpg) no-repeat;
-  background-size: 100% 100%;
-}
-
 .register-content {
   position: absolute;
   top: 0;

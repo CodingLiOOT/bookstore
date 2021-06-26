@@ -1,57 +1,55 @@
 <template>
-  <div class="forgetPassword-wrapper">
-    <div class="forgetPassword-content">
-      <div class="forgetPassword-main">
-        <router-link to="/login" style="float: right">返回登录</router-link>
-        <h2 class="forgetPassword-main-title" align="left">忘记密码</h2>
-        <el-form
-          :model="ForgetForm"
-          :rules="ForgetRule"
-          ref="ForgetForm"
-          @keyup.enter.native="forgetPassword()"
-          status-icon
-        >
-          <el-form-item prop="email">
-            <el-input v-model="ForgetForm.email" placeholder="邮箱"></el-input>
-          </el-form-item>
-          <el-form-item prop="newPassword">
-            <el-input
-              v-model="ForgetForm.newPassword"
-              type="password"
-              placeholder="新密码"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="confirmNewPassword">
-            <el-input
-              v-model="ForgetForm.confirmNewPassword"
-              type="password"
-              placeholder="确认新密码"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="emailCode" :inline="true">
-            <el-input
-              v-model="ForgetForm.emailCode"
-              placeholder="验证码"
-              style="width: 230px"
-            ></el-input>
-            <el-button
-              :disabled="disabled"
-              @click="sendCode"
-              class="sendcode"
-              style="width: 125px"
-              >{{ btnTxt }}</el-button
-            >
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              class="forgetPassword-btn-submit"
-              type="primary"
-              @click="forgetPassword()"
-              >注册</el-button
-            >
-          </el-form-item>
-        </el-form>
-      </div>
+  <div class="forgetPassword-content">
+    <div class="forgetPassword-main">
+      <router-link to="/user/login" style="float: right">返回登录</router-link>
+      <h2 class="forgetPassword-main-title" align="left">忘记密码</h2>
+      <el-form
+        :model="ForgetForm"
+        :rules="ForgetRule"
+        ref="ForgetForm"
+        @keyup.enter.native="forgetPassword()"
+        status-icon
+      >
+        <el-form-item prop="email">
+          <el-input v-model="ForgetForm.email" placeholder="邮箱"></el-input>
+        </el-form-item>
+        <el-form-item prop="newPassword">
+          <el-input
+            v-model="ForgetForm.newPassword"
+            type="password"
+            placeholder="新密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="confirmNewPassword">
+          <el-input
+            v-model="ForgetForm.confirmNewPassword"
+            type="password"
+            placeholder="确认新密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="emailCode" :inline="true">
+          <el-input
+            v-model="ForgetForm.emailCode"
+            placeholder="验证码"
+            style="width: 230px"
+          ></el-input>
+          <el-button
+            :disabled="disabled"
+            @click="sendCode"
+            class="sendcode"
+            style="width: 125px"
+            >{{ btnTxt }}</el-button
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            class="forgetPassword-btn-submit"
+            type="primary"
+            @click="forgetPassword()"
+            >提交</el-button
+          >
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -288,7 +286,7 @@ export default {
   bottom: 0;
   left: 0;
   margin: auto;
-  height: 460px;
+  height: 400px;
   width: 400px;
   background-color: #112234;
   opacity: 0.8;

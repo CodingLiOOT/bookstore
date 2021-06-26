@@ -17,47 +17,54 @@ if (sessionStorage.getItem('token')) {
 
 const router = new Router({
   mode: 'history',
-  routes: [{
-    path: '/',
-    name: 'login',
-    component: () => import("../components/login")
-  },
-  {
-    path: '/home',
-    name: 'Home',
-    component: () => import("../components/Home")
-  },
-  {
-    path: '/index',
-    name: 'index',
-    meta: {
-      requiresAuth: true
+  routes: [
+    {
+      path: '/',
+      redirect: '/user/login'
     },
-    component: () => import("../components/index")
-  },
-  {
-    path: '/login',
-    name: 'login',
-    meta: {
-      requiresAuth: false
+    {
+      path: '/user',
+      name: 'landingPage',
+      redirect: '/user/login',
+      component: () => import('../views/LandingPage.vue'),
+      children: [
+        {
+          path: 'login',
+          name: 'login',
+          component: () => import('../components/login.vue')
+        },
+        {
+          path: 'register',
+          name: 'register',
+          component: () => import('../components/Register.vue')
+        },
+        {
+          path: 'forget',
+          name: 'forget',
+          component: () => import('../components/forget.vue')
+        }
+      ]
+
+
     },
-    component: () => import("../components/login")
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import("../components/Register")
-  },
-  {
-    path: '/forget',
-    name: 'forget',
-    component: () => import("../components/forget")
-  },
-  {
-    path: '/fileDemo',
-    name: 'fileDemo',
-    component: () => import("../components/FileDemo")
-  }
+    {
+      path: '/home',
+      name: 'Home',
+      component: () => import("../components/Home")
+    },
+    {
+      path: '/index',
+      name: 'index',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import("../components/index")
+    },
+    {
+      path: '/fileDemo',
+      name: 'fileDemo',
+      component: () => import("../components/FileDemo")
+    }
   ],
 })
 router.beforeEach((to, from, next) => {
@@ -66,7 +73,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: '/login',
+        path: '/user/login',
         query: {
           redirect: to.fullPath
         }

@@ -1,85 +1,83 @@
 <template>
-  <div class="login-wrapper">
-    <div class="login-content">
-      <div class="login-main">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="账号登录" name="first">
-            <el-form
-              :model="dataForm"
-              :rules="dataRule"
-              ref="dataForm"
-              @keyup.enter.native="login()"
-              status-icon
-            >
-              <el-form-item prop="userName">
-                <el-input
-                  v-model="dataForm.userName"
-                  placeholder="帐号"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input
-                  v-model="dataForm.password"
-                  type="password"
-                  placeholder="密码"
-                ></el-input>
-              </el-form-item>
-              <router-link to="/forget">忘记密码</router-link>
-              <router-link to="/register">注册账号</router-link>
-              <el-form-item>
-                <el-button
-                  class="login-btn-submit"
-                  type="primary"
-                  @click="login()"
-                  >登录</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
+  <div class="login-content">
+    <div class="login-main">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="账号登录" name="first">
+          <el-form
+            :model="dataForm"
+            :rules="dataRule"
+            ref="dataForm"
+            @keyup.enter.native="login()"
+            status-icon
+          >
+            <el-form-item prop="userName">
+              <el-input
+                v-model="dataForm.userName"
+                placeholder="帐号"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input
+                v-model="dataForm.password"
+                type="password"
+                placeholder="密码"
+              ></el-input>
+            </el-form-item>
+            <router-link to="/user/forget">忘记密码</router-link>
+            <router-link to="/user/register">注册账号</router-link>
+            <el-form-item>
+              <el-button
+                class="login-btn-submit"
+                type="primary"
+                @click="login()"
+                >登录</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
 
-          <el-tab-pane label="邮箱登录" name="second">
-            <el-form
-              :model="emailDataForm"
-              :rules="dataRule"
-              ref="emailDataForm"
-              @keyup.enter.native="login()"
-              status-icon
-            >
-              <el-form-item prop="email">
-                <el-input
-                  v-model="emailDataForm.email"
-                  type="email"
-                  placeholder="邮箱"
-                ></el-input>
-              </el-form-item>
+        <el-tab-pane label="邮箱登录" name="second">
+          <el-form
+            :model="emailDataForm"
+            :rules="dataRule"
+            ref="emailDataForm"
+            @keyup.enter.native="login()"
+            status-icon
+          >
+            <el-form-item prop="email">
+              <el-input
+                v-model="emailDataForm.email"
+                type="email"
+                placeholder="邮箱"
+              ></el-input>
+            </el-form-item>
 
-              <el-form-item prop="emailCode" :inline="true">
-                <el-input
-                  v-model="emailDataForm.emailCode"
-                  placeholder="验证码"
-                  style="width: 230px"
-                ></el-input>
-                <el-button
-                  :disabled="disabled"
-                  @click="sendCode"
-                  class="sendcode"
-                  style="width: 125px"
-                  >{{ btnTxt }}
-                </el-button>
-              </el-form-item>
+            <el-form-item prop="emailCode" :inline="true">
+              <el-input
+                v-model="emailDataForm.emailCode"
+                placeholder="验证码"
+                style="width: 230px"
+              ></el-input>
+              <el-button
+                :disabled="disabled"
+                @click="sendCode"
+                class="sendcode"
+                style="width: 125px"
+                >{{ btnTxt }}
+              </el-button>
+            </el-form-item>
 
-              <el-form-item>
-                <el-button
-                  class="login-btn-submit"
-                  type="primary"
-                  @click="login()"
-                  >登录</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
+            <el-form-item>
+              <el-button
+                class="login-btn-submit"
+                type="primary"
+                @click="login()"
+                >登录</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -229,17 +227,6 @@ export default {
 }
 </script>
 <style>
-.login-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  background: rgba(38, 50, 56, 0.6) url(../assets/login_bg.jpg) no-repeat;
-  background-size: 100% 100%;
-}
-
 .login-content {
   position: absolute;
   top: 0;

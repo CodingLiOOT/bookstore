@@ -35,8 +35,8 @@ public class UserController {
         Preconditions.checkState(
                 !(StringUtils.equals(user.getLoginType(), "mail")
                         && StringUtils.isNoneBlank(user.getMail(), user.getVerifyCode())
-                ||!(StringUtils.equals(user.getLoginType(),"password")
-                        && StringUtils.isNoneBlank(user.getUsername(),user.getPassword()))));
+                        || !(StringUtils.equals(user.getLoginType(), "password")
+                        && StringUtils.isNoneBlank(user.getUsername(), user.getPassword()))));
 
         return Pair.of("token", userService.userLogin(user));
     }
@@ -44,6 +44,8 @@ public class UserController {
 
     @PostMapping(value = "/sendVerifyCode")
     public void sendVerifyCode(@RequestBody User user) {
+        Preconditions.checkNotNull(user.getMail());
+
         mailService.sendMail(user.getMail());
     }
 
@@ -59,7 +61,7 @@ public class UserController {
     @PostMapping(value = "/forgetPassword")
     public void forgetPassword(@RequestBody User user) {
         Preconditions.checkNotNull(user);
-        Preconditions.checkState(StringUtils.isNoneBlank(user.getMail(),user.getNewPassword(), user.getVerifyCode()));
+        Preconditions.checkState(StringUtils.isNoneBlank(user.getMail(), user.getNewPassword(), user.getVerifyCode()));
 
         userService.forgetPassword(user);
     }
