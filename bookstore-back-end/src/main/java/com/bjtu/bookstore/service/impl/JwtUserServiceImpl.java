@@ -3,8 +3,6 @@ package com.bjtu.bookstore.service.impl;
 import com.bjtu.bookstore.entity.Role;
 import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.mapper.UserMapper;
-import com.bjtu.bookstore.utils.exceptionHandler.exception.DefinitionException;
-import com.bjtu.bookstore.utils.exceptionHandler.exception.ErrorEnum;
 import com.bjtu.bookstore.utils.token.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,9 +30,6 @@ public class JwtUserServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userMapper.selectUserByUserName(s);
-        if (user == null) {
-            throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
-        }
         List<Role> roles = userMapper.selectRoleByUserName(s);
         user.setRoles(roles);
         List<SimpleGrantedAuthority> collect = new ArrayList<>();

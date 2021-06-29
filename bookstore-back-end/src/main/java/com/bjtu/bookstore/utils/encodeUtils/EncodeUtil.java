@@ -1,7 +1,5 @@
 package com.bjtu.bookstore.utils.encodeUtils;
 
-import com.bjtu.bookstore.utils.exceptionHandler.exception.DefinitionException;
-import com.bjtu.bookstore.utils.exceptionHandler.exception.ErrorEnum;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -34,7 +32,8 @@ public class EncodeUtil {
 
     public Boolean verifyEncode(String rawPass, String salt, String encode) {
         if (!encoder.matches(rawPass + secret + salt, encode)) {
-            throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
+//            throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
+            return false;
         }
         return true;
     }

@@ -9,4 +9,6 @@ public interface UserService {
     void register(User user);
 
     void forgetPassword(User user);
+
+    void modifyPassword(User user);
 }

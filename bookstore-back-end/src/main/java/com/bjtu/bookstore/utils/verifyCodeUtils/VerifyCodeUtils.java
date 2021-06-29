@@ -1,7 +1,5 @@
 package com.bjtu.bookstore.utils.verifyCodeUtils;
 
-import com.bjtu.bookstore.utils.exceptionHandler.exception.DefinitionException;
-import com.bjtu.bookstore.utils.exceptionHandler.exception.ErrorEnum;
 import com.bjtu.bookstore.utils.redis.JedisInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,7 +32,8 @@ public class VerifyCodeUtils {
 
     public boolean verifyCode(String key, String value) {
         if (!value.equals(jedis.get(key))) {
-            throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
+//            throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
+            return false;
         }
         jedis.del(key);
         return true;

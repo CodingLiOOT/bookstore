@@ -66,4 +66,12 @@ public class UserController {
         userService.forgetPassword(user);
     }
 
+    @PostMapping(value = "/modifyPassword")
+    public void modifyPassword(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+        Preconditions.checkState(StringUtils.isNoneBlank(user.getUsername(), user.getPassword(), user.getNewPassword()));
+
+        userService.modifyPassword(user);
+
+    }
 }
