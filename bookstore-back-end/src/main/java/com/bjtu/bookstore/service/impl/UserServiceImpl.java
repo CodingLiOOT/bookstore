@@ -49,11 +49,13 @@ public class UserServiceImpl implements UserService {
                 .<DefinitionException>orElseThrow(() -> {
                     throw new DefinitionException(ErrorEnum.DUPLICATE_USERNAME_OR_MAIL);
                 });
+
         Optional.of(user).map(User::getVerifyCode).filter(
                 value -> verifyCodeUtils.verifyCode(user.getMail(), user.getVerifyCode()))
                 .<DefinitionException>orElseThrow(() -> {
                     throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
                 });
+
         user.setID(UUID.randomUUID().toString());
         user.setPassword(encodeUtil.genCode(user.getPassword(), user.getMail()));
         userMapper.register(user);
@@ -61,15 +63,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void forgetPassword(User user) {
-        String username = Optional.ofNullable(userMapper.selectUsernameByMail(user.getMail()))
-                .<DefinitionException>orElseThrow(() -> {
-                    throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
-                });
+
         Optional.of(user).map(User::getVerifyCode).filter(
                 value -> verifyCodeUtils.verifyCode(user.getMail(), value))
                 .<DefinitionException>orElseThrow(() -> {
                     throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
                 });
+
+        String username = Optional.ofNullable(userMapper.selectUsernameByMail(user.getMail()))
+                .<DefinitionException>orElseThrow(() -> {
+                    throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
+                });
+
         String newPassword = encodeUtil.genCode(user.getNewPassword(), user.getMail());
         userMapper.updatePassword(username, newPassword);
     }
@@ -88,7 +93,7 @@ public class UserServiceImpl implements UserService {
                     throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
                 });
 
-        String newPassword = encodeUtil.genCode(user.getNewPassword(), user.getMail());
+        String newPassword = encodeUtil.genCode(user.getNewPassword(), userBean.getMail());
         userMapper.updatePassword(user.getUsername(), newPassword);
     }
 }
