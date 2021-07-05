@@ -2,9 +2,11 @@ package com.bjtu.bookstore.service;
 
 import com.bjtu.bookstore.entity.User;
 
+import java.util.HashMap;
+
 public interface UserService {
 
-    String userLogin(User user);
+    HashMap<String, String> userLogin(User user);
 
     void register(User user);
 

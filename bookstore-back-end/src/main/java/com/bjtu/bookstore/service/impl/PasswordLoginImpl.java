@@ -11,6 +11,8 @@ import com.bjtu.bookstore.utils.token.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 /**
  * @program: questionPlatform_back_end
  * @description: username password login impl
@@ -31,12 +33,17 @@ public class PasswordLoginImpl implements UserLoginInterface {
     private JWTUtils jwtUtils;
 
     @Override
-    public String userLogin(User user) {
+    public HashMap<String, String> userLogin(User user) {
         User userBean = userMapper.selectUserByUserName(user.getUsername());
         if (userBean == null || !encodeUtil.verifyEncode(user.getPassword(), userBean.getMail(), userBean.getPassword())) {
             throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
         }
         JwtUser userDetails = (JwtUser) jwtUserService.loadUserByUsername(user.getUsername());
-        return jwtUtils.generateToken(userDetails);
+        return new HashMap<String, String>() {
+            {
+                put("token", jwtUtils.generateToken(userDetails));
+                put("userID", userDetails.getID());
+            }
+        };
     }
 }

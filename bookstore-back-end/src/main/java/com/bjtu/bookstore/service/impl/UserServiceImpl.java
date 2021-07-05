@@ -11,10 +11,7 @@ import com.bjtu.bookstore.utils.verifyCodeUtils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -38,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private Map<String, UserLoginInterface> userLoginServiceMap;
 
     @Override
-    public String userLogin(User user) {
+    public HashMap<String, String> userLogin(User user) {
         return userLoginServiceMap.get(user.getLoginType()).userLogin(user);
     }
 

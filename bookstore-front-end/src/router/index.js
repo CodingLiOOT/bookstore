@@ -10,7 +10,7 @@ Vue.use(Router)
  */
 if (sessionStorage.getItem('token')) {
   store.commit('login', {
-    user: sessionStorage.getItem('user'),
+    userID: sessionStorage.getItem('userID'),
     token: sessionStorage.getItem('token')
   })
 }

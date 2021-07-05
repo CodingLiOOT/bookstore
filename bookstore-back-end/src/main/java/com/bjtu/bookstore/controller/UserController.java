@@ -7,9 +7,10 @@ import com.bjtu.bookstore.utils.resultUtils.ResponseResultBody;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 /**
  * @program: framework
@@ -30,15 +31,16 @@ public class UserController {
     private MailService mailService;
 
     @PostMapping(value = "/login")
-    public Pair<String, String> login(@RequestBody User user) {
+    public HashMap<String, String> login(@RequestBody User user) {
         Preconditions.checkNotNull(user);
         Preconditions.checkState(
-                !(StringUtils.equals(user.getLoginType(), "mail")
-                        && StringUtils.isNoneBlank(user.getMail(), user.getVerifyCode())
-                        || !(StringUtils.equals(user.getLoginType(), "password")
-                        && StringUtils.isNoneBlank(user.getUsername(), user.getPassword()))));
+                (StringUtils.equals(user.getLoginType(), "mail")
+                        && StringUtils.isNoneBlank(user.getMail(), user.getVerifyCode()))
+                        || (StringUtils.equals(user.getLoginType(), "password")
+                        && StringUtils.isNoneBlank(user.getUsername(), user.getPassword()))
+        );
 
-        return Pair.of("token", userService.userLogin(user));
+        return userService.userLogin(user);
     }
 
 

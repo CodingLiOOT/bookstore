@@ -1,7 +1,7 @@
 package com.bjtu.bookstore;
 
-import com.bjtu.bookstore.utils.iterator.JwtTokenFilter;
-import com.bjtu.bookstore.utils.iterator.RewriteAccessDenyFilter;
+import com.bjtu.bookstore.utils.filter.JwtTokenFilter;
+import com.bjtu.bookstore.utils.filter.RewriteAccessDenyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,9 +49,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers("/api/user/forgetPassword").permitAll()
                 .antMatchers("/api/test/**").permitAll()
-
-                .antMatchers("/api/judgement/**").permitAll()
-                .antMatchers("/api/Expert/**").permitAll()
 
                 .antMatchers("/static/**").permitAll()
 
