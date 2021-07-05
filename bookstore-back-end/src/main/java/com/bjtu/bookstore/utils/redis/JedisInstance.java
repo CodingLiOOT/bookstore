@@ -32,7 +32,7 @@ public class JedisInstance {
             config.setMaxTotal(30);
             config.setMaxIdle(10);
 
-            jedisPool = new JedisPool(config, "127.0.0.1", 6379);
+            jedisPool = new JedisPool(config, "121.196.105.71", 6379);
         }
 
         public JedisPool getInstance() {
