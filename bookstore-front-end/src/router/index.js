@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from "../vuex"
-
+import MainPage from "../components/MainPage/MainPage"
 
 Vue.use(Router)
 
@@ -18,6 +18,11 @@ if (sessionStorage.getItem('token')) {
 const router = new Router({
   mode: 'history',
   routes: [
+    {
+      path:'/mainPage',
+      name:'mainPage',
+      component: MainPage,
+    },
     {
       path: '/',
       redirect: '/user/login'
