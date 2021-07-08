@@ -31,11 +31,7 @@ public class EncodeUtil {
     }
 
     public Boolean verifyEncode(String rawPass, String salt, String encode) {
-        if (!encoder.matches(rawPass + secret + salt, encode)) {
-//            throw new DefinitionException(ErrorEnum.ERROR_NICKNAME_OR_PASSWORD);
-            return false;
-        }
-        return true;
+        return encoder.matches(rawPass + secret + salt, encode);
     }
 
 }
