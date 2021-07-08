@@ -44,4 +44,10 @@ public class User implements Serializable {
 
     private List<Role> roles;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Timestamp birthday;
+
+    private Integer gender;
+
+    private String storeId;
 }
