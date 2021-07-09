@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from "../vuex"
 import MainPage from "../components/MainPage/MainPage"
+import Cart from "../components/shoppingCart/Cart";
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ const router = new Router({
       path:'/mainPage',
       name:'mainPage',
       component: MainPage,
+    },
+    {
+      path:'/Cart',
+      name:'Cart',
+      component: Cart,
     },
     {
       path: '/',
