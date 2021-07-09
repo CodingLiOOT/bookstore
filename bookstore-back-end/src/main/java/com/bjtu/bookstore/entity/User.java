@@ -2,6 +2,8 @@ package com.bjtu.bookstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,13 +17,14 @@ import java.util.List;
  * @version: 1.0
  **/
 @Data
+
 public class User implements Serializable {
 
     private String loginType;
 
     private String verifyCode;
 
-    private String ID;
+    private String id;
 
     private String avatar;
 
@@ -32,6 +35,7 @@ public class User implements Serializable {
     private String newPassword;
 
     private String type;
+    private String nickname;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createdDate;
