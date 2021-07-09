@@ -182,6 +182,7 @@ export default {
     cartchoose(){
       this.fetchData.status=!this.fetchData.status//取反改变状态
       this.fetchData.status?this.fetchData.shops.forEach((item)=>this.shoptrue(item)):this.fetchData.shops.forEach((item)=>this.shopfalse(item))
+      alert("all")
     },//根据取反后的状态进行相应的店铺按钮操作
     // 店铺
     shoptrue(item){
