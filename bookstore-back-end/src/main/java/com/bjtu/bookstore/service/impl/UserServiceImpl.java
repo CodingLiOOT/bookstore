@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
                     throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
                 });
 
-        user.setID(UUID.randomUUID().toString());
+        user.setId(UUID.randomUUID().toString());
         user.setPassword(encodeUtil.genCode(user.getPassword(), user.getMail()));
         userMapper.register(user);
     }
@@ -93,4 +93,23 @@ public class UserServiceImpl implements UserService {
         String newPassword = encodeUtil.genCode(user.getNewPassword(), userBean.getMail());
         userMapper.updatePassword(user.getUsername(), newPassword);
     }
+
+
+    //通过用户id获取用户信息
+    @Override
+    public User getInformation(User uid) {
+        User userInfo = userMapper.getInformation(uid.getId());
+        return userInfo;
+    }
+
+
+
+    //修改用户个人信息
+    @Override
+    public Integer modifyInformation(User user) {
+        Integer user1 = userMapper.modifyInformation(user);
+        return user1;
+    }
+
+
 }
