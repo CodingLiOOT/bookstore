@@ -2,7 +2,7 @@
   <div>
     <el-row class="row">
       <el-col :span="3" :offset="2">
-        销量榜
+        猜你喜欢
       </el-col>
     </el-row>
     <el-row>
@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import BookPreview from "../BookPreview";
+import BookPreview from "../../components/BookPreview";
 export default {
-  name: "Top",
+  name: "Like",
   components:{
     BookPreview,
   }

@@ -1,8 +1,8 @@
 <template>
   <div>
-      <div class="card">
-        <MainCard></MainCard>
-      </div>
+    <div class="card">
+      <MainCard></MainCard>
+    </div>
   </div>
 </template>
 
@@ -12,12 +12,12 @@ export default {
   components:{
     MainCard
   },
-name: "MainPage"
+  name: "MainPage"
 }
 </script>
 
 <style scoped>
 .card{
-  margin-top: 3%;
+  margin-top: 10%;
 }
 </style>

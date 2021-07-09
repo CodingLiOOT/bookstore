@@ -176,13 +176,14 @@ export default {
           }
         }
       }
+      this.getTotal()
       console.log(bookId);
     },
     // 全选
     cartchoose(){
       this.fetchData.status=!this.fetchData.status//取反改变状态
       this.fetchData.status?this.fetchData.shops.forEach((item)=>this.shoptrue(item)):this.fetchData.shops.forEach((item)=>this.shopfalse(item))
-      alert("all")
+      this.getTotal()
     },//根据取反后的状态进行相应的店铺按钮操作
     // 店铺
     shoptrue(item){
@@ -197,6 +198,7 @@ export default {
     },//循环店铺中的商品，先筛选出目前被选中的商品，给它执行choosefalse函数
     shopchoose(item){
       !item.check?this.shoptrue(item):this.shopfalse(item)
+      this.getTotal()
     },
     //单个商品
     choosetrue(item,pro){
@@ -215,7 +217,21 @@ export default {
     },
     choose(item,pro){
       !pro.checked?this.choosetrue(item,pro):this.choosefalse(item,pro)
+      this.getTotal()
     },//这里是绑定到html上的方法，取反是由于你在触发方法的时候取的是之前的状态
+    getTotal(){
+      this.fetchData.allsum=0
+      this.fetchData.allnum=0
+      for(let i=0;i<this.fetchData.shops.length;i++){
+        for(let j=0;j<this.fetchData.shops[i].books.length;j++){
+          let book=this.fetchData.shops[i].books[j]
+          if(book.checked){
+            this.fetchData.allnum++
+            this.fetchData.allsum=this.fetchData.allsum+parseFloat(book.total)
+          }
+        }
+      }
+    }
   },
   mounted(){
     //动态设置内容高度 让footer始终居底   header+footer的高度是100
