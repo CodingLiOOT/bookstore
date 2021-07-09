@@ -11,11 +11,13 @@ import com.bjtu.bookstore.mapper.CartMapper;
 import com.bjtu.bookstore.mapper.UserMapper;
 import com.bjtu.bookstore.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class CartImpl implements CartService {
     @Autowired
     private UserMapper userMapper;
@@ -28,33 +30,22 @@ public class CartImpl implements CartService {
     @Override
     public HashMap<String, Object> getAllCart(User user) {
 
-        ArrayList<Store> stores=new ArrayList<>();
-        System.out.println(user.getID());
-        stores = cartMapper.getAllCartStores(user.getID());
-        for (int i = 0; i <stores.size() ; i++) {
-            ArrayList<Book> books = new ArrayList<>();
-            books = cartMapper.getAllCartBooksOfStores(user.getID(), stores.get(i).getId());
-            stores.get(i).setBooks(books);
-        }
+        ArrayList<Book> books = new ArrayList<>();
+        books = cartMapper.getAllCartBooks(user.getId());
 
         HashMap<String, Object> data = new HashMap<>();
-        data.put("shops", stores);
+        data.put("shops", books);
         return data;
     }
 
     // 结算购物车
     @Override
     public int calculate(JSONObject object) {
-
-        String str=object.toJSONString();
-        JSONObject json = JSONObject.parseObject(str);
-        String bookstring=json.getString("bookList");
-
         int price=-1;
 
-        JSONArray bookList=JSONArray.parseArray(bookstring);
+        JSONArray bookList=object.getJSONArray("bookList");
         for(int i=0;i<bookList.size();i++) {
-            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("booId");
+            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("bookId");
             int num = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getInteger("num");
             price+=bookMapper.getBookPrice(bookid)*num;
         }
@@ -69,23 +60,19 @@ public class CartImpl implements CartService {
         String bookid=cart.getBookid();
         int num=cart.getNum();
 
-        String storeid=bookMapper.getStoreOfBook(bookid);
-        int success = cartMapper.addtocart(userid,bookid,storeid,num);
-        return 0;
+        int success = cartMapper.addtocart(userid,bookid,num);
+        return success;
     }
 
     // 从购物车中删除图书
     @Override
     public int deletefromcart(JSONObject object) {
-        String str=object.toJSONString();
-        JSONObject json = JSONObject.parseObject(str);
-        String userid=json.getString("ID");
-        String bookstring=json.getString("bookList");
+        String userid=object.getString("ID");
+        JSONArray jsonArray=object.getJSONArray("bookList");
 
         int success=-1;
-        JSONArray bookList=JSONArray.parseArray(bookstring);
-        for(int i=0;i<bookList.size();i++) {
-            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("booId");
+        for(int i=0;i<jsonArray.size();i++) {
+            String bookid = JSONObject.parseObject(JSONObject.toJSONString(jsonArray.get(i))).getString("bookId");
             success=cartMapper.deletefromcart(userid,bookid);
         }
 
@@ -95,15 +82,13 @@ public class CartImpl implements CartService {
     // 修改购物车中图书数目
     @Override
     public int modifyNumFromCart(JSONObject object) {
-        String str=object.toJSONString();
-        JSONObject json = JSONObject.parseObject(str);
-        String userid=json.getString("ID");
-        String bookstring=json.getString("bookList");
+        String userid=object.getString("ID");
+        JSONArray bookList =object.getJSONArray("bookList");
 
         int success=-1;
-        JSONArray bookList=JSONArray.parseArray(bookstring);
+
         for(int i=0;i<bookList.size();i++) {
-            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("booId");
+            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("bookId");
             int num = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getInteger("num");
             if(num==0)
                 success=cartMapper.deletefromcart(userid,bookid);
