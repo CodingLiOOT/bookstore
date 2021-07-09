@@ -29,20 +29,15 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PostMapping(value = "/cart/getAllCart")
+    @PostMapping(value = "/getAllCart")
     public HashMap<String, Object> getAllCart(@RequestBody User user) {
         Preconditions.checkNotNull(user);
-        Preconditions.checkState(
-                (StringUtils.equals(user.getLoginType(), "mail")
-                        && StringUtils.isNoneBlank(user.getMail(), user.getVerifyCode()))
-                        || (StringUtils.equals(user.getLoginType(), "password")
-                        && StringUtils.isNoneBlank(user.getUsername(), user.getPassword()))
-        );
+
 
         return cartService.getAllCart(user);
     }
 
-    @PostMapping(value = "/cart/settlement")
+    @PostMapping(value = "/settlement")
     public int settlement(@RequestBody JSONObject object) {
         Preconditions.checkNotNull(object);
 
@@ -67,6 +62,6 @@ public class CartController {
     public int modifyNumFromCart(@RequestBody JSONObject object) {
         Preconditions.checkNotNull(object);
 
-        return cartService.deletefromcart(object);
+        return cartService.modifyNumFromCart(object);
     }
 }
