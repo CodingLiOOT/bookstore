@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="card">
-      <el-col :span="18" :offset="3">
+      <el-col :span="20" :offset="2">
         <el-card shadow="hover">
           <!--            搜索框-->
           <el-row>
@@ -59,7 +59,7 @@
             </el-col>
           </el-row>
           <el-row class="first">
-<!--            图书类别-->
+            <!--            图书类别-->
             <el-col :span="6" :offset="0">
               <el-row>图书类别</el-row>
               <el-row
@@ -69,15 +69,15 @@
                 {{kind}}
               </el-row>
             </el-col>
-<!--            图书推荐-->
+            <!--            图书推荐-->
             <el-col :span="12">
               <div class="block">
                 <span class="demonstration"></span>
                 <el-carousel trigger="click" height="350px" width="400px">
                   <el-carousel-item v-for="item in imgList" :key="item.id">
                     <img :src="item.idView" class="adImage" alt="推荐">
-<!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
-<!--                    </el-image>-->
+                    <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
+                    <!--                    </el-image>-->
                   </el-carousel-item>
                 </el-carousel>
               </div>
@@ -102,12 +102,15 @@
               </el-row>
             </el-col>
           </el-row>
-<!--          推荐榜-->
+          <!--          推荐榜-->
           <el-row class="information">
             <Top></Top>
           </el-row>
           <el-row class="information">
-            <Top></Top>
+            <Like></Like>
+          </el-row>
+          <el-row class="information">
+            <NewBook></NewBook>
           </el-row>
         </el-card>
       </el-col>
@@ -119,10 +122,14 @@
 import {RandomUtil} from "../../utils/RandomUtil.js"
 import {Store} from "../../utils/store.js";
 import Top from "../MainPage/Top"
+import Like from "./Like";
+import NewBook from "./NewBook";
 export default {
   name: "MainCard",
   components:{
-    Top
+    Top,
+    Like,
+    NewBook,
   },
   data() {
     return {
