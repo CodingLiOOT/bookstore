@@ -13,4 +13,9 @@ public interface UserService {
     void forgetPassword(User user);
 
     void modifyPassword(User user);
+
+    User getInformation(User uid);//通过用户id获取用户信息
+
+
+    Integer modifyInformation(User user); //通过用户id更新用户信息
 }
