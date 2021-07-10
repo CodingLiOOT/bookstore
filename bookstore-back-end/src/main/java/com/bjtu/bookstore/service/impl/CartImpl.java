@@ -32,22 +32,18 @@ public class CartImpl implements CartService {
 
         ArrayList<Book> books = new ArrayList<>();
         books = cartMapper.getAllCartBooks(user.getId());
-
         HashMap<String, Object> data = new HashMap<>();
-        data.put("shops", books);
+        data.put("books", books);
         return data;
     }
 
     // 结算购物车
     @Override
-    public int calculate(JSONObject object) {
+    public int calculate(ArrayList<Book> books) {
         int price=-1;
 
-        JSONArray bookList=object.getJSONArray("bookList");
-        for(int i=0;i<bookList.size();i++) {
-            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("bookId");
-            int num = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getInteger("num");
-            price+=bookMapper.getBookPrice(bookid)*num;
+        for(int i=0;i<books.size();i++) {
+            price+=bookMapper.getBookPrice(books.get(i).getId())*books.get(i).getNum();
         }
 
         return price;
@@ -56,24 +52,19 @@ public class CartImpl implements CartService {
     // 加入购物车
     @Override
     public int addtocart(Cart cart) {
-        String userid=cart.getUserid();
-        String bookid=cart.getBookid();
-        int num=cart.getNum();
-
-        int success = cartMapper.addtocart(userid,bookid,num);
+        int success=-1;
+        for(int i=0;i<cart.getBooks().size();i++) {
+            success=cartMapper.addtocart(cart.getUserId(),cart.getBooks().get(i).getId(),cart.getBooks().get(i).getNum());
+        }
         return success;
     }
 
     // 从购物车中删除图书
     @Override
-    public int deletefromcart(JSONObject object) {
-        String userid=object.getString("ID");
-        JSONArray jsonArray=object.getJSONArray("bookList");
-
+    public int deletefromcart(Cart cart) {
         int success=-1;
-        for(int i=0;i<jsonArray.size();i++) {
-            String bookid = JSONObject.parseObject(JSONObject.toJSONString(jsonArray.get(i))).getString("bookId");
-            success=cartMapper.deletefromcart(userid,bookid);
+        for(int i=0;i<cart.getBooks().size();i++) {
+            success=cartMapper.deletefromcart(cart.getUserId(),cart.getBooks().get(i).getId());
         }
 
         return success;
@@ -81,19 +72,14 @@ public class CartImpl implements CartService {
 
     // 修改购物车中图书数目
     @Override
-    public int modifyNumFromCart(JSONObject object) {
-        String userid=object.getString("ID");
-        JSONArray bookList =object.getJSONArray("bookList");
-
+    public int modifyNumFromCart(Cart cart) {
         int success=-1;
-
-        for(int i=0;i<bookList.size();i++) {
-            String bookid = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getString("bookId");
-            int num = JSONObject.parseObject(JSONObject.toJSONString(bookList.get(i))).getInteger("num");
+        for(int i=0;i<cart.getBooks().size();i++) {
+            int num=cart.getBooks().get(i).getNum();
             if(num==0)
-                success=cartMapper.deletefromcart(userid,bookid);
+                success=cartMapper.deletefromcart(cart.getUserId(),cart.getBooks().get(i).getId());
             else
-                success=cartMapper.modifyNumFromCart(userid,bookid,num);
+                success=cartMapper.modifyNumFromCart(cart.getUserId(),cart.getBooks().get(i).getId(),num);
         }
 
         return success;
