@@ -1,6 +1,7 @@
 package com.bjtu.bookstore.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Cart;
 import com.bjtu.bookstore.entity.Store;
 import com.bjtu.bookstore.entity.User;
@@ -33,15 +34,14 @@ public class CartController {
     public HashMap<String, Object> getAllCart(@RequestBody User user) {
         Preconditions.checkNotNull(user);
 
-
         return cartService.getAllCart(user);
     }
 
     @PostMapping(value = "/settlement")
-    public int settlement(@RequestBody JSONObject object) {
-        Preconditions.checkNotNull(object);
+    public int settlement(@RequestBody ArrayList<Book> books) {
+        Preconditions.checkNotNull(books);
 
-        return cartService.calculate(object);
+        return cartService.calculate(books);
     }
 
     @PostMapping(value = "/addtocart")
@@ -52,16 +52,16 @@ public class CartController {
     }
 
     @PostMapping(value = "/deletefromcart")
-    public int deletefromcart(@RequestBody JSONObject object) {
-        Preconditions.checkNotNull(object);
+    public int deletefromcart(@RequestBody Cart cart) {
+        Preconditions.checkNotNull(cart);
 
-        return cartService.deletefromcart(object);
+        return cartService.deletefromcart(cart);
     }
 
     @PostMapping(value = "/modifyNumFromCart")
-    public int modifyNumFromCart(@RequestBody JSONObject object) {
-        Preconditions.checkNotNull(object);
+    public int modifyNumFromCart(@RequestBody Cart cart) {
+        Preconditions.checkNotNull(cart);
 
-        return cartService.modifyNumFromCart(object);
+        return cartService.modifyNumFromCart(cart);
     }
 }
