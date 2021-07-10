@@ -60,6 +60,6 @@ public interface UserMapper {
             +"where id=#{id}"
             +"</script>"
     )
-    Integer modifyInformation(User  user);
+    void modifyInformation(User  user);
 
 }
