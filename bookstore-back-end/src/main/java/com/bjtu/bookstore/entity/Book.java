@@ -30,4 +30,6 @@ public class Book {
     private Integer dealNum;
 
     private String categoryId;
+
+    private int num;
 }
