@@ -17,5 +17,5 @@ public interface UserService {
     User getInformation(User uid);//通过用户id获取用户信息
 
 
-    Integer modifyInformation(User user); //通过用户id更新用户信息
+    void modifyInformation(User user); //通过用户id更新用户信息
 }
