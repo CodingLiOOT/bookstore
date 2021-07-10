@@ -226,7 +226,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .login-content {
   position: absolute;
   top: 0;

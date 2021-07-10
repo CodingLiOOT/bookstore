@@ -268,16 +268,16 @@ export default {
 </script>
 
 <style scoped>
-.forgetPassword-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  background: rgba(38, 50, 56, 0.6) url(../assets/login_bg.jpg) no-repeat;
-  background-size: 100% 100%;
-}
+/*.forgetPassword-wrapper {*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  left: 0;*/
+/*  overflow: hidden;*/
+/*  !*background: rgba(38, 50, 56, 0.6) url(../assets/login_bg.jpg) no-repeat;*!*/
+/*  background-size: 100% 100%;*/
+/*}*/
 
 .forgetPassword-content {
   position: absolute;
