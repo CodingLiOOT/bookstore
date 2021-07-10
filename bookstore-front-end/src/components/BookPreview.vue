@@ -16,6 +16,7 @@ export default {
   name: "BookPreview",
   data(){
     return{
+
       picture:'图书预览图'
     }
   },
