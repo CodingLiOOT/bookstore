@@ -1,6 +1,7 @@
 package com.bjtu.bookstore.mapper;
 
 import com.bjtu.bookstore.entity.Book;
+import com.bjtu.bookstore.entity.Cart;
 import com.bjtu.bookstore.entity.Store;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ public interface CartMapper {
     //    找到该用户的购物车中的图书对应的店铺中有哪些书被放入了这个用户的购物车
     @Select("select * from book where id in (select bookid from cart where userid = #{userid})")
     ArrayList<Book> getAllCartBooks(String userid);
+    @Select("select * from cart where userid = #{userid}")
+    ArrayList<Cart> getAllCartBooks2(String userid);
     //    加入购物车
     @Insert("insert into cart values(#{userid},#{bookid},#{num})")
     int addtocart(String userid, String bookid, int num);

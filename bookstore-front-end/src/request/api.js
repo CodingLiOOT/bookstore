@@ -92,7 +92,7 @@ export default class api {
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_deleteFromCart = p => post('/cart/deleteFromCart', p)
+  static p_deleteFromCart = p => post('/cart/deletefromcart', p)
 
   /**
    * 修改购物车内商品个数接口

@@ -32,6 +32,11 @@ public class CartImpl implements CartService {
 
         ArrayList<Book> books = new ArrayList<>();
         books = cartMapper.getAllCartBooks(user.getId());
+        ArrayList<Cart> carts = new ArrayList<>();
+        carts = cartMapper.getAllCartBooks2(user.getId());
+        for(int i=0;i<books.size();i++) {
+            books.get(i).setNum(carts.get(i).getNum());
+        }
         HashMap<String, Object> data = new HashMap<>();
         data.put("books", books);
         return data;
@@ -40,7 +45,7 @@ public class CartImpl implements CartService {
     // 结算购物车
     @Override
     public int calculate(ArrayList<Book> books) {
-        int price=-1;
+        int price=0;
 
         for(int i=0;i<books.size();i++) {
             price+=bookMapper.getBookPrice(books.get(i).getId())*books.get(i).getNum();
