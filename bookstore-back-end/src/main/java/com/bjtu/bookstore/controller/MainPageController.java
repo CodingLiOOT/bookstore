@@ -1,14 +1,12 @@
 package com.bjtu.bookstore.controller;
 
 import com.bjtu.bookstore.entity.Book;
+import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.service.MainPageService;
 import com.bjtu.bookstore.utils.resultUtils.ResponseResultBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,8 +37,8 @@ public class MainPageController {
         return mainPageService.getTopBooks();
     }
 
-    @GetMapping(value = "/getRecommendedBooks")
-    public List<Book> getRecommendedBooks() {
+    @PostMapping(value = "/getRecommendedBooks")
+    public List<Book> getRecommendedBooks(@RequestBody User user) {
         return mainPageService.getRecommendedBooks();
     }
 
