@@ -83,23 +83,8 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <el-row class="information">
-                <img src="../../assets/head.jpg" class="userHead" alt="头像" />
-              </el-row>
-              <el-row class="information">
-                欢迎登录！
-              </el-row>
-              <el-row class="information">
-                <el-col :span="8">
-                  <el-button type="primary" round size="small">登录</el-button>
-                </el-col>
-                <el-col :span="8">
-                  <el-button type="primary" round size="small">注册</el-button>
-                </el-col>
-                <el-col :span="8">
-                  <el-button type="primary" round size="small">开店</el-button>
-                </el-col>
-              </el-row>
+              <div v-if="flag"><PersonLogin></PersonLogin></div>
+              <div v-else><Person></Person></div>
             </el-col>
           </el-row>
           <!--          推荐榜-->
@@ -124,32 +109,78 @@ import {Store} from "../../utils/store.js";
 import Top from "../MainPage/Top"
 import Like from "./Like";
 import NewBook from "./NewBook";
+import Person from "./Person";
+import PersonLogin from "./PersonLogin";
+import {alertSuccess} from "../../utils/message";
 export default {
   name: "MainCard",
   components:{
     Top,
     Like,
     NewBook,
+    Person,
+    PersonLogin
   },
   data() {
     return {
       kindList:['教育','小说','名著'],
-      imgList: [
-        {id:0,idView: require('../../assets/1.jpg')},
-        {id:1,idView: require('../../assets/head.jpg')},
-        {id:2,idView: require('../../assets/login_bg.jpg')},
-        {id:3,idView: require('../../assets/logo.png')}
-      ],
+      imgList: [],
       search: "", //当前输入框的值
       isFocus: false, //是否聚焦
       hotSearchList: ["暂无热门搜索"], //热门搜索数据
       historySearchList: [], //历史搜索数据
       searchList: ["暂无数据"], //搜索返回数据,
       history: false,
-      types: ["", "success", "info", "warning", "danger"] //搜索历史tag式样
+      types: ["", "success", "info", "warning", "danger"], //搜索历史tag式样
+      bannerHeight:'',
+      flag:false,
     };
   },
   methods: {
+    getLunBo(){
+      let t=[
+            {id:0,idView: require('../../assets/1.jpg')},
+            {id:1,idView: require('../../assets/head.jpg')},
+            {id:2,idView: require('../../assets/login_bg.jpg')},
+            {id:3,idView: require('../../assets/logo.png')}
+          ];
+      for(let i=0;i<t.length;i++){
+        let lb=t[i];
+        let temp={
+          id:'',
+          idView:'',
+        }
+        temp.id=i+1;
+        temp.idView=lb.idView
+        this.imgList.push(temp)
+      }
+      this.$API.p_getLunBo({})
+          .then((data) => {
+            for(let i=0;i<data.lunBo.length;i++){
+              let lb=data.lunBo[i];
+              let temp={
+                id:'',
+                idView:'',
+              }
+              temp.id=i+1;
+              temp.idView=lb.imgUrl
+              this.imgList.push(temp)
+            }
+          })
+          .catch((err) => {})
+    },
+    getFlag(){
+      alert(this.$store.state.user.userID)
+      if(this.$store.state.user.userID===null){
+        alert("false")
+        this.flag=false;
+      }
+      else{
+
+        alert("true")
+        this.flag=true;
+      }
+    },
     focus() {
       this.isFocus = true;
       this.historySearchList =
@@ -190,7 +221,7 @@ export default {
     },
     removeAllHistory() {
       Store.removeAllHistory();
-    }
+    },
   },
   computed: {
     isHistorySearch() {
@@ -208,6 +239,8 @@ export default {
     },
   },
   mounted() {
+    this.getLunBo();
+    this.getFlag();
     // 首次加载时,需要调用一次
     this.screenWidth =  window.innerWidth;
     this.setSize();
@@ -215,7 +248,7 @@ export default {
     window.onresize = () =>{
       this.screenWidth =  window.innerWidth;
       this.setSize();
-    }
+    };
   }
 }
 </script>
@@ -246,10 +279,6 @@ export default {
 }
 .first{
   margin-top: 3%;
-}
-.userHead{
-  width: 15%;
-  height: 15%;
 }
 .bookKind{
   margin-right: 70%;

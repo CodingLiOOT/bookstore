@@ -1,21 +1,19 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header class="el-header">
-        <el-row>
-          <el-col :span="6">
-            <el-link type="primary">登录/注册</el-link>
-          </el-col>
-        </el-row>
-      </el-header>
+      <Header></Header>
     </el-container>
     <router-view/>
   </div>
 </template>
 
 <script>
+import Header from "./components/Header";
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+    Header,
+  }
 }
 </script>
 

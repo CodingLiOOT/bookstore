@@ -70,13 +70,20 @@
       </el-col>
     </el-row>
     <el-footer class="myFooter">
-      <div class="bar-wrapper">
-        <div class="bar-right">
-          <div class="piece">已选商品<strong class="piece_num">{{this.fetchData.allnum}}</strong>件</div>
-          <div class="totalMoney">共计: <strong class="total_text">￥{{this.fetchData.allsum}}</strong></div>
-          <div class="calBtn"><a href="javascript:;">结算</a></div>
-        </div>
-      </div>
+          <el-row>
+            <el-col :span="2">
+              <el-button type="text" @click="deleteBooks">删除</el-button>
+            </el-col>
+            <el-col :span="3" :offset="12">
+              <div class="piece">已选商品<strong class="piece_num">{{this.fetchData.allnum}}</strong>件</div>
+            </el-col>
+            <el-col :span="3">
+              <div class="totalMoney">共计: <strong class="total_text">￥{{this.fetchData.allsum}}</strong></div>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="info" @click="settlement">结算</el-button>
+            </el-col>
+          </el-row>
     </el-footer>
   </div>
 </template>
@@ -91,92 +98,178 @@ export default {
       picture:'',
       activeName: 'first',
       fetchData:{
-        shops:[
-          {
-            shopId:1,
-            shopName:'搜猎人艺术生活',
-            books:[
-              {
-                bookId:101,
-                bookName:'机试指南',
-                single:480,
-                num:1,
-                imgSrc:'1.jpg',
-                total:'480',
-                checked:false//商品选中状态
-              },
-              {
-                bookId:102,
-                bookName:'机试指南',
-                single:480,
-                num:1,
-                imgSrc:'1.jpg',
-                total:'480',
-                checked:false//商品选中状态
-              },
-              {
-                bookId:103,
-                bookName:'机试指南',
-                single:480,
-                num:1,
-                imgSrc:'1.jpg',
-                total:'480',
-                checked:false//商品选中状态
-              },
-            ],
-            check:false,//店铺选中状态
-            choose:0,//商品选中个数
-          },
-          {
-            shopId:2,
-            shopName:'搜猎人艺术生活',
-            books:[
-              {
-                bookId:104,
-                bookName:'机试指南',
-                single:480,
-                num:1,
-                imgSrc:'1.jpg',
-                total:'480',
-                checked:false//商品选中状态
-              },
-              {
-                bookId:105,
-                bookName:'机试指南',
-                single:480,
-                num:1,
-                imgSrc:'1.jpg',
-                total:'480',
-                checked:false//商品选中状态
-              },
-            ],
-            check:false,//店铺选中状态
-            choose:0,//商品选中个数
-          },
-        ],
-        status:false,//全选选中状态
-        allchoose:0,//店铺选中个数
-        allsum:0,//总计价格
-        allnum:0//总计数量
+        shops:[],
+        status:false,
+        allchoose:'',
+        allsum:'',
+        allnum:'',
       },
       Height:'',
     };
   },
   methods: {
+    getCartList(){
+      // 假数据
+      let books=[
+        {
+          bookId:101,
+          bookName:'机试指南',
+          single:480,
+          num:1,
+          imgSrc:'1.jpg',
+          total:'480',
+          checked:false//商品选中状态
+        },
+        {
+          bookId:102,
+          bookName:'机试指南',
+          single:480,
+          num:1,
+          imgSrc:'1.jpg',
+          total:'480',
+          checked:false//商品选中状态
+        },
+        {
+          bookId:103,
+          bookName:'机试指南',
+          single:480,
+          num:1,
+          imgSrc:'1.jpg',
+          total:'480',
+          checked:false//商品选中状态
+        },]
+      let shop={
+        shopId:1,
+        shopName:'久柒图书店',
+        books:[],
+        check:false,//店铺选中状态
+        choose:0,//商品选中个数
+      }
+      for(let i=0;i<books.length;i++){
+        let temp={
+          bookId:'',
+          bookName:'',
+          single:'',
+          num:'',
+          imgSrc:'',
+          total:'',
+          checked:false//商品选中状态
+        }
+        let book=books[i]
+        temp.bookId=book.bookId;
+        temp.bookName=book.bookName;
+        temp.single=book.single;
+        temp.num=book.num;
+        temp.imgSrc=book.imgSrc;
+        temp.total=book.num*book.single;
+        temp.checked=false;
+        shop.books.push(temp);
+      }
+      this.fetchData.status=false;
+      this.fetchData.allChoose=0;
+      this.fetchData.allsum=0;
+      this.fetchData.allnum=0;
+      this.fetchData.shops.push(shop);
+
+      this.$API.p_getAllCart({})
+          .then((data) => {
+            let shop={
+              shopId:1,
+              shopName:'久柒图书店',
+              books:[],
+              check:false,//店铺选中状态
+              choose:0,//商品选中个数
+            }
+            for(let i=0;i<data.books.length;i++){
+              let temp={
+                bookId:'',
+                bookName:'',
+                single:'',
+                num:'',
+                imgSrc:'',
+                total:'',
+                checked:false//商品选中状态
+              }
+              let book=data.books[i]
+              temp.bookId=book.id;
+              temp.bookName=book.name;
+              temp.single=book.price;
+              temp.num=book.dealNum;
+              temp.imgSrc=book.imgUrl;
+              temp.total=book.dealNum*book.price;
+              temp.checked=false;
+              shop.push(temp);
+            }
+            this.fetchData.status=false;
+            this.fetchData.allChoose=0;
+            this.fetchData.allsum=0;
+            this.fetchData.allnum=0;
+            this.fetchData.push(shop);
+          })
+          .catch((err) => {})
+    },
+    getSelectedList(){
+      let bookList=[];
+      for(let i=0;i<this.fetchData.shops.length;i++){
+        for(let j=0;j<this.fetchData.shops[i].books.length;j++){
+          let book=this.fetchData.shops[i].books[j]
+          if(book.checked){
+            let temp={
+              bookId:'',
+              num:0,
+            }
+            temp.bookId=book.bookId;
+            temp.num=book.num;
+            bookList.push(temp);
+          }
+        }
+      }
+      return bookList;
+    },
+    settlement(){
+      let bkl=this.getSelectedList();
+      this.$API.p_settlement({
+       bookList:bkl
+      })
+          .then((data) => {
+
+          })
+          .catch((err) => {})
+    },
+    deleteBooks(){
+      let bkl=this.getSelectedList();
+      this.$API.p_deleteFromCart({
+        bookList:bkl
+      })
+          .then((data) => {
+          })
+          .catch((err) => {})
+      this.getCartList();
+    },
     handleClick(tab, event) {
       console.log(tab, event);
     },
     handleChange(bookId) {
-      // alert(bookId)
+      let num;
       for(let i=0;i<this.fetchData.shops.length;i++){
         for(let j=0;j<this.fetchData.shops[i].books.length;j++){
           let book=this.fetchData.shops[i].books[j]
           if(book.bookId===bookId){
             book.total=book.single*book.num
+            num=book.num
           }
         }
       }
       this.getTotal()
+      this.$API.p_modifyNumFromCart({
+        ID:this.$store.state.user.userID,
+        bookId:bookId,
+        num:num,
+      })
+          .then((data) => {
+
+          })
+          .catch((err) => {})
       console.log(bookId);
     },
     // 全选
@@ -234,6 +327,7 @@ export default {
     }
   },
   mounted(){
+    this.getCartList();
     //动态设置内容高度 让footer始终居底   header+footer的高度是100
     this.Height = document.documentElement.clientHeight - 100;
     //监听浏览器窗口变化　

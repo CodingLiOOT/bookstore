@@ -31,7 +31,7 @@ const router = new Router({
     },
     {
       path: '/',
-      redirect: '/user/login'
+      redirect: '/mainPage'
     },
     {
       path: '/user',

@@ -16,7 +16,7 @@ export default {
   name: "BookPreview",
   data(){
     return{
-      picture:'../assets/1.jpg'
+      picture:'图书预览图'
     }
   },
   props: {//参数传递需要在props里面声明
