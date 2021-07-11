@@ -4,7 +4,6 @@ import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.service.MailService;
 import com.bjtu.bookstore.service.UserService;
 import com.bjtu.bookstore.utils.resultUtils.ResponseResultBody;
-import com.bjtu.bookstore.utils.resultUtils.Result;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -81,16 +80,17 @@ public class UserController {
 
     //获取用户的相关信息
     @PostMapping(value = "/getInformation")
-    public Result getInformation(@RequestBody User uid){
-       User  result=   userService.getInformation(uid);
-       return Result.success(result);
+    public User getInformation(@RequestBody User uid) {
+        Preconditions.checkNotNull(uid);
+        return userService.getInformation(uid);
     }
 
 
     //通过用户id修改用户信息
     @PostMapping(value = "/modifyInformation")
-    public Result modifyInformation(@RequestBody User user){
-       Integer  userResult= userService.modifyInformation(user);
-       return Result.success(userResult);
+    public void modifyInformation(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+        userService.modifyInformation(user);
+
     }
 }

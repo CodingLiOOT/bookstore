@@ -55,7 +55,29 @@ const router = new Router({
           component: () => import('../components/forget.vue')
         }
       ]
+    },
+    {
+      path:'/item',
+      name:'Item',
+      component: () => import("../components/Item")
 
+    },
+    {
+      path:'/CenterPage',
+      name:'CenterPage',
+      component: () => import("../components/Center/CenterPage")
+
+    },
+    {
+      path:'/OrderInfor',
+      name:'OrderInfor',
+      component: () => import("../components/OrderInfor")
+
+    },
+    {
+      path:'/Paycode',
+      name:'Paycode',
+      component: () => import("../components/Paycode")
 
     },
     {

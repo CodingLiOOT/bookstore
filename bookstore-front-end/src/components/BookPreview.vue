@@ -1,11 +1,11 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }">
+  <el-card :body-style="{ padding: '0px' }" @click.native="openBook(bookId)" class="bookCard">
     <img :src="imgSrc" :alt="picture" class="image">
     <div style="padding: 14px;">
       <span>{{bookName}}</span>
       <div class="bottom clearfix">
-        <el-button type="warning" round size="small">加入购物车</el-button>
-        <el-button type="danger" round size="small">立即购买</el-button>
+        <el-button type="text" round class="btn">加入购物车</el-button>
+        <el-button type="text" round class="btn">立即购买</el-button>
       </div>
     </div>
   </el-card>
@@ -27,9 +27,21 @@ export default {
     'bookName':{
       type: String,
       default:'defaultName',
+    },
+    'bookId':{
+      type: String,
+      default:'defaultBookId',
     }
   },
   methods: {
+    openBook(val){
+      this.$router.push({
+        path: '/item',
+        query: {
+          bookId: val,
+        }
+      });
+    }
   },
 
 }
@@ -42,5 +54,13 @@ export default {
 }
 .bottom{
   margin-top: 2%;
+}
+.bookCard{
+  cursor: pointer;
+}
+.btn{
+  /*width:60%;*/
+  /*height:60%;*/
+  font-size: 0.2rem;
 }
 </style>

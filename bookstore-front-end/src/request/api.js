@@ -43,21 +43,21 @@ export default class api {
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static g_getTops = p => get('/mainPage/getTops', p)
+  static g_getTops = p => get('/mainPage/getTopBooks', p)
 
   /**
    * 猜你喜欢书列表接口
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static g_getLikes = p => get('/mainPage/getLikes', p)
+  static g_getLikes = p => post('/mainPage/getRecommendedBooks', p)
 
   /**
    * 图书类别接口
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static g_getAllCate = p => post('/mainPage/getAllCate', p)
+  static g_getAllCate = p => post('/category/getCategories', p)
 
   /**
    * 轮播接口
@@ -100,5 +100,69 @@ export default class api {
    * @returns {Promise<unknown>}
    */
   static p_modifyNumFromCart = p => post('/cart/modifyNumFromCart', p)
+
+  /**
+   * 修改购物车内商品个数接口
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_bookDetail = p => post('/book/getDetail', p)
+
+  /**
+   * 增加购物车内商品接口
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_addToCart = p => post('/cart/addotcart', p)
+
+  /**
+   * 获取订单列表
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getOrderList = p => post('/user/getOrderList', p)
+
+  /**
+   * 提交订单
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_confirmOrder = p => post('/user/confirmOrder', p)
+
+  /**
+   * 修改个人信息
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_modifyInformation = p => post('/user/modifyInformation', p)
+
+  /**
+   * 修改某个地址
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_modifyAddress = p => post('/user/modifyAddress', p)
+
+  /**
+   * 获取所有地址
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getAddress = p => post('/user/getAddress', p)
+
+  /**
+   * 添加地址
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_addAddress = p => post('/user/addAddress', p)
+
+  /**
+   * 删除地址
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_deleteAddress = p => post('/user/deleteAddress', p)
+
 
 }

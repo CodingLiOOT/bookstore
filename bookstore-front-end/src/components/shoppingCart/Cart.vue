@@ -180,9 +180,39 @@ export default {
       let bkl=this.getSelectedList();
       this.$API.p_settlement(bkl)
           .then((data) => {
-
           })
           .catch((err) => {})
+
+      let bklist=[]
+      let total=0
+      for(let i=0;i<this.fetchData.shops.length;i++){
+        for(let j=0;j<this.fetchData.shops[i].books.length;j++){
+          let book=this.fetchData.shops[i].books[j]
+          if(book.checked){
+            let temp={
+              bookId:'',
+              bookName:'',
+              price:0,
+              bookNum:0,
+            }
+            temp.bookId=book.bookId;
+            temp.bookNum=book.num;
+            temp.bookName=book.bookName;
+            temp.price=book.single;
+            temp.bookTotal=book.single*book.num
+            total=total+temp.bookTotal
+            bklist.push(temp);
+          }
+        }
+      }
+      this.$router.push({
+        path: '/orderInfor',
+        query: {
+          bklist: bklist,
+          bookList:bkl,
+          total:total,
+        }
+      });
     },
     deleteBooks(){
       let books=[]

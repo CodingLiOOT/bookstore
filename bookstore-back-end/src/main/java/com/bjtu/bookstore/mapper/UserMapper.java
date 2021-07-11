@@ -52,7 +52,7 @@ public interface UserMapper {
     @Update("<script>"
             +"update user  "
             +"<set>"
-            +" <if test=\"nickname != null\">nickname=#{nickname},</if>"
+            +" <if test=\"username != null\">username=#{username},</if>"
             +" <if test=\"birthday != null\">birthday=#{birthday},</if>"
             +" <if test=\"gender != null\">gender=#{gender},</if>"
             +" <if test=\"phone != null\">phone=#{phone}</if>"
@@ -60,6 +60,6 @@ public interface UserMapper {
             +"where id=#{id}"
             +"</script>"
     )
-    Integer modifyInformation(User  user);
+    void modifyInformation(User  user);
 
 }
