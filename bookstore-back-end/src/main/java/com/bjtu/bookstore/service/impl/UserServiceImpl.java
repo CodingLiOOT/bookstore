@@ -98,6 +98,8 @@ public class UserServiceImpl implements UserService {
     //通过用户id获取用户信息
     @Override
     public User getInformation(User uid) {
+
+
         User userInfo = userMapper.getInformation(uid.getId());
         return userInfo;
     }
@@ -106,9 +108,9 @@ public class UserServiceImpl implements UserService {
 
     //修改用户个人信息
     @Override
-    public Integer modifyInformation(User user) {
-        Integer user1 = userMapper.modifyInformation(user);
-        return user1;
+    public void modifyInformation(User user) {
+        userMapper.modifyInformation(user);
+
     }
 
 

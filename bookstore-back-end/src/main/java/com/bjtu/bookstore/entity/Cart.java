@@ -16,4 +16,6 @@ public class Cart {
     private ArrayList<Store> stores;
 
     private Double totalPrice;
+
+    private int num;
 }

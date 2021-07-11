@@ -35,15 +35,15 @@ html,body{
   padding:0;
 }
 .el-header{
-  background-color: #e6e6e7;
-  color: #333;
-  text-align: center;
-  line-height: 50px;
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  z-index: 1000;
+  /*background-color: #e6e6e7;*/
+  /*color: #333;*/
+  /*text-align: center;*/
+  /*line-height: 50px;*/
+  /*position: fixed;*/
+  /*width: 100%;*/
+  /*left: 0;*/
+  /*top: 0;*/
+  /*z-index: 1000;*/
 }
 
 </style>

@@ -31,5 +31,7 @@ public class Book {
 
     private String categoryId;
 
+    private String categoryName;
+
     private int num;
 }

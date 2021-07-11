@@ -10,7 +10,7 @@
                 <el-col :span="2" :offset="0">
                   <!--所有商品全选-->
                   <input type="checkbox" id="all" class="whole_check">
-                  <label for="all" :class="fetchData.status?'mark':''" @click="cartchoose()"></label>
+                  <label for="all" :class="this.fetchData.status?'mark':''" @click="cartchoose()"></label>
                   全选
                 </el-col>
                 <el-col :span="2" :offest="4">信息</el-col>
@@ -19,7 +19,7 @@
                 <el-col :span="2" :offset="2">金额</el-col>
                 <el-col :span="2" :offset="2">操作</el-col>
               </el-row>
-              <div v-for="shop in fetchData.shops" :key="shop.shopId">
+              <div v-for="shop in this.fetchData.shops" :key="shop.shopId">
                 <el-row class="infoCard">
                   <div class="shopName">
                     <input type="checkbox" id="shop_a" class="shopChoice">
@@ -36,7 +36,7 @@
                           <label for="checkbox_2" :class="book.checked?'mark':''" @click="choose(shop,book)"></label>
                         </el-col>
                         <el-col :span="15" :offset="6">
-                          <img :src="require('../../assets/'+book.imgSrc)" :alt="picture" class="image">
+                          <img :src="book.imgSrc" :alt="picture" class="image">
                         </el-col>
                       </el-row>
                     </el-col>
@@ -109,69 +109,42 @@ export default {
   },
   methods: {
     getCartList(){
-      // 假数据
-      let books=[
-        {
-          bookId:101,
-          bookName:'机试指南',
-          single:480,
-          num:1,
-          imgSrc:'1.jpg',
-          total:'480',
-          checked:false//商品选中状态
-        },
-        {
-          bookId:102,
-          bookName:'机试指南',
-          single:480,
-          num:1,
-          imgSrc:'1.jpg',
-          total:'480',
-          checked:false//商品选中状态
-        },
-        {
-          bookId:103,
-          bookName:'机试指南',
-          single:480,
-          num:1,
-          imgSrc:'1.jpg',
-          total:'480',
-          checked:false//商品选中状态
-        },]
-      let shop={
-        shopId:1,
-        shopName:'久柒图书店',
-        books:[],
-        check:false,//店铺选中状态
-        choose:0,//商品选中个数
-      }
-      for(let i=0;i<books.length;i++){
-        let temp={
-          bookId:'',
-          bookName:'',
-          single:'',
-          num:'',
-          imgSrc:'',
-          total:'',
-          checked:false//商品选中状态
-        }
-        let book=books[i]
-        temp.bookId=book.bookId;
-        temp.bookName=book.bookName;
-        temp.single=book.single;
-        temp.num=book.num;
-        temp.imgSrc=book.imgSrc;
-        temp.total=book.num*book.single;
-        temp.checked=false;
-        shop.books.push(temp);
-      }
-      this.fetchData.status=false;
-      this.fetchData.allChoose=0;
-      this.fetchData.allsum=0;
-      this.fetchData.allnum=0;
-      this.fetchData.shops.push(shop);
-
-      this.$API.p_getAllCart({})
+      this.fetchData={
+        shops:[
+          {
+            shopId:1,
+            shopName:'久柒图书店',
+            books:[
+              {
+                bookId:'1',
+                bookName:'book1',
+                single:12,
+                num:1,
+                imgSrc:'',
+                total:12,
+                checked:false//商品选中状态
+              },{
+                bookId:'2',
+                bookName:'book2',
+                single:32,
+                num:1,
+                imgSrc:'',
+                total:32,
+                checked:false//商品选中状态
+              }
+            ],
+            check:false,//店铺选中状态
+            choose:0,//商品选中个数
+          }
+        ],
+        status:false,
+        allchoose:'',
+        allsum:'',
+        allnum:'',
+      },
+      this.$API.p_getAllCart({
+        id:this.$store.state.userID
+      })
           .then((data) => {
             let shop={
               shopId:1,
@@ -184,29 +157,32 @@ export default {
               let temp={
                 bookId:'',
                 bookName:'',
-                single:'',
-                num:'',
+                single:0,
+                num:0,
                 imgSrc:'',
-                total:'',
+                total:0,
                 checked:false//商品选中状态
               }
               let book=data.books[i]
               temp.bookId=book.id;
               temp.bookName=book.name;
               temp.single=book.price;
-              temp.num=book.dealNum;
+              temp.num=book.num;
+
               temp.imgSrc=book.imgUrl;
-              temp.total=book.dealNum*book.price;
+              temp.total=book.num*book.price;
               temp.checked=false;
-              shop.push(temp);
+              shop.books.push(temp);
             }
             this.fetchData.status=false;
-            this.fetchData.allChoose=0;
+            this.fetchData.allchoose=0;
             this.fetchData.allsum=0;
             this.fetchData.allnum=0;
-            this.fetchData.push(shop);
+            this.fetchData.shops.push(shop)
           })
           .catch((err) => {})
+          console.log(this.fetchData)
+
     },
     getSelectedList(){
       let bookList=[];
@@ -215,10 +191,10 @@ export default {
           let book=this.fetchData.shops[i].books[j]
           if(book.checked){
             let temp={
-              bookId:'',
+              id:'',
               num:0,
             }
-            temp.bookId=book.bookId;
+            temp.id=book.bookId;
             temp.num=book.num;
             bookList.push(temp);
           }
@@ -228,23 +204,66 @@ export default {
     },
     settlement(){
       let bkl=this.getSelectedList();
-      this.$API.p_settlement({
-       bookList:bkl
-      })
+      this.$API.p_settlement(bkl)
           .then((data) => {
-
           })
           .catch((err) => {})
+
+      let bklist=[]
+      let total=0
+      for(let i=0;i<this.fetchData.shops.length;i++){
+        for(let j=0;j<this.fetchData.shops[i].books.length;j++){
+          let book=this.fetchData.shops[i].books[j]
+          if(book.checked){
+            let temp={
+              bookId:'',
+              bookName:'',
+              price:0,
+              bookNum:0,
+            }
+            temp.bookId=book.bookId;
+            temp.bookNum=book.num;
+            temp.bookName=book.bookName;
+            temp.price=book.single;
+            temp.bookTotal=book.single*book.num
+            total=total+temp.bookTotal
+            bklist.push(temp);
+          }
+        }
+      }
+      this.$router.push({
+        path: '/orderInfor',
+        query: {
+          bklist: bklist,
+          bookList:bkl,
+          total:total,
+        }
+      });
     },
     deleteBooks(){
-      let bkl=this.getSelectedList();
+      let books=[]
+      for(let i=0;i<this.fetchData.shops.length;i++){
+        for(let j=0;j<this.fetchData.shops[i].books.length;j++){
+          let book=this.fetchData.shops[i].books[j]
+          if(book.checked){
+            let temp={
+              id:'',
+              // num:0,
+            }
+            temp.id=book.bookId;
+            // temp.num=book.num;
+            books.push(temp);
+          }
+        }
+      }
       this.$API.p_deleteFromCart({
-        bookList:bkl
+        userId:this.$store.state.userID,
+        books
       })
           .then((data) => {
+            this.getCartList();
           })
           .catch((err) => {})
-      this.getCartList();
     },
     handleClick(tab, event) {
       console.log(tab, event);
@@ -261,10 +280,15 @@ export default {
         }
       }
       this.getTotal()
+      let books=[
+        {
+          id:bookId,
+          num:num,
+        }
+      ]
       this.$API.p_modifyNumFromCart({
-        ID:this.$store.state.user.userID,
-        bookId:bookId,
-        num:num,
+        userId:this.$store.state.userID,
+        books,
       })
           .then((data) => {
 
