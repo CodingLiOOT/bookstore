@@ -20,7 +20,7 @@
                           <el-table
                               :data="tableData[scope.$index].detailData"
                               style="width: 100%">
-                            <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
+                            <el-table-column prop="id" label="图书编号" width="180"></el-table-column>
                             <el-table-column prop="shopName" label="店铺" width="180"></el-table-column>
                             <el-table-column prop="category" label="所属分类" width="180"></el-table-column>
                             <el-table-column prop="price" label="单价" width="180"></el-table-column>
@@ -36,7 +36,7 @@
                       label="订单编号"
                       sortable
                       width="180"
-                      column-key="orderid">
+                      column-key="orderId">
                   </el-table-column>
                   <el-table-column
                       prop="date"
@@ -62,9 +62,7 @@
                   </el-table-column>
                   <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
-                      <el-button
-                          type="text"
-                          size="small">
+                      <el-button type="text" size="small" @click="settle1(scope.row.orderId)">
                         去支付
                       </el-button>
                     </template>
@@ -85,7 +83,7 @@
                           <el-table
                               :data="detailData"
                               style="width: 100%">
-                            <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
+                            <el-table-column prop="id" label="图书编号" width="180"></el-table-column>
                             <el-table-column prop="shopName" label="店铺" width="180"></el-table-column>
                             <el-table-column prop="category" label="所属分类" width="180"></el-table-column>
                             <el-table-column prop="price" label="单价" width="180"></el-table-column>
@@ -130,7 +128,7 @@
                     <template slot-scope="scope">
                       <el-button
                           type="text"
-                          size="small">
+                          size="small" plain @click="open1">
                         提醒发货
                       </el-button>
                     </template>
@@ -151,7 +149,7 @@
                           <el-table
                               :data="detailData"
                               style="width: 100%">
-                            <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
+                            <el-table-column prop="id" label="图书编号" width="180"></el-table-column>
                             <el-table-column prop="shopName" label="店铺" width="180"></el-table-column>
                             <el-table-column prop="category" label="所属分类" width="180"></el-table-column>
                             <el-table-column prop="price" label="单价" width="180"></el-table-column>
@@ -196,7 +194,7 @@
                     <template slot-scope="scope">
                       <el-button
                           type="text"
-                          size="small">
+                          size="small" plain @click="open2">
                         确认收货
                       </el-button>
                     </template>
@@ -217,8 +215,8 @@
                           <el-table
                               :data="detailData"
                               style="width: 100%">
-                            <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
-                            <el-table-column prop="shopName" label="店铺" width="180"></el-table-column>
+                            <el-table-column prop="id" label="图书编号" width="180"></el-table-column>
+                            <el-table-column prop="shopName" label="书名" width="180"></el-table-column>
                             <el-table-column prop="category" label="所属分类" width="180"></el-table-column>
                             <el-table-column prop="price" label="单价" width="180"></el-table-column>
                             <el-table-column prop="bookNum" label="数量" width="180"></el-table-column>
@@ -260,9 +258,7 @@
                   </el-table-column>
                   <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
-                      <el-button
-                          type="text"
-                          size="small">
+                      <el-button type="text" size="small" @click="comment(scope.row.orderId)">
                         去评价
                       </el-button>
                     </template>
@@ -283,7 +279,7 @@
                           <el-table
                               :data="detailData"
                               style="width: 100%">
-                            <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
+                            <el-table-column prop="id" label="图书编号" width="180"></el-table-column>
                             <el-table-column prop="shopName" label="店铺" width="180"></el-table-column>
                             <el-table-column prop="category" label="所属分类" width="180"></el-table-column>
                             <el-table-column prop="price" label="单价" width="180"></el-table-column>
@@ -324,15 +320,6 @@
                       label="订单状态"
                       width="100">
                   </el-table-column>
-                  <!--            <el-table-column label="操作" width="120">-->
-                  <!--              <template slot-scope="scope">-->
-                  <!--                <el-button-->
-                  <!--                    type="text"-->
-                  <!--                    size="small">-->
-                  <!--                  删除-->
-                  <!--                </el-button>-->
-                  <!--              </template>-->
-                  <!--            </el-table-column>-->
                 </el-table>
               </el-tab-pane>
             </el-tabs>
@@ -349,6 +336,7 @@
 
 <script>
 import Setting from "./Setting";
+
 export default {
   name: "CenterPage",
   components:{
@@ -369,74 +357,261 @@ export default {
           this.getUnPay()
           break;
         case "2":
+          this.getUndelivered()
           break;
         case "3":
+          this.getNotReceived()
           break;
         case "4":
+          this.getNotEvaluated()
           break;
         case "5":
+          this.getEvaluated()
           break;
       }
     },
     getUnPay(){
       this.tableData=[];
-      let cat={
-        tableData:[{
-          orderId:'111252',
-          date: '2021-11-11',
-          num:'7',
-          sum:'77',
-          state: '待支付',
-          detailData:[{
-            bookName:'一本好书',
-            bookId:'001',
-            shopName:'新华书店',
-            category:'天文',
-            price:'23',
-            bookNum:'4'
-          },{
-            bookName:'很好书',
-            bookId:'002',
-            shopName:'新华书店',
-            category:'天文',
-            price:'23',
-            bookNum:'4'
-          }]
-
-        },  {
-          orderId:'112223',
-          date: '2021-11-1',
-          num:'6',
-          sum:'97',
-          state: '待支付',
-          detailData:[{
-            bookName:'一本好书',
-            bookId:'003',
-            shopName:'新华书店',
-            category:'天文',
-            price:'23',
-            bookNum:'4'
-          },{
-            bookName:'很好书',
-            bookId:'004',
-            shopName:'新华书店',
-            category:'天文',
-            price:'23',
-            bookNum:'4'
-          }]
-        }]
-      };
-      this.update(cat);
+      // let cat={
+      //   tableData:[{
+      //     orderId:'111',
+      //     date: '2021-11-11',
+      //     num:'7',
+      //     sum:'77',
+      //     state: '待支付',
+      //     detailData:[{
+      //       bookName:'一本好书',
+      //       id:'001',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     },{
+      //       bookName:'很好书',
+      //       id:'002',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     }]
+      //   }]
+      // };
+      this.update(data);
       this.$API
           .p_getOrderList({
             id:this.$store.state.userID,
-            state:0
+            state:1
           })
           .then((data) => {
             this.update(data);
           })
           .catch((err) => {})
     },
+
+    getUndelivered(){
+      this.tableData=[];
+      // let cat={
+      //   tableData:[{
+      //     orderId:'111',
+      //     date: '2021-11-11',
+      //     num:'7',
+      //     sum:'77',
+      //     state: '待支付',
+      //     detailData:[{
+      //       bookName:'一本好书',
+      //       id:'001',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     },{
+      //       bookName:'很好书',
+      //       id:'002',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     }]
+      //   }]
+      // };
+      this.update(data);
+      this.$API
+          .p_getOrderList({
+            id:this.$store.state.userID,
+            state:2
+          })
+          .then((data) => {
+            this.update(data);
+          })
+          .catch((err) => {})
+    },
+
+    getNotReceived() {
+      this.tableData = [];
+      // let cat={
+      //   tableData:[{
+      //     orderId:'111',
+      //     date: '2021-11-11',
+      //     num:'7',
+      //     sum:'77',
+      //     state: '待支付',
+      //     detailData:[{
+      //       bookName:'一本好书',
+      //       id:'001',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     },{
+      //       bookName:'很好书',
+      //       id:'002',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     }]
+      //   }]
+      // };
+      this.update(data);
+      this.$API
+          .p_getOrderList({
+            id:this.$store.state.userID,
+            state:3
+          })
+          .then((data) => {
+            this.update(data);
+          })
+          .catch((err) => {})
+    },
+
+    getNotEvaluated(){
+      this.tableData=[];
+      // let cat={
+      //   tableData:[{
+      //     orderId:'111',
+      //     date: '2021-11-11',
+      //     num:'7',
+      //     sum:'77',
+      //     state: '待支付',
+      //     detailData:[{
+      //       bookName:'一本好书',
+      //       id:'001',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     },{
+      //       bookName:'很好书',
+      //       id:'002',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     }]
+      //   }]
+      // };
+      this.update(data);
+      this.$API
+          .p_getOrderList({
+            id:this.$store.state.userID,
+            state:4
+          })
+          .then((data) => {
+            this.update(data);
+          })
+          .catch((err) => {})
+    },
+
+    getEvaluated(){
+      this.tableData=[];
+      // let cat={
+      //   tableData:[{
+      //     orderId:'111',
+      //     date: '2021-11-11',
+      //     num:'7',
+      //     sum:'77',
+      //     state: '待支付',
+      //     detailData:[{
+      //       bookName:'一本好书',
+      //       id:'001',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     },{
+      //       bookName:'很好书',
+      //       id:'002',
+      //       shopName:'新华书店',
+      //       category:'天文',
+      //       price:'23',
+      //       bookNum:'4'
+      //     }]
+      //   }]
+      // };
+      this.update(data);
+      this.$API
+          .p_getOrderList({
+            id:this.$store.state.userID,
+            state:5
+          })
+          .then((data) => {
+            this.update(data);
+          })
+          .catch((err) => {})
+    },
+
+    settle1(val){
+      console.log(val)
+      this.$router.push({
+        path: '/Paycode',
+        query: {
+          orderId: val
+        }
+      });
+    },
+    open1() {
+      this.$notify({
+        title: '成功',
+        message: '提醒卖家发货成功',
+        type: 'success'
+      });
+    },
+    open2() {
+      this.$notify({
+        title: '成功',
+        message: '确认收货成功',
+        type: 'success'
+      });
+      this.$API
+          .p_changestate({
+            orderId:this.settle1(val),
+            state:4
+          })
+          .catch((err) => {})
+    },
+    comment(val){
+      this.$prompt('请输入评论', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({ value }) => {
+        this.$message({
+          type: 'success',
+          message: '评论成功'
+        });
+        // this.$API
+        //     .p_changestate({
+        //       orderId:this.settle1(val),
+        //       state:4
+        //     })
+        //     .catch((err) => {});
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        });
+      });
+    },
+
     update(data){
       for (let i = 0; i < data.tableData.length; i++) {
         let d=data.tableData[i]
@@ -457,14 +632,14 @@ export default {
           let dt=d.detailData[j];
           let temp={
             bookName:'',
-            bookId:'',
+            id:'',
             shopName:'',
             category:'',
             price:0,
             bookNum:0,
           }
           temp.bookName=dt.bookName;
-          temp.bookId=dt.bookId;
+          temp.id=dt.id;
           temp.shopName=dt.shopName;
           temp.category=dt.category;
           temp.price=dt.price;

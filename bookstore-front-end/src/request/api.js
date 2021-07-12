@@ -123,11 +123,18 @@ export default class api {
   static p_getOrderList = p => post('/user/getOrderList', p)
 
   /**
-   * 提交订单
+   * 修改订单状态
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_confirmOrder = p => post('/user/confirmOrder', p)
+  static p_changestate = p => post('/user/changestate', p)
+
+    /**
+     * 提交订单
+     * @param {Object} p [发送的参数：]
+     * @returns {Promise<unknown>}
+     */
+    static p_confirmOrder = p => post('/user/confirmOrder', p)
 
   /**
    * 修改个人信息
