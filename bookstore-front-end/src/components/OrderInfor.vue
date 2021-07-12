@@ -32,7 +32,7 @@
             <el-table
                 :data="this.detailData"
                 style="width: 100%">
-              <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
+              <el-table-column prop="id" label="图书编号" width="180"></el-table-column>
               <el-table-column prop="bookName" label="图书名称" width="180"></el-table-column>
               <el-table-column prop="price" label="单价" width="180"></el-table-column>
               <el-table-column prop="bookNum" label="数量" width="180"></el-table-column>
@@ -40,8 +40,8 @@
             </el-table>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  @click="onSubmit">提交订单</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary"  @click="submit">提交订单</el-button>
+            <el-button @click="returnPage">取消</el-button>
           </el-form-item>
 
         </el-form>
@@ -64,7 +64,7 @@ export default {
       },
       detailData:[{
           bookName:'一本好书',
-          bookId:'001',
+          id:'001',
           shopName:'新华书店',
           category:'天文',
           price:'23',
@@ -72,7 +72,7 @@ export default {
           bookTotal:0,
         },{
           bookName:'很好书',
-          bookId:'002',
+          id:'002',
           shopName:'新华书店',
           category:'天文',
           price:'23',
@@ -98,7 +98,23 @@ export default {
           .then((data) => {
           })
           .catch((err) => {})
-    }
+    },
+    returnPage(){
+      if (window.history.length <= 1) {
+        this.$router.push({ path: "/cart/settlement" });
+        return false;
+      } else {
+        this.$router.go(-1);
+      }
+    },
+    submit(val){
+      console.log(val)
+      this.$router.push({
+        path: '/Paycode',
+        query: {
+        }
+      });
+    },
   },
   mounted() {
     this.getData()
