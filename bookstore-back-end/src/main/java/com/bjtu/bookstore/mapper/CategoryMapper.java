@@ -13,6 +13,8 @@ public interface CategoryMapper {
 
     @Select("select * from category")
     List<Category> getCategories();
-    @Select("select name from category where id=#{categoryid}")
-    String getCategoryName(String categoryid);
+
+
+    @Select("select name from category where id=#{id} ")
+    String getNameById(String id);
 }
