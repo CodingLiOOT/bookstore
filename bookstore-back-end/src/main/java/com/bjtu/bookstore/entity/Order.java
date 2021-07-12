@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @program: bookstore-back-end
@@ -34,5 +35,5 @@ public class Order {
 
     private Integer state;
 
-    private ListMultimap<String, String> goods;
+    private List<Book> bookList;
 }
