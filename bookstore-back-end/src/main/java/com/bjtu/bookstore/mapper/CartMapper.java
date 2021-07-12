@@ -28,4 +28,7 @@ public interface CartMapper {
     //    修改购物车中的书的数目
     @Update("update cart set num=#{num} where userid=#{userid} and bookid=#{bookid}")
     int modifyNumFromCart(String userid, String bookid, int num);
+    // 判断是否已经存在购物车中
+    @Select("select * from cart where bookid=#{bookid} and userid=#{userid}")
+    ArrayList<Cart> judge(String userid, String bookid);
 }

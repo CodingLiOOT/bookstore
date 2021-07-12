@@ -113,28 +113,28 @@ export default class api {
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_addToCart = p => post('/cart/addotcart', p)
+  static p_addToCart = p => post('/cart/addtocart', p)
 
   /**
    * 获取订单列表
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_getOrderList = p => post('/user/getOrderList', p)
+  static p_getOrderList = p => post('/order/getOrderList', p)
 
   /**
    * 修改订单状态
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_changestate = p => post('/user/changestate', p)
+  static p_changestate = p => post('/order/changestate', p)
 
     /**
      * 提交订单
      * @param {Object} p [发送的参数：]
      * @returns {Promise<unknown>}
      */
-    static p_confirmOrder = p => post('/user/confirmOrder', p)
+    static p_confirmOrder = p => post('/order/confirmOrder', p)
 
   /**
    * 修改个人信息

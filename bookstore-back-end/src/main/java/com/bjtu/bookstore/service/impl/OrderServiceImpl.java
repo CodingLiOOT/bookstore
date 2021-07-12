@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
             List<HashMap<String,Object>>  detailData=new ArrayList<>();
             for(int j=0;j<byOrderId.size();j++){
                 HashMap<String,Object> datadetailItem =new HashMap<>();
-                Order_book order_book = byOrderId.get(i);
+                Order_book order_book = byOrderId.get(j);
                 String bookId = order_book.getBookId();
                 ArrayList<Book> detail = bookMapper.getDetail(bookId);
                 Book book = detail.get(0);
@@ -65,20 +65,11 @@ public class OrderServiceImpl implements OrderService {
                 datadetailItem.put("bookNum",order_book.getAmount());
 
                 detailData.add(datadetailItem);
-
-
             }
 
             map.put("num",num);
             map.put("detailData",detailData);
-
-
             list.add(map);
-
-
-
-
-
         }
 
 
@@ -87,11 +78,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void changestate(Order order) {
-          orderMapper.changestate(order);
+          orderMapper.changestate(order.getId(), order.getState());
     }
 
     @Override
-    public void confirmOrder(Order order) {
+    public HashMap<String,Object> confirmOrder(Order order) {
 
          order.setId(UUID.randomUUID().toString());
          order.setState(1);
@@ -107,9 +98,12 @@ public class OrderServiceImpl implements OrderService {
             order_book.setOrderId(order.getId());
             order_book.setBookId(book.getId());
             order_book.setAmount(book.getNum());
+            order_book.setStoreId("1");
 
             order_bookMapper.confirmOrderBook(order_book);
         }
-
+        HashMap<String,Object> datas = new HashMap<>();
+        datas.put("orderId", order.getId());
+        return datas;
     }
 }

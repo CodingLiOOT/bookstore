@@ -12,11 +12,11 @@ import java.util.List;
 public interface OrderMapper {
 
 
-    @Select("select* from orders where userId=#{id}")
+    @Select("select* from orders where userId=#{id} and state=#{state}")
     List<Order> getOrderList(Order order);
 
     @Update("update orders set state=#{state} where id=#{id}")
-    void changestate(Order order);
+    void changestate(String id, int state);
 
     @Insert("insert into orders values(#{id},#{shippingId},#{userId},#{createdTime},#{completedTime},#{totalPrice},#{payType},#{state})")
     void confirmOrder(Order order);

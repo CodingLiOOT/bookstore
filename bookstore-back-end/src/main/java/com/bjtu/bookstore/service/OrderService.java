@@ -15,5 +15,5 @@ public interface OrderService {
     void changestate(Order order);
 
 
-    void confirmOrder(Order order);
+    HashMap<String,Object> confirmOrder(Order order);
 }

@@ -58,8 +58,13 @@ public class CartImpl implements CartService {
     @Override
     public int addtocart(Cart cart) {
         int success=-1;
+
         for(int i=0;i<cart.getBooks().size();i++) {
-            success=cartMapper.addtocart(cart.getUserId(),cart.getBooks().get(i).getId(),cart.getBooks().get(i).getNum());
+            ArrayList<Cart> results = cartMapper.judge(cart.getUserId(), cart.getBooks().get(i).getId());
+            if(results.size()>0)
+                success=cartMapper.modifyNumFromCart(cart.getUserId(),cart.getBooks().get(i).getId(),cart.getBooks().get(i).getNum());
+            else
+                success=cartMapper.addtocart(cart.getUserId(),cart.getBooks().get(i).getId(),cart.getBooks().get(i).getNum());
         }
         return success;
     }

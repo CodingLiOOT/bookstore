@@ -32,19 +32,24 @@ export default {
         this.$router.push({ path: "/mainPage" });
         return false;
       } else {
-        this.$router.go(-1);
-
+        // this.$router.go(-1);
+        this.$router.push({ path: "/CenterPage" });
       }
     },
     change(){
       this.$API
           .p_changestate({
-            orderId:this.$route.query.orderId,
+            id:this.$route.query.orderId,
             state:2
           })
           .catch((err) => {})
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      this.$router.push({
+        path: '/CenterPage',
+        query: {
 
+        }
+      });
     },
 
   }

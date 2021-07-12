@@ -23,7 +23,7 @@ public class BookServiceImpl implements BookService {
         ArrayList<Book> books = new ArrayList<>();
         books = bookMapper.getDetail(book.getId());
         for(int i=0;i<books.size();i++) {
-            books.get(i).setCategoryName(categoryMapper.getCategoryName(books.get(i).getCategoryId()));
+            books.get(i).setCategoryName(categoryMapper.getNameById(books.get(i).getCategoryId()));
         }
         HashMap<String, Object> data = new HashMap<>();
         data.put("bookDetail", books);

@@ -137,23 +137,41 @@ export default {
   },
 
   methods: {
-    buy(){
-      let books=[
+    getBookList(){
+      let bookList=[
         {
           id:this.$route.query.bookId,
           num:this.num,
         }
       ]
-      this.$API.p_settlement({
-        userId:this.$store.state.userID,
-        books
-      })
+      return bookList
+    },
+    buy(){
+
+
+      let bkl=this.getBookList()
+      this.$API.p_settlement(bkl)
           .then((data) => {
+            let bklist=[
+              {
+                id:this.$route.query.bookId,
+                bookName:this.book.bookName,
+                price:this.book.price,
+                bookNum:this.num,
+              }
+            ]
+            let total=this.book.price*this.num
             this.$router.push({
-              path: '/cart',
+              path: '/orderInfor',
+              query: {
+                bklist: bklist,
+                bookList:bkl,
+                total:total
+              }
             });
           })
           .catch((err) => {})
+
     },
     addToCart(){
       // this.$router.push({

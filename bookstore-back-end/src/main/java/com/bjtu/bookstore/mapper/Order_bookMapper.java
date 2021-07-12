@@ -17,6 +17,6 @@ public interface Order_bookMapper {
     List<Order_book> getByOrderId(String id);
 
 
-    @Insert("insert into order_book values(#{orderId},#{bookId},#{amount},#{storeId},#{state})")
+    @Insert("insert into order_book values(#{orderId},#{bookId},#{amount},#{storeId})")
     void confirmOrderBook(Order_book order_book);
 }

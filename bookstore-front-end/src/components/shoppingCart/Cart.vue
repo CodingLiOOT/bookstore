@@ -190,12 +190,12 @@ export default {
           let book=this.fetchData.shops[i].books[j]
           if(book.checked){
             let temp={
-              bookId:'',
+              id:'',
               bookName:'',
               price:0,
               bookNum:0,
             }
-            temp.bookId=book.bookId;
+            temp.id=book.bookId;
             temp.bookNum=book.num;
             temp.bookName=book.bookName;
             temp.price=book.single;
@@ -210,7 +210,7 @@ export default {
         query: {
           bklist: bklist,
           bookList:bkl,
-          total:total,
+          total:total+0.0
         }
       });
     },

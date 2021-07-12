@@ -12,5 +12,5 @@ public class Order_book {
 
     private String storeId;
 
-    private String state;
+    private int state;
 }
