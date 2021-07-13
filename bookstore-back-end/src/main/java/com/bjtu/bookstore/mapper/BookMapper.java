@@ -30,4 +30,15 @@ public interface BookMapper {
     @Select("SELECT * FROM book ORDER BY dealNum DESC LIMIT 5")
     List<Book> getTopBooks();
 
+    //    返回某类别的某一页的书，返回第n到第m-1行的记录
+    @Select("SELECT * FROM book where categoryId=#{categoryId} LIMIT #{n}, #{m}")
+    ArrayList<Book> getSomePageBookByCategory(int n, int m, String categoryId);
+
+    //    返回某类别的某一页的书，返回第n到第m-1行的记录
+    @Select("SELECT * FROM book LIMIT #{n}, #{m}")
+    ArrayList<Book> getSomePageBook(int n, int m);
+
+    //    返回书的数量
+    @Select("SELECT count(*) FROM book")
+    int getAllNum();
 }

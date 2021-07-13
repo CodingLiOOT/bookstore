@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from "../vuex"
 import MainPage from "../components/MainPage/MainPage"
 import Cart from "../components/shoppingCart/Cart";
+import AllBook from "../components/AllBook/AllBook";
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ const router = new Router({
       path:'/mainPage',
       name:'mainPage',
       component: MainPage,
+    },
+    {
+      path:'/AllBook',
+      name:'AllBook',
+      component: AllBook,
     },
     {
       path:'/Cart',

@@ -80,8 +80,11 @@
             <!--            图书类别-->
             <el-col :span="6" :offset="0">
               <el-row>图书类别</el-row>
-              <el-row v-for="kind in kindList" :key="kind.id" class="bookKind">
-                {{ kind }}
+              <el-row v-for="kind in this.parent" :key="kind.name" class="bookKind">
+                {{kind.name}}:
+                <div v-for="child in kind.children" :key="child.name" :span="12" class="cat" @click="searchCategory(child.name)">
+                  {{child.name}}
+                </div>
               </el-row>
             </el-col>
             <!--            图书推荐-->
@@ -149,9 +152,18 @@ export default {
       types: ['', 'success', 'info', 'warning', 'danger'], //搜索历史tag式样
       bannerHeight: '',
       flag: false,
+      parent:[]
     }
   },
   methods: {
+    searchCategory(val){
+      this.$router.push({
+        path: '/AllBook',
+        query: {
+          cat: val,
+        }
+      });
+    },
     getLunBo() {
       let t = [
         { id: 0, idView: require('../../assets/1.jpg') },
@@ -233,6 +245,32 @@ export default {
     removeAllHistory() {
       Store.removeAllHistory()
     },
+    getCategories(){
+      this.$API
+          .p_getCategories({})
+          .then((data) => {
+            for (let i = 0; i < data.length; i++) {
+              let parent={
+                name:'',
+                children:[],
+              }
+              parent.name=data[i].name
+              for(let j=0;j<data[i].childCategory.length;j++){
+                let c=data[i].childCategory[j]
+                let child={
+                  name:'',
+                }
+                child.name=c.name
+                parent.children.push(child)
+              }
+              this.parent.push(parent)
+              console.log(this.parent)
+            }
+
+
+          })
+          .catch((err) => {})
+    }
   },
   computed: {
     isHistorySearch() {
@@ -252,6 +290,7 @@ export default {
   mounted() {
     this.getLunBo()
     this.getFlag()
+    this.getCategories()
     // 首次加载时,需要调用一次
     this.screenWidth = window.innerWidth
     this.setSize()
@@ -306,5 +345,9 @@ export default {
   width: 45%;
   height: 10%;
   padding-bottom: 5%;
+}
+.cat:hover{
+  text-decoration:underline;
+  cursor: pointer;
 }
 </style>

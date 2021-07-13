@@ -1,6 +1,7 @@
 package com.bjtu.bookstore.controller;
 
 import com.bjtu.bookstore.entity.Book;
+import com.bjtu.bookstore.entity.Cart;
 import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.mapper.BookMapper;
 import com.bjtu.bookstore.service.BookService;
@@ -23,13 +24,16 @@ import java.util.HashMap;
 public class BookController {
     @Autowired
     private BookService bookService;
-    @Autowired
-    private MailService mailService;
 
     @PostMapping(value = "/getDetail")
     public HashMap<String, Object> getDetail(@RequestBody Book book) {
         Preconditions.checkNotNull(book.getId());
 
         return bookService.getDetail(book);
+    }
+
+    @PostMapping(value = "/getAllBooksByCategory")
+    public HashMap<String, Object> getAllBooks(@RequestBody Cart cart) {
+        return bookService.getAllBooks(cart);
     }
 }

@@ -34,4 +34,8 @@ public class Book {
     private String categoryName;
 
     private int num;
+
+    private int startNum;
+
+    private int endNum;
 }

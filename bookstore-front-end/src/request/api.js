@@ -171,5 +171,18 @@ export default class api {
    */
   static p_deleteAddress = p => post('/user/deleteAddress', p)
 
+  /**
+   * 获取某页的书
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getAllBooks = p => post('/book/getAllBooksByCategory', p)
+
+  /**
+   * 获取某页的书
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getCategories = p => post('/category/getCategories', p)
 
 }
