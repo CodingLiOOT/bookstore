@@ -17,7 +17,6 @@ import java.util.*;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-
     @Autowired
     private OrderMapper orderMapper;
 
@@ -42,7 +41,6 @@ public class OrderServiceImpl implements OrderService {
             Order order1 = orderList.get(i);
             map.put("orderId",order1.getId());
             map.put("date",order1.getCreatedTime());
-
             map.put("sum",order1.getTotalPrice());
             map.put("shippingId",order1.getShippingId());
             map.put("state",order1.getState());
@@ -72,7 +70,6 @@ public class OrderServiceImpl implements OrderService {
             list.add(map);
         }
 
-
         return list;
     }
 
@@ -88,7 +85,6 @@ public class OrderServiceImpl implements OrderService {
          order.setState(1);
          order.setCreatedTime(new Timestamp(new Date().getTime()));
 
-
          orderMapper.confirmOrder(order);
 
         List<Book> bookList = order.getBookList();
@@ -101,6 +97,8 @@ public class OrderServiceImpl implements OrderService {
             order_book.setStoreId("1");
 
             order_bookMapper.confirmOrderBook(order_book);
+
+            bookMapper.updateDealNum(book.getId());
         }
         HashMap<String,Object> datas = new HashMap<>();
         datas.put("orderId", order.getId());

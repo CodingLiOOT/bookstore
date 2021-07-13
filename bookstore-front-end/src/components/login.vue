@@ -144,11 +144,11 @@ export default {
                 loginType: 'password',
               })
               .then((data) => {
-                alertSuccess('登陆成功')
+                alertSuccess('登录成功')
                 this.$store.commit('login', data)
                 //this.$router.replace('/index')
                 let redirect = decodeURIComponent(
-                  this.$route.query.redirect || '/index'
+                  this.$route.query.redirect || '/MainPage'
                 )
                 this.$router.push({
                   path: redirect,

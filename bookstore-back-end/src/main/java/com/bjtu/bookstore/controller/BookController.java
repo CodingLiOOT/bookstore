@@ -34,6 +34,21 @@ public class BookController {
 
     @PostMapping(value = "/getAllBooksByCategory")
     public HashMap<String, Object> getAllBooks(@RequestBody Cart cart) {
+        Preconditions.checkNotNull(cart.getCartId());
+
         return bookService.getAllBooks(cart);
+    }
+
+    @PostMapping(value = "/search")
+    public HashMap<String, Object> search(@RequestBody Cart cart) {
+        Preconditions.checkNotNull(cart.getBooks());
+
+        return bookService.search(cart);
+    }
+
+    @PostMapping(value = "/shaixuan")
+    public void shaixuan(@RequestBody Cart cart) {
+
+        bookService.shaixuan(cart);
     }
 }

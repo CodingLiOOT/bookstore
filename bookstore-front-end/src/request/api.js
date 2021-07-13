@@ -185,4 +185,39 @@ export default class api {
    */
   static p_getCategories = p => post('/category/getCategories', p)
 
+  /**
+   * 搜索书名
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_search = p => post('/book/search', p)
+
+  /**
+   * 筛选书名
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_shaixuan = p => post('/book/shaixuan', p)
+
+  /**
+   * 评论
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_comment = p => post('/comment/sendComment', p)
+
+  /**
+   * 评论
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getCommentByOrder = p => post('/comment/getCommentByOrder', p)
+
+  /**
+   * 评论
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getCommentByBook = p => post('/comment/getCommentByBook', p)
+
 }

@@ -74,22 +74,29 @@
           <el-tab-pane label="评论">
             <el-divider>评论</el-divider>
             <el-table
-                :data="tableData"
+                :data="this.tableData"
                 style="width: 100%">
               <el-table-column
-                  prop="commentDetail"
+                  prop="comment"
                   label="评论">
               </el-table-column>
               <el-table-column
-                  prop="score"
+                  prop="rate"
                   label="评分">
+                <template slot-scope="scope">
+                  　　　　    <el-rate
+                    v-model="scope.row.rate"
+                    :colors="colors">
+                </el-rate>
+                </template>
+
               </el-table-column>
               <el-table-column
-                  prop="userId"
+                  prop="userName"
                   label="买家">
               </el-table-column>
               <el-table-column
-                  prop="cTime"
+                  prop="date"
                   label="发表时间">
               </el-table-column>
             </el-table>
@@ -120,19 +127,10 @@ export default {
         dealNum:'',
         categoryName:'',//类别名
       },
-      tableData: [{
-        commentDetail: '很好看',
-        score:'5',
-        userId: '王***',
-        cTime: '2016-05-02'
-      }, {
-        commentDetail: '很好看',
-        score:'4',
-        userId: '王***',
-        cTime: '2016-05-02'
-      }],
+      tableData: [],
       screenWidth :0,
       num: 1,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
     };
   },
 
@@ -147,8 +145,6 @@ export default {
       return bookList
     },
     buy(){
-
-
       let bkl=this.getBookList()
       this.$API.p_settlement(bkl)
           .then((data) => {
@@ -221,10 +217,24 @@ export default {
             }
           })
           .catch((err) => {})
+    },
+    getComment(){
+      this.$API
+          .p_getCommentByBook({
+            bookId:this.$route.query.bookId,
+          })
+          .then((data) => {
+            for(let i=0;i<data.commentList.length;i++){
+              this.tableData.push(data.commentList[i])
+            }
+          })
+          .catch((err) => {})
+
     }
   },
   mounted(){
     this.getDetail()
+    this.getComment()
   }
 
 }

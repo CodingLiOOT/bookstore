@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface OrderMapper {
 
-
     @Select("select* from orders where userId=#{id} and state=#{state}")
     List<Order> getOrderList(Order order);
 
@@ -20,11 +19,4 @@ public interface OrderMapper {
 
     @Insert("insert into orders values(#{id},#{shippingId},#{userId},#{createdTime},#{completedTime},#{totalPrice},#{payType},#{state})")
     void confirmOrder(Order order);
-
-
-
-
-
-
-
 }

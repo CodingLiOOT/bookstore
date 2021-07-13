@@ -1,5 +1,59 @@
 <template>
   <el-row>
+<!--    评论dialog-->
+    <el-dialog
+        title="提示"
+        :visible.sync="commentVisible"
+        width="50%">
+      <div  v-for="book in books"
+            :key="book.bookId">
+        {{book.bookName}}
+        <el-form :model="book.commentForm">
+          <el-form-item label="评价">
+            <el-input v-model="book.commentForm.content" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="评分">
+            <el-rate
+                v-model="book.commentForm.rate"
+                :colors="colors">
+            </el-rate>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="commentVisible = false">取 消</el-button>
+    <el-button type="primary" @click="submitComment">确 定</el-button>
+  </span>
+    </el-dialog>
+<!--    查看评论dialog-->
+    <el-dialog
+        title="提示"
+        :visible.sync="getCommentVisible"
+        width="50%">
+      <div  v-for="book in booksCom"
+            :key="book.bookId">
+        <el-row>
+          <el-col>
+            {{book.bookName}}
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form>
+            <el-form-item label="评价">
+              {{book.comment}}
+            </el-form-item>
+            <el-form-item label="评分">
+              <el-rate v-model="book.rate"
+                       :colors="colors">
+              </el-rate>
+            </el-form-item>
+          </el-form>
+        </el-row>
+      </div>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="getCommentVisible = false">确 定</el-button>
+  </span>
+    </el-dialog>
     <el-col :span="20" :offset="2">
       <el-card class="center" >
         <div>***个人中心***</div>
@@ -128,7 +182,7 @@
                     <template slot-scope="scope">
                       <el-button
                           type="text"
-                          size="small" plain @click="open1">
+                          size="small" plain @click="open1(scope.row.orderId)">
                         提醒发货
                       </el-button>
                     </template>
@@ -194,7 +248,7 @@
                     <template slot-scope="scope">
                       <el-button
                           type="text"
-                          size="small" plain @click="open2">
+                          size="small" plain @click="open2(scope.row.orderId)">
                         确认收货
                       </el-button>
                     </template>
@@ -222,10 +276,8 @@
                             <el-table-column prop="bookNum" label="数量" width="180"></el-table-column>
                           </el-table>
                         </el-form-item>
-
                       </el-form>
                     </template>
-
                   </el-table-column>
                   <el-table-column
                       prop="orderId"
@@ -320,6 +372,13 @@
                       label="订单状态"
                       width="100">
                   </el-table-column>
+                  <el-table-column label="操作" width="120">
+                    <template slot-scope="scope">
+                      <el-button type="text" size="small" @click="getComment(scope.row.orderId)">
+                        查看评价
+                      </el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </el-tab-pane>
             </el-tabs>
@@ -355,9 +414,34 @@ export default {
           detailData:[]}
       ],
       activeName:'1',
+      commentVisible:false,
+      getCommentVisible:false,
+      commentForm:{
+        content:'',
+        rate:'',
+      },
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      books:[],
+      orderId:'',
+      booksCom:[],
     };
   },
   methods: {
+    getComment(val){
+      this.booksCom=[]
+      this.getCommentVisible=true
+      this.$API
+          .p_getCommentByOrder({
+            orderId:val
+          })
+          .then((data) => {
+            for (let i = 0; i < data.commentList.length; i++) {
+              let c=data.commentList[i]
+              this.booksCom.push(c)
+            }
+          })
+          .catch((err) => {})
+    },
     handleClick(tab, event) {
       switch (tab.name){
         case "1":
@@ -377,32 +461,43 @@ export default {
           break;
       }
     },
+    submitComment(val){
+      let comment=
+        {
+          userId:this.$store.state.userID,
+          orderId:this.orderId,
+          bookList:[
+
+          ]
+        }
+        for(let i=0;i<this.books.length;i++){
+          let temp= {
+            id:'',
+            comment:'',
+            rate:'',
+          }
+          temp.id=this.books[i].bookId
+          temp.comment=this.books[i].commentForm.content
+          temp.rate=this.books[i].commentForm.rate
+          comment.bookList.push(temp)
+        }
+      this.$API
+          .p_comment(
+            comment
+          )
+          .then((data) => {
+            this.$API
+                .p_changestate({
+                  id:this.orderId,
+                  state:5
+                })
+                .catch((err) => {})
+          })
+          .catch((err) => {})
+      this.commentVisible=false
+    },
     getUnPay(){
       this.tableData=[];
-      // let cat={
-      //   tableData:[{
-      //     orderId:'111',
-      //     date: '2021-11-11',
-      //     num:'7',
-      //     sum:'77',
-      //     state: '待支付',
-      //     detailData:[{
-      //       bookName:'一本好书',
-      //       id:'001',
-      //       shopName:'新华书店',
-      //       category:'天文',
-      //       price:'23',
-      //       bookNum:'4'
-      //     },{
-      //       bookName:'很好书',
-      //       id:'002',
-      //       shopName:'新华书店',
-      //       category:'天文',
-      //       price:'23',
-      //       bookNum:'4'
-      //     }]
-      //   }]
-      // };
       this.$API
           .p_getOrderList({
             id:this.$store.state.userID,
@@ -475,14 +570,20 @@ export default {
         }
       });
     },
-    open1() {
+    open1(val) {
       this.$notify({
         title: '成功',
         message: '提醒卖家发货成功',
         type: 'success'
       });
+      this.$API
+          .p_changestate({
+            id:val,
+            state:3
+          })
+          .catch((err) => {})
     },
-    open2() {
+    open2(val) {
       this.$notify({
         title: '成功',
         message: '确认收货成功',
@@ -490,32 +591,49 @@ export default {
       });
       this.$API
           .p_changestate({
-            orderId:this.settle1(val),
+            id:val,
             state:4
           })
           .catch((err) => {})
     },
     comment(val){
-      this.$prompt('请输入评论', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      }).then(({ value }) => {
-        this.$message({
-          type: 'success',
-          message: '评论成功'
-        });
-        // this.$API
-        //     .p_changestate({
-        //       orderId:this.settle1(val),
-        //       state:4
-        //     })
-        //     .catch((err) => {});
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消输入'
-        });
-      });
+      this.orderId=val
+      this.commentVisible=true
+      this.books=[]
+      for(let i=0;i<this.tableData.length;i++){
+        if(val===this.tableData[i].orderId){
+          for(let j=0;j<this.tableData[i].detailData.length;j++){
+            let temp={
+              bookId:'',
+              bookName:'',
+              commentForm:{},
+            }
+            temp.bookId=this.tableData[i].detailData[j].id
+            temp.bookName=this.tableData[i].detailData[j].bookName
+            this.books.push(temp)
+          }
+        }
+      }
+      // this.$prompt('请输入评论', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      // }).then(({ value }) => {
+      //   this.$message({
+      //     type: 'success',
+      //     message: '评论成功'
+      //   });
+      //   // this.$API
+      //   //     .p_changestate({
+      //   //       orderId:this.settle1(val),
+      //   //       state:4
+      //   //     })
+      //   //     .catch((err) => {});
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '取消输入'
+      //   });
+      // });
     },
 
     update(data){

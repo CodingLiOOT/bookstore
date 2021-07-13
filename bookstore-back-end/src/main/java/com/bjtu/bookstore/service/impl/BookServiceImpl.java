@@ -39,10 +39,12 @@ public class BookServiceImpl implements BookService {
         Book b1=cart.getBooks().get(0);
 
         if(categoryId==null) {
-            books=bookMapper.getSomePageBook(b1.getStartNum()-1,15);
+            books=bookMapper.getSomePageBook(b1.getStartNum()-1,10);
+            datas.put("allNum",bookMapper.getAllNum());
         }
         else {
-            books=bookMapper.getSomePageBookByCategory(b1.getStartNum()-1,15, categoryId);
+            books=bookMapper.getSomePageBookByCategory(b1.getStartNum()-1,10, categoryId);
+            datas.put("allNum",bookMapper.getAllNumByCategory(categoryId));
         }
 
         for(int i=0;i<books.size();i++) {
@@ -50,7 +52,30 @@ public class BookServiceImpl implements BookService {
         }
 
         datas.put("bookList", books);
-        datas.put("allNum",bookMapper.getAllNum());
+
         return datas;
+    }
+
+    @Override
+    public HashMap<String, Object> search(Cart cart) {
+        HashMap<String, Object> datas = new HashMap<>();
+        Book b1=cart.getBooks().get(0);
+        String content="%";
+        content+=b1.getName();
+        content+="%";
+        ArrayList<Book> books=bookMapper.search(b1.getStartNum()-1,10,content);
+
+        for(int i=0;i<books.size();i++) {
+            books.get(i).setCategoryName(categoryMapper.getNameById(books.get(i).getCategoryId()));
+        }
+
+        datas.put("bookList", books);
+        datas.put("allNum",bookMapper.getAllNumByContent(b1.getName()));
+        return datas;
+    }
+
+    @Override
+    public void shaixuan(Cart cart) {
+        bookMapper.updateState(cart.getBooks().get(0).getId());
     }
 }

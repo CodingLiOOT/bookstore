@@ -7,6 +7,12 @@
             style="width: 100%"
         >
           <el-table-column
+              prop="bookId"
+              label="编号"
+              sortable
+              width="120">
+          </el-table-column>
+          <el-table-column
               prop="imgUrl"
               label="预览"
               sortable
@@ -17,12 +23,12 @@
           </el-table-column>
           <el-table-column
               prop="name"
-              label="书名"
+              label="详细信息"
               sortable
               width="180">
             <template slot-scope="scope">
               <el-row>
-                {{scope.row.name}}
+                {{scope.row.bookName}}
               </el-row>
               <el-row>
                 {{scope.row.publisher}}
@@ -46,6 +52,14 @@
               label="单价"
               sortable
               width="180">
+          </el-table-column>
+          <el-table-column
+              label="操作"
+              width="100">
+            <template slot-scope="scope">
+              <el-button @click="modify(scope.row.bookId)" type="text" size="small">查看</el-button>
+              <el-button type="text" size="small"></el-button>
+            </template>
           </el-table-column>
         </el-table>
         <el-pagination
@@ -74,12 +88,29 @@ export default {
       currentPage:1,
       total:0,
       cat:'所有',
+      content:'',
     }
   },
   components:{
     BookPreview
   },
   methods: {
+    modify(val){
+      // let books=[{
+      //   id:val
+      // }]
+      // this.$API
+      //     .p_shaixuan({books})
+      //     .then((data) => {
+      //     })
+      //     .catch((err) => {})
+      this.$router.push({
+        path: '/item',
+        query: {
+          bookId: val,
+        }
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -90,13 +121,46 @@ export default {
       console.log(`当前页: ${val}`);
     },
     getAllBooks(){
+      this.books=[]
       let books=[{
-        startNum:this.currentPage*10,
-        endNum:this.currentPage*10+10,
+        startNum:(this.currentPage-1)*10+1,
       }]
       this.$API
           .p_getAllBooks({
             cartId:this.cat,
+            books
+          })
+          .then((data) => {
+            this.total=data.allNum
+            for (let i = 0; i < data.bookList.length; i++) {
+              let book = data.bookList[i]
+              let temp = {
+                bookId: '',
+                name: '',
+                imgUrl: '',
+                publisher:'',
+                price:'',
+                categoryName:'',
+              }
+              temp.bookId = book.id
+              temp.bookName = book.name
+              temp.imgUrl = book.imgUrl
+              temp.publisher=book.publisher
+              temp.price=book.price
+              temp.categoryName=book.categoryName
+              this.books.push(temp)
+            }
+          })
+          .catch((err) => {})
+    },
+    getBySearch(){
+      this.books=[]
+      let books=[{
+        startNum:(this.currentPage-1)*10+1,
+        name:this.content
+      }]
+      this.$API
+          .p_search({
             books
           })
           .then((data) => {
@@ -121,19 +185,30 @@ export default {
             }
           })
           .catch((err) => {})
-    },
+    }
 
   },
   mounted() {
-    this.cat=this.$route.query.cat
-    this.getAllBooks()
+    let type=this.$route.query.t
+    if(type==='cat'){
+      this.cat=this.$route.query.val
+      this.getAllBooks()
+    }
+    else if(type==='book'){
+      this.content=this.$route.query.val
+      this.getBySearch()
+    }
+    else{
+      this.cat='所有';
+      this.getAllBooks()
+    }
   }
 }
 </script>
 
 <style scoped>
 .allBookCard{
-  margin-top: 10%;
+  margin-top: 65px;
 }
 .pic{
   height: 80px;

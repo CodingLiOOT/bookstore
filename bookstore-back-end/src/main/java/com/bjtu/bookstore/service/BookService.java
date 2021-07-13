@@ -11,4 +11,6 @@ import java.util.HashMap;
 public interface BookService {
     public HashMap<String, Object> getDetail(Book book);
     public HashMap<String, Object> getAllBooks(Cart cart);
+    public HashMap<String, Object> search(Cart cart);
+    public void shaixuan(Cart cart);
 }

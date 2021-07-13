@@ -160,7 +160,8 @@ export default {
       this.$router.push({
         path: '/AllBook',
         query: {
-          cat: val,
+          t:'cat',
+          val: val,
         }
       });
     },
@@ -181,21 +182,21 @@ export default {
         temp.idView = lb.idView
         this.imgList.push(temp)
       }
-      this.$API
-        .p_getLunBo({})
-        .then((data) => {
-          for (let i = 0; i < data.lunBo.length; i++) {
-            let lb = data.lunBo[i]
-            let temp = {
-              id: '',
-              idView: '',
-            }
-            temp.id = i + 1
-            temp.idView = lb.imgUrl
-            this.imgList.push(temp)
-          }
-        })
-        .catch((err) => {})
+      // this.$API
+      //   .p_getLunBo({})
+      //   .then((data) => {
+      //     for (let i = 0; i < data.lunBo.length; i++) {
+      //       let lb = data.lunBo[i]
+      //       let temp = {
+      //         id: '',
+      //         idView: '',
+      //       }
+      //       temp.id = i + 1
+      //       temp.idView = lb.imgUrl
+      //       this.imgList.push(temp)
+      //     }
+      //   })
+      //   .catch((err) => {})
     },
     getFlag() {
       if (this.$store.state.userID === undefined) {
@@ -233,6 +234,13 @@ export default {
         Store.saveHistory(this.historySearchList)
       }
       this.history = this.historySearchList.length == 0 ? false : true
+      this.$router.push({
+        path: '/AllBook',
+        query: {
+          t:'book',
+          val: this.search,
+        }
+      });
     },
     closeHandler(search) {
       this.historySearchList.splice(this.historySearchList.indexOf(search), 1)

@@ -37,5 +37,9 @@ public class Book {
 
     private int startNum;
 
-    private int endNum;
+    private String commentId;
+
+    private String comment;
+
+    private int rate;
 }
