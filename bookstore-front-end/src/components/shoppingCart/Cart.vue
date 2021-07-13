@@ -48,7 +48,7 @@
                     </el-col>
                     <el-col :span="2" :offset="2">
                       <div>
-                        <el-input-number v-model="book.num" @change="handleChange(book.bookId)" :min="1" size="small" label="描述文字"></el-input-number>
+                        <el-input-number v-model="book.num" @change="handleChange(book.bookId)" :min="1" :max="book.inventory" size="small" label="描述文字"></el-input-number>
                       </div>
                     </el-col>
                     <el-col :span="2" :offset="2">
@@ -65,25 +65,29 @@
 
             </el-tab-pane>
           </el-tabs>
-          <!--          底部-->
+          <!-----底部------>
         </el-card>
       </el-col>
     </el-row>
+
     <el-footer class="myFooter">
-          <el-row>
-            <el-col :span="2">
-              <el-button type="text" @click="deleteBooks">删除</el-button>
-            </el-col>
-            <el-col :span="3" :offset="12">
-              <div class="piece">已选商品<strong class="piece_num">{{this.fetchData.allnum}}</strong>件</div>
-            </el-col>
-            <el-col :span="3">
-              <div class="totalMoney">共计: <strong class="total_text">￥{{this.fetchData.allsum}}</strong></div>
-            </el-col>
-            <el-col :span="3">
-              <el-button type="info" @click="settlement">结算</el-button>
-            </el-col>
-          </el-row>
+      <el-card class="footer">
+        <el-row>
+          <el-col :span="2">
+            <el-button type="text" @click="deleteBooks">删除</el-button>
+          </el-col>
+          <el-col :span="3" :offset="12">
+            <div class="piece">已选商品<strong class="piece_num">{{this.fetchData.allnum}}</strong>件</div>
+          </el-col>
+          <el-col :span="3">
+            <div class="totalMoney">共计: <strong class="total_text">￥{{this.fetchData.allsum}}</strong></div>
+          </el-col>
+          <el-col :span="3">
+            <el-button type="info"  :disabled="disabled" @click="settlement">结算</el-button>
+          </el-col>
+        </el-row>
+      </el-card>
+
     </el-footer>
   </div>
 </template>
@@ -95,6 +99,7 @@ export default {
   },
   data() {
     return {
+      disabled:true,
       picture:'',
       activeName: 'first',
       fetchData:{
@@ -102,12 +107,20 @@ export default {
         status:false,
         allchoose:'',
         allsum:'',
-        allnum:'',
+        allnum:0,
       },
       Height:'',
     };
   },
   methods: {
+    determine(){
+      if(this.fetchData.allnum!==0&&this.fetchData.allnum!==undefined){
+        this.disabled=false
+      }
+      else{
+        this.disabled=true
+      }
+    },
     getCartList(){
       this.fetchData={
         shops:[],
@@ -115,7 +128,7 @@ export default {
         allchoose:'',
         allsum:'',
         allnum:'',
-      },
+      }
       this.$API.p_getAllCart({
         id:this.$store.state.userID
       })
@@ -135,14 +148,15 @@ export default {
                 num:0,
                 imgSrc:'',
                 total:0,
-                checked:false//商品选中状态
+                checked:false,//商品选中状态
+                inventory:0,
               }
               let book=data.books[i]
               temp.bookId=book.id;
               temp.bookName=book.name;
               temp.single=book.price;
               temp.num=book.num;
-
+              temp.inventory=book.inventory
               temp.imgSrc=book.imgUrl;
               temp.total=book.num*book.price;
               temp.checked=false;
@@ -155,7 +169,7 @@ export default {
             this.fetchData.shops.push(shop)
           })
           .catch((err) => {})
-          console.log(this.fetchData)
+      console.log(this.fetchData)
 
     },
     getSelectedList(){
@@ -178,11 +192,11 @@ export default {
     },
     settlement(){
       let bkl=this.getSelectedList();
+
       this.$API.p_settlement(bkl)
           .then((data) => {
           })
-          .catch((err) => {})
-
+          .catch((err) => {});
       let bklist=[]
       let total=0
       for(let i=0;i<this.fetchData.shops.length;i++){
@@ -213,6 +227,7 @@ export default {
           total:total+0.0
         }
       });
+
     },
     deleteBooks(){
       let books=[]
@@ -254,6 +269,7 @@ export default {
         }
       }
       this.getTotal()
+      this.determine()
       let books=[
         {
           id:bookId,
@@ -275,6 +291,7 @@ export default {
       this.fetchData.status=!this.fetchData.status//取反改变状态
       this.fetchData.status?this.fetchData.shops.forEach((item)=>this.shoptrue(item)):this.fetchData.shops.forEach((item)=>this.shopfalse(item))
       this.getTotal()
+      this.determine()
     },//根据取反后的状态进行相应的店铺按钮操作
     // 店铺
     shoptrue(item){
@@ -290,6 +307,7 @@ export default {
     shopchoose(item){
       !item.check?this.shoptrue(item):this.shopfalse(item)
       this.getTotal()
+      this.determine()
     },
     //单个商品
     choosetrue(item,pro){
@@ -309,6 +327,7 @@ export default {
     choose(item,pro){
       !pro.checked?this.choosetrue(item,pro):this.choosefalse(item,pro)
       this.getTotal()
+      this.determine()
     },//这里是绑定到html上的方法，取反是由于你在触发方法的时候取的是之前的状态
     getTotal(){
       this.fetchData.allsum=0
@@ -325,6 +344,7 @@ export default {
     }
   },
   mounted(){
+    this.determine()
     this.getCartList();
     //动态设置内容高度 让footer始终居底   header+footer的高度是100
     this.Height = document.documentElement.clientHeight - 100;
@@ -336,7 +356,7 @@ export default {
 
 <style scoped>
 .card{
-  margin-top: 10%;
+  margin-top: 65px;
 }
 .infoCard{
   margin-top: 2%;
@@ -372,11 +392,15 @@ a:hover {
 }
 .myFooter{
   /*#e5e8f5*/
-  background-color: #e6e6e7;
+
   position: fixed;
   width: 85%;
   left: 7.5%;
   bottom: 0;
   z-index: 1000;
+  border-radius: 30px;
+}
+.footer{
+  border-radius: 30px;
 }
 </style>

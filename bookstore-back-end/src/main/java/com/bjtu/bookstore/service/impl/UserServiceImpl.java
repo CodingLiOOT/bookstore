@@ -1,5 +1,6 @@
 package com.bjtu.bookstore.service.impl;
 
+import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.mapper.UserMapper;
 import com.bjtu.bookstore.service.UserLoginInterface;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(User user) {
         List<User> users = userMapper.selectUserByNameOrMail(user.getUsername(), user.getMail());
-        Optional.ofNullable(users).filter(u -> u.size() != 0)
+        Optional.ofNullable(users).filter(u -> u.size() == 0)
                 .<DefinitionException>orElseThrow(() -> {
                     throw new DefinitionException(ErrorEnum.DUPLICATE_USERNAME_OR_MAIL);
                 });
@@ -94,24 +95,30 @@ public class UserServiceImpl implements UserService {
         userMapper.updatePassword(user.getUsername(), newPassword);
     }
 
-
     //通过用户id获取用户信息
     @Override
     public User getInformation(User uid) {
-
 
         User userInfo = userMapper.getInformation(uid.getId());
         return userInfo;
     }
 
-
-
     //修改用户个人信息
     @Override
     public void modifyInformation(User user) {
         userMapper.modifyInformation(user);
-
     }
 
+    @Override
+    public HashMap<String, Object> getRightUsers(User user) {
+        HashMap<String, Object> datas = new HashMap<>();
+        datas.put("userList", userMapper.getRightUsers(user.getState(), user.getStartNum()-1, 20));
+        return datas;
+    }
 
+    @Override
+    public void changeUserState(User user) {
+
+        userMapper.changeUserState(user.getState(), user.getId());
+    }
 }

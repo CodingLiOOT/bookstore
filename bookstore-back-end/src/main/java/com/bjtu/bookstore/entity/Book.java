@@ -23,6 +23,7 @@ public class Book {
 
     private String name;
 
+    // 能用是1，不能用是0
     private Integer state;
 
     private Double price;

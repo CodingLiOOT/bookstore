@@ -13,4 +13,6 @@ public interface BookService {
     public HashMap<String, Object> getAllBooks(Cart cart);
     public HashMap<String, Object> search(Cart cart);
     public void shaixuan(Cart cart);
+    public HashMap<String, Object> getRightBooks(Book book);
+    public void changeBookState(Book book);
 }

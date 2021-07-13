@@ -706,6 +706,6 @@ a:hover {
   color: #ff8000;
 }
 .center{
-  margin-top: 10%;
+  margin-top: 65px;
 }
 </style>

@@ -226,7 +226,7 @@ export default {
               verifyCode: this.RegisterForm.emailCode,
             })
             .then((res) => {
-              this.$router.replace('/login')
+              this.$router.replace('/user/login')
             })
             .catch({})
         } else {
@@ -238,7 +238,7 @@ export default {
     //发送邮箱验证码，30秒后重新发送
     sendCode() {
       this.$refs.RegisterForm.validateField('email', (valid) => {
-        if (valid) {
+        // if (valid) {
           this.time = 30
           this.timer()
           this.$API
@@ -248,7 +248,7 @@ export default {
             .then((res) => {
               alertSuccess('发送成功')
             })
-        }
+        // }
       })
     },
     //发送邮箱验证码倒计时

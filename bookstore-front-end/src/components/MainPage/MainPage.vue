@@ -18,6 +18,6 @@ export default {
 
 <style scoped>
 .card{
-  margin-top: 10%;
+  margin-top: 65px;
 }
 </style>

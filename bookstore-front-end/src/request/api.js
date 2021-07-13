@@ -220,4 +220,32 @@ export default class api {
    */
   static p_getCommentByBook = p => post('/comment/getCommentByBook', p)
 
+  /**
+   * 更改用户状态
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_changeUserState = p => post('/user/changeUserState', p)
+
+  /**
+   * 获取某页的用户
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getRightUsers = p => post('/user/getRightUsers', p)
+
+  /**
+   * 获取某页的书
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getRightBooks = p => post('/book/getRightBooks', p)
+
+  /**
+   * 修改某本书的状态
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_changeBookState = p => post('/book/changeBookState', p)
+
 }

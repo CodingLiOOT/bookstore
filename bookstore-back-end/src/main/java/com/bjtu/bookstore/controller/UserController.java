@@ -1,5 +1,6 @@
 package com.bjtu.bookstore.controller;
 
+import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.service.MailService;
 import com.bjtu.bookstore.service.UserService;
@@ -43,14 +44,12 @@ public class UserController {
         return userService.userLogin(user);
     }
 
-
     @PostMapping(value = "/sendVerifyCode")
     public void sendVerifyCode(@RequestBody User user) {
         Preconditions.checkNotNull(user.getMail());
 
         mailService.sendMail(user.getMail());
     }
-
 
     @PostMapping(value = "/register")
     public void register(@RequestBody User user) {
@@ -74,9 +73,7 @@ public class UserController {
         Preconditions.checkState(StringUtils.isNoneBlank(user.getUsername(), user.getPassword(), user.getNewPassword()));
 
         userService.modifyPassword(user);
-
     }
-
 
     //获取用户的相关信息
     @PostMapping(value = "/getInformation")
@@ -91,6 +88,19 @@ public class UserController {
     public void modifyInformation(@RequestBody User user) {
         Preconditions.checkNotNull(user);
         userService.modifyInformation(user);
+    }
 
+    @PostMapping(value = "/getRightUsers")
+    public HashMap<String, Object> getRightUsers(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+
+        return userService.getRightUsers(user);
+    }
+
+    @PostMapping(value = "/changeUserState")
+    public void changeState(@RequestBody User user) {
+        Preconditions.checkNotNull(user);
+
+        userService.changeUserState(user);
     }
 }

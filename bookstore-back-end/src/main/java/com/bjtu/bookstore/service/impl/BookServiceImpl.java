@@ -78,4 +78,17 @@ public class BookServiceImpl implements BookService {
     public void shaixuan(Cart cart) {
         bookMapper.updateState(cart.getBooks().get(0).getId());
     }
+
+    @Override
+    public HashMap<String, Object> getRightBooks(Book book) {
+        HashMap<String, Object> datas = new HashMap<>();
+        datas.put("bookList", bookMapper.getRightBooks(book.getState(),book.getStartNum()-1,10));
+        return datas;
+    }
+
+    @Override
+    public void changeBookState(Book book) {
+
+        bookMapper.changeBookState(book.getState(), book.getId());
+    }
 }

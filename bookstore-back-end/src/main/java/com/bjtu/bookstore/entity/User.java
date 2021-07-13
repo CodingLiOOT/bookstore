@@ -35,6 +35,7 @@ public class User implements Serializable {
     private String newPassword;
 
     private String type;
+
     private String nickname;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -44,6 +45,7 @@ public class User implements Serializable {
 
     private String mail;
 
+    // 普通用户能用是1，不能用是0，管理员是2
     private Integer state;
 
     private List<Role> roles;
@@ -54,4 +56,6 @@ public class User implements Serializable {
     private Integer gender;
 
     private String storeId;
+
+    private int startNum;
 }

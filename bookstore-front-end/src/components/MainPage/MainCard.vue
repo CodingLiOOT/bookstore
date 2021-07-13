@@ -2,38 +2,41 @@
   <div>
     <el-row class="card">
       <el-col :span="20" :offset="2">
-        <el-card shadow="hover">
-          <!--            搜索框-->
+        <el-container>
           <el-row>
-            <el-col :span="16" :offset="4">
+            <el-col :span="3" :offset="2">
+              <el-image :src="require('@/assets/lo.png')" style="width: 260px;height: 90px"></el-image>
+            </el-col>
+            <el-col :span="7" :offset="7">
               <el-input
-                v-model="search"
-                @focus="focus"
-                @blur="blur"
-                @keyup.enter.native="searchHandler"
-                placeholder="搜索书籍名"
+                  v-model="search"
+                  @focus="focus"
+                  @blur="blur"
+                  @keyup.enter.native="searchHandler"
+                  placeholder="搜索书籍名"
+                  style="width: 600px;height: 20px"
               >
                 <el-button
-                  slot="append"
-                  icon="el-icon-search"
-                  id="search"
-                  @click="searchHandler"
+                    slot="append"
+                    icon="el-icon-search"
+                    id="search"
+                    @click="searchHandler"
                 ></el-button>
               </el-input>
               <!---设置z-index优先级,防止被走马灯效果遮挡-->
               <el-card
-                @mouseenter="enterSearchBoxHanlder"
-                v-if="isSearch"
-                id="search-box"
-                style="position: fixed; z-index: 15"
+                  @mouseenter="enterSearchBoxHanlder"
+                  v-if="isSearch"
+                  id="search-box"
+                  style="position: fixed; z-index: 15"
               >
                 <div v-if="isHistorySearch">
                   <el-row>
                     <div class="search-title" v-show="history">历史搜索</div>
                     <div
-                      class="remove-history"
-                      v-show="history"
-                      @click="removeAllHistory"
+                        class="remove-history"
+                        v-show="history"
+                        @click="removeAllHistory"
                     >
                       清空历史记录
                     </div>
@@ -41,13 +44,13 @@
                   <el-row>
                     <el-col :offset="0" :span="24">
                       <el-tag
-                        v-for="search in historySearchList"
-                        :key="search.id"
-                        closable
-                        class="word-tag"
-                        :type="search.type"
-                        @close="closeHandler(search)"
-                        >{{ search.name }}</el-tag
+                          v-for="search in historySearchList"
+                          :key="search.id"
+                          closable
+                          class="word-tag"
+                          :type="search.type"
+                          @close="closeHandler(search)"
+                      >{{ search.name }}</el-tag
                       >
                     </el-col>
                   </el-row>
@@ -56,9 +59,9 @@
                   </el-row>
                   <el-row>
                     <div
-                      v-for="search in hotSearchList"
-                      :key="search.id"
-                      class="topSearch"
+                        v-for="search in hotSearchList"
+                        :key="search.id"
+                        class="topSearch"
                     >
                       {{ search }}
                     </div>
@@ -66,9 +69,9 @@
                 </div>
                 <div v-if="isSearchList">
                   <div
-                    v-for="search in searchList"
-                    :key="search.id"
-                    class="topSearch"
+                      v-for="search in searchList"
+                      :key="search.id"
+                      class="topSearch"
                   >
                     {{ search }}
                   </div>
@@ -76,22 +79,34 @@
               </el-card>
             </el-col>
           </el-row>
+
+          <!--            搜索框-->
+
+        </el-container>
+
+        <el-card class="card1">
+
           <el-row class="first">
             <!--            图书类别-->
-            <el-col :span="6" :offset="0">
-              <el-row>图书类别</el-row>
-              <el-row v-for="kind in this.parent" :key="kind.name" class="bookKind">
-                {{kind.name}}:
-                <div v-for="child in kind.children" :key="child.name" :span="12" class="cat" @click="searchCategory(child.name)">
-                  {{child.name}}
-                </div>
-              </el-row>
+            <el-col :span="8" :offset="0">
+              <el-card class="card2">
+                <el-divider>图书类别</el-divider>
+                <el-row v-for="kind in this.parent" :key="kind.name" >
+                    <span >
+                      {{kind.name}}>
+                    </span>
+                  <span  v-for="child in kind.children" :key="child.name" class="cat" @click="searchCategory(child.name)">
+                      {{child.name}}
+                    </span>
+                </el-row>
+              </el-card>
             </el-col>
-            <!--            图书推荐-->
-            <el-col :span="12">
+
+            <!--            轮播图图书推荐-->
+            <el-col :span="11" >
               <div class="block">
                 <span class="demonstration"></span>
-                <el-carousel trigger="click" height="350px" width="400px">
+                <el-carousel trigger="click" height="350px" width="400px"class="ca">
                   <el-carousel-item v-for="item in imgList" :key="item.id">
                     <img :src="item.idView" class="adImage" alt="推荐" />
                     <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
@@ -100,11 +115,16 @@
                 </el-carousel>
               </div>
             </el-col>
-            <el-col :span="6">
-              <div v-if="flag"><PersonLogin></PersonLogin></div>
-              <div v-else><Person></Person></div>
+            <el-col :span="4" >
+              <el-card class="card3">
+                <div v-if="flag"><PersonLogin></PersonLogin></div>
+                <div v-else><Person></Person></div>
+              </el-card>
+
             </el-col>
           </el-row>
+
+
           <!--          推荐榜-->
           <el-row class="information">
             <Top></Top>
@@ -167,10 +187,10 @@ export default {
     },
     getLunBo() {
       let t = [
-        { id: 0, idView: require('../../assets/1.jpg') },
-        { id: 1, idView: require('../../assets/head.jpg') },
-        { id: 2, idView: require('../../assets/login_bg.jpg') },
-        { id: 3, idView: require('../../assets/logo.png') },
+        { id: 0, idView: require('../../assets/p1.jpg') },
+        { id: 1, idView: require('../../assets/p2.jpg') },
+        { id: 2, idView: require('../../assets/p3.jpg') },
+        { id: 3, idView: require('../../assets/p4.jpg') },
       ]
       for (let i = 0; i < t.length; i++) {
         let lb = t[i]
@@ -313,7 +333,7 @@ export default {
 
 <style scoped>
 #search {
-  background-color: #ffc300;
+  background-color: #ADC4F7;
   border-radius: 0%;
 }
 .word-tag {
@@ -323,7 +343,7 @@ export default {
   color: #bdbaba;
   font-size: 15px;
   float: left;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
 }
 .topSearch {
   float: left;
@@ -338,10 +358,10 @@ export default {
 .first {
   margin-top: 3%;
 }
-.bookKind {
-  margin-right: 70%;
-  margin-bottom: 3%;
+.test{
+
 }
+
 .information {
   margin-top: 5%;
 }
@@ -357,5 +377,21 @@ export default {
 .cat:hover{
   text-decoration:underline;
   cursor: pointer;
+
+}
+.cat{
+//background-color:#ADC4F7;
+}
+.card1{
+  border-radius: 30px;
+}
+.card2{
+  border-radius: 30px;
+}
+.card3{
+  border-radius: 30px;
+}
+.ca{
+  border-radius: 30px;
 }
 </style>

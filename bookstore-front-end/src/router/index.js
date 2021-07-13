@@ -4,6 +4,10 @@ import store from "../vuex"
 import MainPage from "../components/MainPage/MainPage"
 import Cart from "../components/shoppingCart/Cart";
 import AllBook from "../components/AllBook/AllBook";
+import Manage from "../components/Manage/Manage";
+import UserManage from "../components/Manage/UserManage";
+import LunboManage from "../components/Manage/LunboManage";
+import bookManage from "../components/Manage/bookManage";
 
 Vue.use(Router)
 
@@ -103,7 +107,27 @@ const router = new Router({
       path: '/fileDemo',
       name: 'fileDemo',
       component: () => import("../components/FileDemo")
-    }
+    },
+    {
+      path: '/Manage',
+      name: 'Manage',
+      component: Manage
+    },
+    {
+      path: '/userManage',
+      name: 'userManage',
+      component: UserManage
+    },
+    {
+      path: '/bookManage',
+      name: 'bookManage',
+      component: bookManage
+    },
+    {
+      path: '/LunboManage',
+      name: 'LunboManage',
+      component: LunboManage
+    },
   ],
 })
 router.beforeEach((to, from, next) => {

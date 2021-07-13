@@ -58,6 +58,7 @@
               width="100">
             <template slot-scope="scope">
               <el-button @click="modify(scope.row.bookId)" type="text" size="small">查看</el-button>
+<!--              <el-button @click="modify1(scope.row.bookId)" type="text" size="small">修改</el-button>-->
               <el-button type="text" size="small"></el-button>
             </template>
           </el-table-column>
@@ -96,20 +97,20 @@ export default {
   },
   methods: {
     modify(val){
-      // let books=[{
-      //   id:val
-      // }]
-      // this.$API
-      //     .p_shaixuan({books})
-      //     .then((data) => {
-      //     })
-      //     .catch((err) => {})
-      this.$router.push({
-        path: '/item',
-        query: {
-          bookId: val,
-        }
-      });
+      let books=[{
+        id:val
+      }]
+      this.$API
+          .p_shaixuan({books})
+          .then((data) => {
+          })
+          .catch((err) => {})
+      // this.$router.push({
+      //   path: '/item',
+      //   query: {
+      //     bookId: val,
+      //   }
+      // });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

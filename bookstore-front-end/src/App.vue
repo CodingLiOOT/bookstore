@@ -27,8 +27,9 @@ export default {
   width: 100%;
   background-size: 100%;
   min-height: 900px;
-  background: rgba(38, 50, 56, 0.6) url(./assets/bg4.jpg) no-repeat fixed top center;
-  background-size: cover
+  /*background: rgba(38, 50, 56, 0.6) url(./assets/bg4.jpg) no-repeat fixed top center;*/
+  /*background-size: cover*/
+  background-color: #f3f4f6;
 }
 html,body{
   margin:0;

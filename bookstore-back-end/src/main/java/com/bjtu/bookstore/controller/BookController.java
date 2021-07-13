@@ -48,7 +48,22 @@ public class BookController {
 
     @PostMapping(value = "/shaixuan")
     public void shaixuan(@RequestBody Cart cart) {
+        Preconditions.checkNotNull(cart);
 
         bookService.shaixuan(cart);
+    }
+
+    @PostMapping(value = "/getRightBooks")
+    public HashMap<String, Object> getRightBooks(@RequestBody Book book) {
+        Preconditions.checkNotNull(book);
+
+        return bookService.getRightBooks(book);
+    }
+
+    @PostMapping(value = "/changeBookState")
+    public void changeState(@RequestBody Book book) {
+        Preconditions.checkNotNull(book);
+
+        bookService.changeBookState(book);
     }
 }

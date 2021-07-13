@@ -12,6 +12,14 @@ import java.util.List;
 @Mapper
 @Repository
 public interface BookMapper {
+    //    找到所有正常的书或者违规的书
+    @Select("select * from book where state=#{state} LIMIT #{n}, #{m}")
+    ArrayList<Book> getRightBooks(int state, int n, int m);
+
+    // 管理员修改书的状态
+    @Update("update book set state=#{state} where id=#{id}")
+    int changeBookState(int state, String id);
+
     //    找到该书的价钱
     @Select("select price from book where state=1 and id = #{bookid}")
     int getBookPrice(String bookid);

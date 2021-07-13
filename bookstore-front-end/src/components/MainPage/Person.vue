@@ -1,20 +1,21 @@
 <template>
   <div>
     <el-row class="information">
-      <img src="../../assets/head.jpg" class="userHead" alt="头像" />
+      <div class="block">
+        <el-avatar   :size="60" icon="el-icon-user-solid" >
+        </el-avatar>
+      </div>
     </el-row>
     <el-row class="information">
       欢迎登录！
       <el-row class="information">
-        <el-col :span="8">
+        <el-col >
           <el-button type="primary" round size="small" @click="login()">登录</el-button>
         </el-col>
-        <el-col :span="8">
+        <el-col >
           <el-button type="primary" round size="small" @click="login()">注册</el-button>
         </el-col>
-        <el-col :span="8">
-          <el-button type="primary" round size="small">开店</el-button>
-        </el-col>
+
       </el-row>
     </el-row>
 
@@ -23,7 +24,7 @@
 
 <script>
 export default {
-name: "Person",
+  name: "Person",
   methods:{
     login(){
       this.$router.push('/user/login')
@@ -37,7 +38,7 @@ name: "Person",
   margin-top: 5%;
 }
 .userHead{
-  width: 15%;
-  height: 15%;
+  width: 77px;
+  height: 77px;
 }
 </style>

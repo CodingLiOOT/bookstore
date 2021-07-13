@@ -1,5 +1,6 @@
 package com.bjtu.bookstore.mapper;
 
+import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Role;
 import com.bjtu.bookstore.entity.User;
 import org.apache.ibatis.annotations.Insert;
@@ -8,11 +9,20 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
 @Repository
 public interface UserMapper {
+
+    // 返回所有正常用户或者是违规用户
+    @Select("select * from user where state = #{state} LIMIT #{n}, #{m}")
+    ArrayList<User> getRightUsers(int state, int n, int m);
+
+    // 管理员修改用户的状态
+    @Update("update user set state=#{state} where id=#{id}")
+    int changeUserState(int state, String id);
 
     @Select("select * from user where username = #{username}")
     User selectUserByUserName(String username);
