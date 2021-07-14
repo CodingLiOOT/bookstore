@@ -1,6 +1,5 @@
 package com.bjtu.bookstore.controller;
 
-import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.service.MailService;
 import com.bjtu.bookstore.service.UserService;
@@ -46,7 +45,7 @@ public class UserController {
 
     @PostMapping(value = "/sendVerifyCode")
     public void sendVerifyCode(@RequestBody User user) {
-        Preconditions.checkNotNull(user.getMail());
+        Preconditions.checkState(StringUtils.isNotBlank(user.getMail()));
 
         mailService.sendMail(user.getMail());
     }

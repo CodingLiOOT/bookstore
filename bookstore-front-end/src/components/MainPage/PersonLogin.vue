@@ -24,18 +24,18 @@ export default {
   methods: {
     getInfo() {
       this.$API
-          .p_getUserInfo({ id: this.$store.state.userID })
-          .then((data) => {
-            this.userInfo.userName = data.userName
-            console.log(data.avatar)
-            if (data.avatar != null) {
-              this.userInfo.imgUrl = data.avatar
-            } else {
-              this.userInfo.imgUrl =
-                  'http://images.amazon.com/images/P/0001010565.01.MZZZZZZZ.jpg'
-            }
-          })
-          .catch((err) => {})
+        .p_getUserInfo({ id: this.$store.state.userID })
+        .then((data) => {
+          this.userInfo.userName = data.userName
+          console.log(data.avatar)
+          if (data.avatar != null) {
+            this.userInfo.imgUrl = data.avatar
+          } else {
+            this.userInfo.imgUrl =
+              'http://images.amazon.com/images/P/0001010565.01.MZZZZZZZ.jpg'
+          }
+        })
+        .catch((err) => {})
     },
   },
   props: {

@@ -7,17 +7,17 @@
 </template>
 
 <script>
-import MainCard from "./MainCard";
+import MainCard from './MainCard'
 export default {
-  components:{
-    MainCard
+  components: {
+    MainCard,
   },
-  name: "MainPage"
+  name: 'MainPage',
 }
 </script>
 
 <style scoped>
-.card{
+.card {
   margin-top: 65px;
 }
 </style>

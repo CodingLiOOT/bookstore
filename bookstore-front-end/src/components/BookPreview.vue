@@ -1,10 +1,15 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }" @click.native="openBook(bookId)" class="bookCard" shadow="hover">
-<!--    <img :src="imgSrc" class="image">-->
+  <el-card
+    :body-style="{ padding: '0px' }"
+    @click.native="openBook(bookId)"
+    class="bookCard"
+    shadow="hover"
+  >
+    <!--    <img :src="imgSrc" class="image">-->
     <el-image :src="imgSrc" :fit="fill" class="image"></el-image>
-    <div style="padding: 14px;">
-      <span v-if="bookName.length>20">{{bookName.slice(0,15)}}...</span>
-      <span v-else>{{bookName}}</span>
+    <div style="padding: 14px">
+      <span v-if="bookName.length > 20">{{ bookName.slice(0, 15) }}...</span>
+      <span v-else>{{ bookName }}</span>
       <div class="bottom clearfix">
         <el-row>
           <el-col :span="12">
@@ -15,8 +20,7 @@
           </el-col>
         </el-row>
 
-
-<!--        <el-button type="text" round class="btn" @click="modify(bookId)">修改</el-button>-->
+        <!--        <el-button type="text" round class="btn" @click="modify(bookId)">修改</el-button>-->
       </div>
     </div>
   </el-card>
@@ -24,65 +28,67 @@
 
 <script>
 export default {
-  name: "BookPreview",
-  data(){
-    return{
-      picture:'http://images.amazon.com/images/P/0001010565.01.MZZZZZZZ.jpg',
-      name:'',
+  name: 'BookPreview',
+  data() {
+    return {
+      picture: 'http://images.amazon.com/images/P/0001010565.01.MZZZZZZZ.jpg',
+      name: '',
     }
   },
-  props: {//参数传递需要在props里面声明
-    'imgSrc': {
+  props: {
+    //参数传递需要在props里面声明
+    imgSrc: {
       type: String,
-      default: 'http://images.amazon.com/images/P/0001010565.01.MZZZZZZZ.jpg'
+      default: 'http://images.amazon.com/images/P/0001010565.01.MZZZZZZZ.jpg',
     },
-    'bookName':{
+    bookName: {
       type: String,
-      default:'defaultName',
+      default: 'defaultName',
     },
-    'bookId':{
+    bookId: {
       type: String,
-      default:'defaultBookId',
-    }
+      default: 'defaultBookId',
+    },
   },
   methods: {
-    modify(val){
-      let books=[{
-        id:val
-      }]
+    modify(val) {
+      let books = [
+        {
+          id: val,
+        },
+      ]
       this.$API
-          .p_shaixuan({books})
-          .then((data) => {
-          })
-          .catch((err) => {})
+        .p_shaixuan({ books })
+        .then((data) => {})
+        .catch((err) => {})
     },
-    openBook(val){
+    openBook(val) {
       this.$router.push({
         path: '/item',
         query: {
           bookId: val,
-        }
-      });
-    }
+        },
+      })
+    },
   },
   mounted() {
-    this.name=this.props.bookName
-  }
+    this.name = this.props.bookName
+  },
 }
 </script>
 
 <style scoped>
-.image{
+.image {
   width: 200px;
   height: 250px;
 }
-.bottom{
+.bottom {
   margin-top: 2%;
 }
-.bookCard{
+.bookCard {
   cursor: pointer;
 }
-.btn{
+.btn {
   /*width:60%;*/
   /*height:60%;*/
   font-size: 0.2rem;

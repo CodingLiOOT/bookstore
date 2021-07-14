@@ -4,20 +4,20 @@
       <el-col :offset="2">
         <el-row class="row">
           <el-col :span="3" :offset="0">
-            <img :src="require('../../assets/new.png')" class="new"/>
+            <img :src="require('../../assets/new.png')" class="new" />
           </el-col>
         </el-row>
         <el-row>
           <el-col
-              :span="4"
-              v-for="book in books"
-              :key="book.bookId"
-              :offset="books.length > 0 ? 0.8 : 0"
+            :span="4"
+            v-for="book in books"
+            :key="book.bookId"
+            :offset="books.length > 0 ? 0.8 : 0"
           >
             <BookPreview
-                :bookId="book.bookId"
-                :bookName="book.bookName"
-                :imgSrc="book.imgSrc"
+              :bookId="book.bookId"
+              :bookName="book.bookName"
+              :imgSrc="book.imgSrc"
             ></BookPreview>
           </el-col>
         </el-row>
@@ -69,8 +69,8 @@ export default {
 .row {
   margin-bottom: 2%;
 }
-.new{
+.new {
   width: 120px;
-  height:50px
+  height: 50px;
 }
 </style>

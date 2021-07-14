@@ -5,38 +5,41 @@
         <el-container>
           <el-row>
             <el-col :span="3" :offset="2">
-              <el-image :src="require('@/assets/lo.png')" style="width: 260px;height: 90px"></el-image>
+              <el-image
+                :src="require('@/assets/lo.png')"
+                style="width: 260px; height: 90px"
+              ></el-image>
             </el-col>
             <el-col :span="7" :offset="7">
               <el-input
-                  v-model="search"
-                  @focus="focus"
-                  @blur="blur"
-                  @keyup.enter.native="searchHandler"
-                  placeholder="搜索书籍名"
-                  style="width: 600px;height: 20px"
+                v-model="search"
+                @focus="focus"
+                @blur="blur"
+                @keyup.enter.native="searchHandler"
+                placeholder="搜索书籍名"
+                style="width: 600px; height: 20px"
               >
                 <el-button
-                    slot="append"
-                    icon="el-icon-search"
-                    id="search"
-                    @click="searchHandler"
+                  slot="append"
+                  icon="el-icon-search"
+                  id="search"
+                  @click="searchHandler"
                 ></el-button>
               </el-input>
               <!---设置z-index优先级,防止被走马灯效果遮挡-->
               <el-card
-                  @mouseenter="enterSearchBoxHanlder"
-                  v-if="isSearch"
-                  id="search-box"
-                  style="position: fixed; z-index: 15"
+                @mouseenter="enterSearchBoxHanlder"
+                v-if="isSearch"
+                id="search-box"
+                style="position: fixed; z-index: 15"
               >
                 <div v-if="isHistorySearch">
                   <el-row>
                     <div class="search-title" v-show="history">历史搜索</div>
                     <div
-                        class="remove-history"
-                        v-show="history"
-                        @click="removeAllHistory"
+                      class="remove-history"
+                      v-show="history"
+                      @click="removeAllHistory"
                     >
                       清空历史记录
                     </div>
@@ -44,13 +47,13 @@
                   <el-row>
                     <el-col :offset="0" :span="24">
                       <el-tag
-                          v-for="search in historySearchList"
-                          :key="search.id"
-                          closable
-                          class="word-tag"
-                          :type="search.type"
-                          @close="closeHandler(search)"
-                      >{{ search.name }}</el-tag
+                        v-for="search in historySearchList"
+                        :key="search.id"
+                        closable
+                        class="word-tag"
+                        :type="search.type"
+                        @close="closeHandler(search)"
+                        >{{ search.name }}</el-tag
                       >
                     </el-col>
                   </el-row>
@@ -59,9 +62,9 @@
                   </el-row>
                   <el-row>
                     <div
-                        v-for="search in hotSearchList"
-                        :key="search.id"
-                        class="topSearch"
+                      v-for="search in hotSearchList"
+                      :key="search.id"
+                      class="topSearch"
                     >
                       {{ search }}
                     </div>
@@ -69,9 +72,9 @@
                 </div>
                 <div v-if="isSearchList">
                   <div
-                      v-for="search in searchList"
-                      :key="search.id"
-                      class="topSearch"
+                    v-for="search in searchList"
+                    :key="search.id"
+                    class="topSearch"
                   >
                     {{ search }}
                   </div>
@@ -81,39 +84,52 @@
           </el-row>
 
           <!--            搜索框-->
-
         </el-container>
         <el-card class="card1">
-              <el-row class="first">
-                <!--            图书类别-->
-                <el-col :span="11" :offset="1">
-                  <el-card class="card2">
-                    <div class="bookCat">图书类别</div>
-<!--                    <el-divider >图书类别</el-divider>-->
-                    <el-row v-for="kind in this.parent" :key="kind.name" >
-                    <span class="cate">
-                      {{kind.name}}>&nbsp;
-                    </span>
-                      <span class="cateChild" v-for="child in kind.children" :key="child.name" @click="searchCategory(child.name)">
-                      {{child.name}}<el-divider direction="vertical"></el-divider>
-                    </span>
-<!--                      <el-divider></el-divider>-->
-                    </el-row>
-                  </el-card>
-                </el-col>
-                <!--            轮播图图书推荐-->
-                <el-col :span="11" :offset="0">
-                  <div class="block">
-                    <span class="demonstration"></span>
-                    <el-carousel trigger="click" height="350px" width="400px"class="ca">
-                      <el-carousel-item v-for="item in imgList" :key="item.id">
-                        <img :src="item.idView" class="adImage" alt="推荐" @click="intoLunbo" />
-                        <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
-                        <!--                    </el-image>-->
-                      </el-carousel-item>
-                    </el-carousel>
-                  </div>
-                </el-col>
+          <el-row class="first">
+            <!--            图书类别-->
+            <el-col :span="11" :offset="1">
+              <el-card class="card2">
+                <div class="bookCat">图书类别</div>
+                <!--                    <el-divider >图书类别</el-divider>-->
+                <el-row v-for="kind in this.parent" :key="kind.name">
+                  <span class="cate"> {{ kind.name }}>&nbsp; </span>
+                  <span
+                    class="cateChild"
+                    v-for="child in kind.children"
+                    :key="child.name"
+                    @click="searchCategory(child.name)"
+                  >
+                    {{ child.name
+                    }}<el-divider direction="vertical"></el-divider>
+                  </span>
+                  <!--                      <el-divider></el-divider>-->
+                </el-row>
+              </el-card>
+            </el-col>
+            <!--            轮播图图书推荐-->
+            <el-col :span="11" :offset="0">
+              <div class="block">
+                <span class="demonstration"></span>
+                <el-carousel
+                  trigger="click"
+                  height="350px"
+                  width="400px"
+                  class="ca"
+                >
+                  <el-carousel-item v-for="item in imgList" :key="item.id">
+                    <img
+                      :src="item.idView"
+                      class="adImage"
+                      alt="推荐"
+                      @click="intoLunbo"
+                    />
+                    <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
+                    <!--                    </el-image>-->
+                  </el-carousel-item>
+                </el-carousel>
+              </div>
+            </el-col>
           </el-row>
           <!--          推荐榜-->
           <el-row class="information">
@@ -164,18 +180,18 @@ export default {
       types: ['', 'success', 'info', 'warning', 'danger'], //搜索历史tag式样
       bannerHeight: '',
       flag: false,
-      parent:[]
+      parent: [],
     }
   },
   methods: {
-    searchCategory(val){
+    searchCategory(val) {
       this.$router.push({
         path: '/AllBook',
         query: {
-          t:'cat',
+          t: 'cat',
           val: val,
-        }
-      });
+        },
+      })
     },
     getLunBo() {
       let t = [
@@ -194,21 +210,6 @@ export default {
         temp.idView = lb.idView
         this.imgList.push(temp)
       }
-      // this.$API
-      //   .p_getLunBo({})
-      //   .then((data) => {
-      //     for (let i = 0; i < data.lunBo.length; i++) {
-      //       let lb = data.lunBo[i]
-      //       let temp = {
-      //         id: '',
-      //         idView: '',
-      //       }
-      //       temp.id = i + 1
-      //       temp.idView = lb.imgUrl
-      //       this.imgList.push(temp)
-      //     }
-      //   })
-      //   .catch((err) => {})
     },
     getFlag() {
       if (this.$store.state.userID === undefined) {
@@ -249,10 +250,10 @@ export default {
       this.$router.push({
         path: '/AllBook',
         query: {
-          t:'book',
+          t: 'book',
           val: this.search,
-        }
-      });
+        },
+      })
     },
     closeHandler(search) {
       this.historySearchList.splice(this.historySearchList.indexOf(search), 1)
@@ -265,40 +266,36 @@ export default {
     removeAllHistory() {
       Store.removeAllHistory()
     },
-    getCategories(){
+    getCategories() {
       this.$API
-          .p_getCategories({})
-          .then((data) => {
-            for (let i = 0; i < data.length; i++) {
-              let parent={
-                name:'',
-                children:[],
-              }
-              parent.name=data[i].name
-              for(let j=0;j<data[i].childCategory.length;j++){
-                let c=data[i].childCategory[j]
-                let child={
-                  name:'',
-                }
-                child.name=c.name
-                parent.children.push(child)
-              }
-              this.parent.push(parent)
-              console.log(this.parent)
+        .p_getCategories({})
+        .then((data) => {
+          for (let i = 0; i < data.length; i++) {
+            let parent = {
+              name: '',
+              children: [],
             }
-
-
-          })
-          .catch((err) => {})
+            parent.name = data[i].name
+            for (let j = 0; j < data[i].childCategory.length; j++) {
+              let c = data[i].childCategory[j]
+              let child = {
+                name: '',
+              }
+              child.name = c.name
+              parent.children.push(child)
+            }
+            this.parent.push(parent)
+            console.log(this.parent)
+          }
+        })
+        .catch((err) => {})
     },
-    intoLunbo(){
+    intoLunbo() {
       this.$router.push({
         path: '/activityPage',
-        query: {
-
-        }
-      });
-    }
+        query: {},
+      })
+    },
   },
   computed: {
     isHistorySearch() {
@@ -314,7 +311,6 @@ export default {
       // 通过浏览器宽度(图片宽度)计算高度
       this.bannerHeight = (400 / 1920) * this.screenWidth
     },
-
   },
   mounted() {
     this.getLunBo()
@@ -334,7 +330,7 @@ export default {
 
 <style scoped>
 #search {
-  background-color: #ADC4F7;
+  background-color: #adc4f7;
   border-radius: 0%;
 }
 .word-tag {
@@ -359,9 +355,6 @@ export default {
 .first {
   margin-top: 3%;
 }
-.test{
-
-}
 
 .information {
   margin-top: 5%;
@@ -376,56 +369,50 @@ export default {
   height: 10%;
   padding-bottom: 5%;
 }
-.cat:hover{
-  text-decoration:underline;
+.cat:hover {
+  text-decoration: underline;
   cursor: pointer;
-
 }
-.cat{
-//background-color:#ADC4F7;
-}
-.card1{
+.card1 {
   border-radius: 30px;
-
 }
-.card2{
+.card2 {
   border-radius: 30px;
-  height:350px;
-  background-image: linear-gradient( #FFFFCC,#FFFFCC);
+  height: 350px;
+  background-image: linear-gradient(#ffffcc, #ffffcc);
   /*background-color: #c6cfe2;*/
 }
-.card3{
+.card3 {
   border-radius: 30px;
 }
-.ca{
+.ca {
   border-radius: 30px;
 }
-.block{
+.block {
   height: 350px;
 }
-.cate{
+.cate {
   float: left;
   font-weight: bold;
   margin-bottom: 16px;
 }
-.cateChild{
+.cateChild {
   /*float: left;*/
   cursor: pointer;
   margin-bottom: 16px;
 }
-.cateChild:hover{
+.cateChild:hover {
   color: #3f9dfe;
 }
-.book{
+.book {
   margin-left: 4px;
   margin-bottom: 4px;
 }
-.bookCat{
+.bookCat {
   color: #0b447f;
   margin-bottom: 20px;
   margin-left: 0;
   margin-right: 0;
   font-weight: bold;
 }
-
 </style>

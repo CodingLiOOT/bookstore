@@ -239,15 +239,15 @@ export default {
     sendCode() {
       this.$refs.RegisterForm.validateField('email', (valid) => {
         // if (valid) {
-          this.time = 30
-          this.timer()
-          this.$API
-            .p_SendCode({
-              mail: this.RegisterForm.email,
-            })
-            .then((res) => {
-              alertSuccess('发送成功')
-            })
+        this.time = 30
+        this.timer()
+        this.$API
+          .p_SendCode({
+            mail: this.RegisterForm.email,
+          })
+          .then((res) => {
+            alertSuccess('发送成功')
+          })
         // }
       })
     },

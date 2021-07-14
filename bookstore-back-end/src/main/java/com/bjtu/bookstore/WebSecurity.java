@@ -49,7 +49,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers("/api/user/forgetPassword").permitAll()
                 .antMatchers("/api/test/**").permitAll()
-
+                .antMatchers("/api/category/getCategories").permitAll()
+                .antMatchers("/api/mainPage/getRecommendedBooks").permitAll()
+                .antMatchers("/api/mainPage/getTopBooks").permitAll()
+                .antMatchers("/api/mainPage/getNewBooks").permitAll()
+                .antMatchers("/api/book/getAllBooksByCategory").permitAll()
                 .antMatchers("/static/**").permitAll()
 
 
