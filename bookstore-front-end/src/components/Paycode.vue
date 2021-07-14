@@ -42,14 +42,16 @@ export default {
             id:this.$route.query.orderId,
             state:2
           })
+          .then((data) => {
+            this.$router.push({
+              path: '/CenterPage',
+              query: {
+              }
+            });
+          })
           .catch((err) => {})
       // this.$router.go(-1);
-      this.$router.push({
-        path: '/CenterPage',
-        query: {
 
-        }
-      });
     },
 
   }

@@ -83,51 +83,43 @@
           <!--            搜索框-->
 
         </el-container>
-
         <el-card class="card1">
-
-          <el-row class="first">
-            <!--            图书类别-->
-            <el-col :span="8" :offset="0">
-              <el-card class="card2">
-                <el-divider>图书类别</el-divider>
-                <el-row v-for="kind in this.parent" :key="kind.name" >
-                    <span >
-                      {{kind.name}}>
+              <el-row class="first">
+                <!--            图书类别-->
+                <el-col :span="11" :offset="1">
+                  <el-card class="card2">
+                    <div class="bookCat">图书类别</div>
+<!--                    <el-divider >图书类别</el-divider>-->
+                    <el-row v-for="kind in this.parent" :key="kind.name" >
+                    <span class="cate">
+                      {{kind.name}}>&nbsp;
                     </span>
-                  <span  v-for="child in kind.children" :key="child.name" class="cat" @click="searchCategory(child.name)">
-                      {{child.name}}
+                      <span class="cateChild" v-for="child in kind.children" :key="child.name" @click="searchCategory(child.name)">
+                      {{child.name}}<el-divider direction="vertical"></el-divider>
                     </span>
-                </el-row>
-              </el-card>
-            </el-col>
-
-            <!--            轮播图图书推荐-->
-            <el-col :span="11" >
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-carousel trigger="click" height="350px" width="400px"class="ca">
-                  <el-carousel-item v-for="item in imgList" :key="item.id">
-                    <img :src="item.idView" class="adImage" alt="推荐" />
-                    <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
-                    <!--                    </el-image>-->
-                  </el-carousel-item>
-                </el-carousel>
-              </div>
-            </el-col>
-            <el-col :span="4" >
-              <el-card class="card3">
-                <div v-if="flag"><PersonLogin></PersonLogin></div>
-                <div v-else><Person></Person></div>
-              </el-card>
-
-            </el-col>
+<!--                      <el-divider></el-divider>-->
+                    </el-row>
+                  </el-card>
+                </el-col>
+                <!--            轮播图图书推荐-->
+                <el-col :span="11" :offset="0">
+                  <div class="block">
+                    <span class="demonstration"></span>
+                    <el-carousel trigger="click" height="350px" width="400px"class="ca">
+                      <el-carousel-item v-for="item in imgList" :key="item.id">
+                        <img :src="item.idView" class="adImage" alt="推荐" @click="intoLunbo" />
+                        <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
+                        <!--                    </el-image>-->
+                      </el-carousel-item>
+                    </el-carousel>
+                  </div>
+                </el-col>
           </el-row>
-
-
           <!--          推荐榜-->
           <el-row class="information">
-            <Top></Top>
+            <div class="book">
+              <Top></Top>
+            </div>
           </el-row>
           <el-row class="information">
             <Like></Like>
@@ -298,6 +290,14 @@ export default {
 
           })
           .catch((err) => {})
+    },
+    intoLunbo(){
+      this.$router.push({
+        path: '/activityPage',
+        query: {
+
+        }
+      });
     }
   },
   computed: {
@@ -314,6 +314,7 @@ export default {
       // 通过浏览器宽度(图片宽度)计算高度
       this.bannerHeight = (400 / 1920) * this.screenWidth
     },
+
   },
   mounted() {
     this.getLunBo()
@@ -368,6 +369,7 @@ export default {
 .adImage {
   width: 100%;
   height: inherit;
+  cursor: pointer;
 }
 #search-box {
   width: 45%;
@@ -384,9 +386,13 @@ export default {
 }
 .card1{
   border-radius: 30px;
+
 }
 .card2{
   border-radius: 30px;
+  height:350px;
+  background-image: linear-gradient( #FFFFCC,#FFFFCC);
+  /*background-color: #c6cfe2;*/
 }
 .card3{
   border-radius: 30px;
@@ -394,4 +400,32 @@ export default {
 .ca{
   border-radius: 30px;
 }
+.block{
+  height: 350px;
+}
+.cate{
+  float: left;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.cateChild{
+  /*float: left;*/
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.cateChild:hover{
+  color: #3f9dfe;
+}
+.book{
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+.bookCat{
+  color: #0b447f;
+  margin-bottom: 20px;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
 </style>

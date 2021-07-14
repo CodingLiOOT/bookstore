@@ -128,6 +128,11 @@ const router = new Router({
       name: 'LunboManage',
       component: LunboManage
     },
+    {
+      path: '/activityPage',
+      name: 'activityPage',
+      component: () => import("../components/activityPage")
+    },
   ],
 })
 router.beforeEach((to, from, next) => {

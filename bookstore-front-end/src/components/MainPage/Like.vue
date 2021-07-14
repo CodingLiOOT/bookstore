@@ -1,20 +1,25 @@
 <template>
   <div>
-    <el-row class="row">
-      <el-col :span="3" :offset="0"> 猜你喜欢 </el-col>
-    </el-row>
     <el-row>
-      <el-col
-        :span="4"
-        v-for="book in books"
-        :key="book.bookId"
-        :offset="books.length > 0 ? 0.5 : 0"
-      >
-        <BookPreview
-            :bookId="book.bookId"
-            :bookName="book.bookName"
-            :imgSrc="book.imgSrc"
-        ></BookPreview>
+      <el-col :offset="2">
+        <el-row class="row">
+          <el-col :span="3" :offset="0">
+            <img :src="require('../../assets/like.png')" class="like"/></el-col>
+        </el-row>
+        <el-row>
+          <el-col
+              :span="4"
+              v-for="book in books"
+              :key="book.bookId"
+              :offset="books.length > 0 ? 0.8 : 0"
+          >
+            <BookPreview
+                :bookId="book.bookId"
+                :bookName="book.bookName"
+                :imgSrc="book.imgSrc"
+            ></BookPreview>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -61,6 +66,10 @@ export default {
 
 <style scoped>
 .row {
-  margin-bottom: 3%;
+  margin-bottom: 2%;
+}
+.like{
+  width: 120px;
+  height:50px
 }
 </style>

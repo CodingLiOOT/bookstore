@@ -87,7 +87,11 @@ export default {
             phone:this.form.phone,
           })
           .then((data) => {
-
+            this.$notify({
+              title: '成功',
+              message: '修改个人信息成功',
+              type: 'success'
+            });
           })
           .catch((err) => {})
     },
@@ -95,17 +99,6 @@ export default {
       this.getUserDetail()
     },
     getUserDetail(){
-      let d= {
-        name: 'Nancy123',
-        phone:'18518407537',
-        mail:'nancy_wdi@163.com',
-        gender: 1,
-      }
-      this.form.name=d.name
-      this.form.gender=d.gender
-      this.form.mail=d.mail
-      this.form.phone=d.phone
-      this.birthday=d.birthday
       this.$API
           .p_getUserInfo({
             id:this.$store.state.userID

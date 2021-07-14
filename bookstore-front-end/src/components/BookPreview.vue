@@ -1,13 +1,22 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }" @click.native="openBook(bookId)" class="bookCard">
-    <img :src="imgSrc" class="image">
+  <el-card :body-style="{ padding: '0px' }" @click.native="openBook(bookId)" class="bookCard" shadow="hover">
+<!--    <img :src="imgSrc" class="image">-->
+    <el-image :src="imgSrc" :fit="fill" class="image"></el-image>
     <div style="padding: 14px;">
-      <span v-if="bookName.length>20">{{bookName.slice(0,20)}}...</span>
+      <span v-if="bookName.length>20">{{bookName.slice(0,15)}}...</span>
       <span v-else>{{bookName}}</span>
       <div class="bottom clearfix">
-        <el-button type="text" round class="btn">加入购物车</el-button>
-        <el-button type="text" round class="btn">立即购买</el-button>
-        <el-button type="text" round class="btn" @click="modify(bookId)">修改</el-button>
+        <el-row>
+          <el-col :span="12">
+            <el-button type="text" round class="btn">加入购物车</el-button>
+          </el-col>
+          <el-col :span="12">
+            <el-button type="text" round class="btn">立即购买</el-button>
+          </el-col>
+        </el-row>
+
+
+<!--        <el-button type="text" round class="btn" @click="modify(bookId)">修改</el-button>-->
       </div>
     </div>
   </el-card>
@@ -64,8 +73,8 @@ export default {
 
 <style scoped>
 .image{
-  width: 100px;
-  height: 130px;
+  width: 200px;
+  height: 250px;
 }
 .bottom{
   margin-top: 2%;

@@ -29,7 +29,7 @@ public interface BookMapper {
     String getBookNameById(String bookid);
 
     //    找到该书的详情
-    @Select("select * from book where state=1 and id = #{bookid}")
+    @Select("select * from book where id = #{bookid}")
     ArrayList<Book> getDetail(String bookid);
 
     //    找到该书的店铺

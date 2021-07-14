@@ -75,17 +75,16 @@
        </el-table-column>
        <el-table-column
            label="操作"
-           width="100">
+           width="130">
          <template slot-scope="scope">
-           <el-button @click="modifyAddr(scope.row.addressId)" type="text" size="small">修改</el-button>
-           <el-button @click="openDelDialog(scope.row.addressId)" type="text" size="small" style="color: red">删除</el-button>
-           <el-button type="text" size="small"></el-button>
+           <el-button @click="modifyAddr(scope.row.addressId)" type="text" >修改</el-button>
+           <el-button @click="openDelDialog(scope.row.addressId)" type="text"  style="color: red">删除</el-button>
          </template>
        </el-table-column>
      </el-table>
    </el-row>
    <el-row class="buto">
-     <el-button type="primary" @click="addVisible = true">添加地址</el-button>
+     <el-button type="primary" @click="add">添加地址</el-button>
    </el-row>
  </div>
 </template>
@@ -116,6 +115,10 @@ name: "Address",
     }
   },
   methods:{
+    add(){
+      this.addVisible = true
+      this.addressForm={}
+    },
     submitModify(){
       this.$API
           .p_modifyAddress({
@@ -178,6 +181,7 @@ name: "Address",
             address:this.addAddressForm.address
           })
           .then((data) => {
+            this.addAddressForm={}
             this.addVisible=false
             this.getAllAddresses()
           })

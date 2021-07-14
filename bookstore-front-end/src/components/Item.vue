@@ -36,7 +36,7 @@
                     {{ this.book.dealNum}}
                   </el-form-item>
                   <el-form-item label="数量">
-                    <el-input-number v-model="num" @change="handleChange" :min="1" :max="this.book.inventory" label="描述文字">
+                    <el-input-number v-model="num" @change="handleChange" :step="1" :min="1" :max="this.book.inventory" label="描述文字">
                     </el-input-number>
                     库存{{this.book.inventory}}
                   </el-form-item>

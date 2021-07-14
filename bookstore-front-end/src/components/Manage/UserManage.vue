@@ -109,7 +109,7 @@ export default {
       navList:[
         {name:'/userManage',navItem:'用户管理'},
         {name:'/bookManage',navItem:'图书管理'},
-        {name:'/LunboManage',navItem:'轮播管理'},
+        // {name:'/LunboManage',navItem:'轮播管理'},
       ],
       normalUsers:[],
       invalidUsers:[],

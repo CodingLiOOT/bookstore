@@ -248,4 +248,25 @@ export default class api {
    */
   static p_changeBookState = p => post('/book/changeBookState', p)
 
+  /**
+   * 获取所有轮播信息
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getAllLunbos = p => post('/lunbo/getAllLunbos', p)
+
+  /**
+   * 删除某个轮播信息
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_deleteLunbo = p => post('/lunbo/deleteLunbo', p)
+
+  /**
+   * 增加轮播信息
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_addLunbo = p => post('/lunbo/addToLunbo', p)
+
 }

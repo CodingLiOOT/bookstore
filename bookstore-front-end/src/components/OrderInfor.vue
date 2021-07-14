@@ -67,13 +67,13 @@
               </el-row>
             </div>
             <div v-else>
-              <el-button>管理收货地址</el-button>
+              <el-button @click="manage">管理收货地址</el-button>
             </div>
           </el-form-item>
           <el-form-item label="选择支付方式：">
 
-              <el-radio v-model="this.pay" :label=1>微信</el-radio>
-              <el-radio v-model="this.pay" :label=2>支付宝</el-radio>
+              <el-radio v-model="pay" :label=1>微信</el-radio>
+              <el-radio v-model="pay" :label=2>支付宝</el-radio>
 
           </el-form-item>
           <el-form-item label="总价：">
@@ -154,7 +154,7 @@ export default {
       }
       this.addressDialogVisible=false
     },
-    manage(){
+    manage() {
       this.addressDialogVisible=true
     },
     onSubmit() {
@@ -183,7 +183,7 @@ export default {
               this.tableData.push(temp)
               console.log(this.tableData)
             }
-            this.address=this.tableData[0]
+            Object.assign(this.address,this.tableData[0])
           })
           .catch((err) => {})
     },

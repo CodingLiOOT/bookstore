@@ -56,7 +56,7 @@
     </el-dialog>
     <el-col :span="20" :offset="2">
       <el-card class="center" >
-        <div>***个人中心***</div>
+        <div>个人中心</div>
         <el-tabs :tab-position="left">
           <el-tab-pane label="订单列表">
             <el-tabs :tab-position="tabPosition" v-model="activeName" @tab-click="handleClick">
@@ -93,7 +93,7 @@
                       column-key="orderId">
                   </el-table-column>
                   <el-table-column
-                      prop="date"
+                      prop="moment(date).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')"
                       label="创建日期"
                       sortable
                       width="180"
@@ -109,15 +109,13 @@
                       label="总价"
                       width="100">
                   </el-table-column>
-                  <el-table-column
-                      prop="state"
-                      label="订单状态"
-                      width="100">
-                  </el-table-column>
-                  <el-table-column label="操作" width="120">
+                  <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                       <el-button type="text" size="small" @click="settle1(scope.row.orderId)">
                         去支付
+                      </el-button>
+                      <el-button class="red" type="text" size="small" @click="cancel(scope.row.orderId)">
+                        取消支付
                       </el-button>
                     </template>
                   </el-table-column>
@@ -171,11 +169,6 @@
                   <el-table-column
                       prop="sum"
                       label="总价"
-                      width="100">
-                  </el-table-column>
-                  <el-table-column
-                      prop="state"
-                      label="订单状态"
                       width="100">
                   </el-table-column>
                   <el-table-column label="操作" width="120">
@@ -239,11 +232,6 @@
                       label="总价"
                       width="100">
                   </el-table-column>
-                  <el-table-column
-                      prop="state"
-                      label="订单状态"
-                      width="100">
-                  </el-table-column>
                   <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
                       <el-button
@@ -301,11 +289,6 @@
                   <el-table-column
                       prop="sum"
                       label="总价"
-                      width="100">
-                  </el-table-column>
-                  <el-table-column
-                      prop="state"
-                      label="订单状态"
                       width="100">
                   </el-table-column>
                   <el-table-column label="操作" width="120">
@@ -367,11 +350,7 @@
                       label="总价"
                       width="100">
                   </el-table-column>
-                  <el-table-column
-                      prop="state"
-                      label="订单状态"
-                      width="100">
-                  </el-table-column>
+
                   <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
                       <el-button type="text" size="small" @click="getComment(scope.row.orderId)">
@@ -382,7 +361,6 @@
                 </el-table>
               </el-tab-pane>
             </el-tabs>
-
           </el-tab-pane>
           <el-tab-pane label="个人信息">
             <Setting></Setting>
@@ -427,6 +405,22 @@ export default {
     };
   },
   methods: {
+    cancel(val){
+      this.$API
+          .p_changestate({
+            id:val,
+            state:0
+          })
+          .then((data) => {
+            this.$notify({
+              title: '成功',
+              message: '取消支付成功',
+              type: 'success'
+            });
+            this.getUnPay()
+          })
+          .catch((err) => {})
+    },
     getComment(val){
       this.booksCom=[]
       this.getCommentVisible=true
@@ -486,6 +480,11 @@ export default {
             comment
           )
           .then((data) => {
+            this.$notify({
+              title: '成功',
+              message: '评价成功',
+              type: 'success'
+            });
             this.$API
                 .p_changestate({
                   id:this.orderId,
@@ -614,26 +613,6 @@ export default {
           }
         }
       }
-      // this.$prompt('请输入评论', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      // }).then(({ value }) => {
-      //   this.$message({
-      //     type: 'success',
-      //     message: '评论成功'
-      //   });
-      //   // this.$API
-      //   //     .p_changestate({
-      //   //       orderId:this.settle1(val),
-      //   //       state:4
-      //   //     })
-      //   //     .catch((err) => {});
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '取消输入'
-      //   });
-      // });
     },
 
     update(data){
@@ -707,5 +686,8 @@ a:hover {
 }
 .center{
   margin-top: 65px;
+}
+.red{
+  color: red;
 }
 </style>

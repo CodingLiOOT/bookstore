@@ -17,7 +17,8 @@ export default {
   left: 0;
   overflow: hidden;
   /*background: rgb(193, 216, 235);*/
-  background: rgba(38, 50, 56, 0.6) url(../assets/login_bg.jpg) no-repeat fixed top center;
+  /*background: rgba(38, 50, 56, 0.6) url(../assets/login_bg.jpg) no-repeat fixed top center;*/
+  background-image: linear-gradient( #D1E8E2,#FFFFCC);;
   background-size: 100% 100%;
 }
 </style>

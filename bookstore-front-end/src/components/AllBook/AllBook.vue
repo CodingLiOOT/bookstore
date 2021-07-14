@@ -6,12 +6,12 @@
             :data="books"
             style="width: 100%"
         >
-          <el-table-column
-              prop="bookId"
-              label="编号"
-              sortable
-              width="120">
-          </el-table-column>
+<!--          <el-table-column-->
+<!--              prop="bookId"-->
+<!--              label="编号"-->
+<!--              sortable-->
+<!--              width="120">-->
+<!--          </el-table-column>-->
           <el-table-column
               prop="imgUrl"
               label="预览"
@@ -25,7 +25,7 @@
               prop="name"
               label="详细信息"
               sortable
-              width="180">
+              width="300">
             <template slot-scope="scope">
               <el-row>
                 {{scope.row.bookName}}
@@ -45,7 +45,7 @@
               prop="categoryName"
               label="类别"
               sortable
-              width="180">
+              width="200">
           </el-table-column>
           <el-table-column
               prop="price"
@@ -97,20 +97,20 @@ export default {
   },
   methods: {
     modify(val){
-      let books=[{
-        id:val
-      }]
-      this.$API
-          .p_shaixuan({books})
-          .then((data) => {
-          })
-          .catch((err) => {})
-      // this.$router.push({
-      //   path: '/item',
-      //   query: {
-      //     bookId: val,
-      //   }
-      // });
+      // let books=[{
+      //   id:val
+      // }]
+      // this.$API
+      //     .p_shaixuan({books})
+      //     .then((data) => {
+      //     })
+      //     .catch((err) => {})
+      this.$router.push({
+        path: '/item',
+        query: {
+          bookId: val,
+        }
+      });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

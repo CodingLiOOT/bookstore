@@ -2,13 +2,10 @@
   <el-header class="el-header" >
     <el-row>
       <el-col :span="6">
-        <!--        <el-link type="primary">登录/注册</el-link>-->
-        <!--        <el-link type="primary" :href="/Cart">购物车</el-link>-->
-        <router-link :to="{path: '/user/login', params: { }}" class="r">登录/注册</router-link>
+        <router-link :to="{path: '/user/login', params: {}}"class="r" @click.native="quit">注销</router-link>
         <router-link :to="{path: '/mainPage', params: {}}" class="r">主页</router-link>
         <router-link :to="{path: '/Cart', params: {}}" class="r">购物车</router-link>
         <router-link :to="{path: '/CenterPage', params: {}}"class="r">个人中心</router-link>
-<!--        <router-link v-if="flag=false" :to="{path: '/user/login', params: {}}"class="r" @click.native="quit">注销</router-link>-->
       </el-col>
     </el-row>
   </el-header>
@@ -21,7 +18,6 @@ export default {
   name: "Header",
   data(){
     return{
-      flag:true
     }
   },
   methods:{
@@ -31,7 +27,7 @@ export default {
     }
   },
   mounted() {
-    this.flag = this.$store.state.userID === undefined;
+    App.flag = this.$store.state.userID === undefined;
   }
 }
 </script>
