@@ -2,6 +2,7 @@ package com.bjtu.bookstore.utils.token;
 
 import com.bjtu.bookstore.utils.exceptionHandler.exception.DefinitionException;
 import com.bjtu.bookstore.utils.exceptionHandler.exception.ErrorEnum;
+import com.bjtu.bookstore.utils.redis.JedisInstance;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +10,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,17 +28,20 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "jwt")
 @Component
 public class JWTUtils implements Serializable {
+    private final Jedis jedis = JedisInstance.getInstance().getResource();
     private String secret;
     private Long expiration;
     private String header;
 
     private String generateToken(Map<String, Object> claims) {
         Date expirationDate = new Date(System.currentTimeMillis() + expiration);
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+        jedis.setex(token, 10 * 60, "token");
+        return token;
     }
 
     private Claims getClaimsFromToken(String token) {
@@ -94,6 +99,10 @@ public class JWTUtils implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser jwtUser = (JwtUser) userDetails;
         String username = getUsernameFromToken(token);
+        if (jedis.exists(token)) {
+            jedis.expire(token, 60 * 10);
+            return true;
+        }
         if (!(username.equals(jwtUser.getUsername())) || isTokenExpired(token)) {
             throw new DefinitionException(ErrorEnum.SIGNATURE_NOT_MATCH);
         }
