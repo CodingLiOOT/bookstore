@@ -4,6 +4,7 @@ import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Cart;
 import com.bjtu.bookstore.mapper.BookMapper;
 import com.bjtu.bookstore.mapper.CategoryMapper;
+import com.bjtu.bookstore.mapper.StoreMapper;
 import com.bjtu.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
     @Autowired
+    private StoreMapper storeMapper;
+    @Autowired
     private CategoryMapper categoryMapper;
 
     @Override
@@ -24,6 +27,7 @@ public class BookServiceImpl implements BookService {
         ArrayList<Book> books = new ArrayList<>();
         books = bookMapper.getDetail(book.getId());
         for(int i=0;i<books.size();i++) {
+            books.get(i).setStoreName(storeMapper.getNameById(books.get(i).getStoreId()));
             books.get(i).setCategoryName(categoryMapper.getNameById(books.get(i).getCategoryId()));
         }
         HashMap<String, Object> data = new HashMap<>();
@@ -48,6 +52,7 @@ public class BookServiceImpl implements BookService {
         }
 
         for(int i=0;i<books.size();i++) {
+            books.get(i).setStoreName(storeMapper.getNameById(books.get(i).getStoreId()));
             books.get(i).setCategoryName(categoryMapper.getNameById(books.get(i).getCategoryId()));
         }
 
@@ -66,6 +71,7 @@ public class BookServiceImpl implements BookService {
         ArrayList<Book> books=bookMapper.search(b1.getStartNum()-1,10,content);
 
         for(int i=0;i<books.size();i++) {
+            books.get(i).setStoreName(storeMapper.getNameById(books.get(i).getStoreId()));
             books.get(i).setCategoryName(categoryMapper.getNameById(books.get(i).getCategoryId()));
         }
 

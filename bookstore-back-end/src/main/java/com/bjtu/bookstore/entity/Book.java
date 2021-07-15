@@ -17,6 +17,8 @@ public class Book {
 
     private String storeId;
 
+    private String storeName;
+
     private Integer inventory;
 
     private String publisher;

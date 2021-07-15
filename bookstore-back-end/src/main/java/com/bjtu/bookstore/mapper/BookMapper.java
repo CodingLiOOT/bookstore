@@ -16,7 +16,7 @@ public interface BookMapper {
     @Select("select * from book where state=#{state} LIMIT #{n}, #{m}")
     ArrayList<Book> getRightBooks(int state, int n, int m);
 
-    // 管理员修改书的状态
+    //    管理员修改书的状态
     @Update("update book set state=#{state} where id=#{id}")
     int changeBookState(int state, String id);
 

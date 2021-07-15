@@ -12,13 +12,14 @@ import java.util.ArrayList;
 @Repository
 public interface CartMapper {
     //    找到该用户的购物车中的图书对应的店铺
-//    @Select("select * from store where id = (select distinct storeid from cart where userid = #{userid})")
-//    ArrayList<Store> getAllCartStores(String userid);
+    @Select("select * from store where storeId in (select distinct storeId from book where id in (select bookid from cart where userid = #{userid}))")
+    ArrayList<Store> getAllCartStores(String userid);
     //    找到该用户的购物车中的图书对应的店铺中有哪些书被放入了这个用户的购物车
-    @Select("select * from book where id in (select bookid from cart where userid = #{userid})")
-    ArrayList<Book> getAllCartBooks(String userid);
-    @Select("select * from cart where userid = #{userid}")
-    ArrayList<Cart> getAllCartBooks2(String userid);
+    @Select("select * from book where id in (select bookid from cart where userid = #{userid}) and storeId=#{storeId} and state=#{state}")
+    ArrayList<Book> getAllCartBooks(String userid, String storeId, int state);
+
+    @Select("select * from cart where userid = #{userid} and bookid=#{bookid}")
+    Cart getUserBookNum(String userid, String bookid);
     //    加入购物车
     @Insert("insert into cart values(#{userid},#{bookid},#{num})")
     int addtocart(String userid, String bookid, int num);

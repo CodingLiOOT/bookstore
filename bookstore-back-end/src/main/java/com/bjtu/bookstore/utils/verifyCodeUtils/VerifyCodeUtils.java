@@ -17,7 +17,6 @@ import java.util.Random;
 @Slf4j
 @Component
 public class VerifyCodeUtils {
-    private final Jedis jedis = JedisInstance.getInstance().getResource();
 
     public String generateCode(String key) {
         StringBuilder str = new StringBuilder();
@@ -26,16 +25,22 @@ public class VerifyCodeUtils {
             str.append(random.nextInt(10));
         }
         String code = str.toString();
+        Jedis jedis = JedisInstance.getInstance().getResource();
         jedis.setex(key, 300, code);
+        jedis.close();
         return code;
     }
 
     public boolean verifyCode(String key, String value) {
+        Jedis jedis = JedisInstance.getInstance().getResource();
+
         if (!value.equals(jedis.get(key))) {
 //            throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
+            jedis.close();
             return false;
         }
         jedis.del(key);
+        jedis.close();
         return true;
     }
 

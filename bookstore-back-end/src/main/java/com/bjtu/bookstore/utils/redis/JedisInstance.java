@@ -31,6 +31,12 @@ public class JedisInstance {
             JedisPoolConfig config = new JedisPoolConfig();
             config.setMaxTotal(30);
             config.setMaxIdle(10);
+            config.setTestWhileIdle(true);
+            config.setMinEvictableIdleTimeMillis(60000);
+            config.setTimeBetweenEvictionRunsMillis(30000);
+            config.setNumTestsPerEvictionRun(-1);
+            config.setTestOnBorrow(true);
+            config.setTestOnReturn(true);
 
             jedisPool = new JedisPool(config, "121.196.105.71", 6379);
         }

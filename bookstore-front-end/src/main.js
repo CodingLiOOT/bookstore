@@ -6,12 +6,10 @@ import router from './router'
 import './element'
 import store from './vuex'
 import api from './request/api'
-import Moment from 'moment'
 
 //axios.defaults.baseURL='http://localhost:8090/api'
-Vue.prototype.$API = api
+Vue.prototype.$API=api;
 Vue.config.productionTip = false
-Vue.prototype.moment = Moment
 
 /* eslint-disable no-new */
 new Vue({

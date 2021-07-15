@@ -54,6 +54,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/mainPage/getTopBooks").permitAll()
                 .antMatchers("/api/mainPage/getNewBooks").permitAll()
                 .antMatchers("/api/book/getAllBooksByCategory").permitAll()
+                .antMatchers("/api/book/getDetail").permitAll()
                 .antMatchers("/static/**").permitAll()
 
 

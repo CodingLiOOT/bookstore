@@ -3,10 +3,7 @@ package com.bjtu.bookstore.service.impl;
 import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Order;
 import com.bjtu.bookstore.entity.Order_book;
-import com.bjtu.bookstore.mapper.BookMapper;
-import com.bjtu.bookstore.mapper.CategoryMapper;
-import com.bjtu.bookstore.mapper.OrderMapper;
-import com.bjtu.bookstore.mapper.Order_bookMapper;
+import com.bjtu.bookstore.mapper.*;
 import com.bjtu.bookstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private BookMapper bookMapper;
+
+    @Autowired
+    private StoreMapper storeMapper;
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
 
                 datadetailItem.put("bookName",book.getName());
                 datadetailItem.put("bookId",book.getId());
-                datadetailItem.put("shopName","bookstore");
+                datadetailItem.put("storeName",storeMapper.getNameById(book.getStoreId()));
                 datadetailItem.put("category",categoryMapper.getNameById(book.getCategoryId()));
                 datadetailItem.put("price",book.getPrice());
                 datadetailItem.put("bookNum",order_book.getAmount());

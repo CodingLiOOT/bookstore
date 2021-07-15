@@ -28,7 +28,6 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "jwt")
 @Component
 public class JWTUtils implements Serializable {
-    private final Jedis jedis = JedisInstance.getInstance().getResource();
     private String secret;
     private Long expiration;
     private String header;
@@ -40,7 +39,9 @@ public class JWTUtils implements Serializable {
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+        Jedis jedis = JedisInstance.getInstance().getResource();
         jedis.setex(token, 10 * 60, "token");
+        jedis.close();
         return token;
     }
 
@@ -99,10 +100,13 @@ public class JWTUtils implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser jwtUser = (JwtUser) userDetails;
         String username = getUsernameFromToken(token);
+        Jedis jedis = JedisInstance.getInstance().getResource();
         if (jedis.exists(token)) {
             jedis.expire(token, 60 * 10);
+            jedis.close();
             return true;
         }
+        jedis.close();
         if (!(username.equals(jwtUser.getUsername())) || isTokenExpired(token)) {
             throw new DefinitionException(ErrorEnum.SIGNATURE_NOT_MATCH);
         }

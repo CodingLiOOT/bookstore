@@ -16,14 +16,14 @@ import java.util.List;
 @Data
 public class Store {
 
-    private String id;
+    private String storeId;
 
     private String userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createdTime;
 
-    private String name;
+    private String storeName;
 
     private String desc;
 
@@ -32,11 +32,11 @@ public class Store {
     private List<Book> books;
 
     public String getId() {
-        return id;
+        return storeId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.storeId = id;
     }
 
     public String getUserId() {
@@ -56,11 +56,11 @@ public class Store {
     }
 
     public String getName() {
-        return name;
+        return storeName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.storeName = name;
     }
 
     public String getDesc() {

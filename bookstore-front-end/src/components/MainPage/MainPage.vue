@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div class="card">
-      <MainCard></MainCard>
-    </div>
+      <div class="card">
+        <MainCard></MainCard>
+      </div>
   </div>
 </template>
 
 <script>
-import MainCard from './MainCard'
+import MainCard from "./MainCard";
 export default {
-  components: {
-    MainCard,
+  components:{
+    MainCard
   },
-  name: 'MainPage',
+name: "MainPage"
 }
 </script>
 
 <style scoped>
-.card {
-  margin-top: 65px;
+.card{
+  margin-top: 3%;
 }
 </style>

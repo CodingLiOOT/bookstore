@@ -2,14 +2,10 @@ package com.bjtu.bookstore.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.bjtu.bookstore.entity.Book;
-import com.bjtu.bookstore.entity.Cart;
-import com.bjtu.bookstore.entity.Store;
-import com.bjtu.bookstore.entity.User;
-import com.bjtu.bookstore.mapper.BookMapper;
-import com.bjtu.bookstore.mapper.CartMapper;
-import com.bjtu.bookstore.mapper.UserMapper;
+import com.bjtu.bookstore.entity.*;
+import com.bjtu.bookstore.mapper.*;
 import com.bjtu.bookstore.service.CartService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +16,9 @@ import java.util.List;
 @Service
 public class CartImpl implements CartService {
     @Autowired
-    private UserMapper userMapper;
+    private StoreMapper storeMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
     @Autowired
     private CartMapper cartMapper;
     @Autowired
@@ -30,15 +28,31 @@ public class CartImpl implements CartService {
     @Override
     public HashMap<String, Object> getAllCart(User user) {
 
-        ArrayList<Book> books = new ArrayList<>();
-        books = cartMapper.getAllCartBooks(user.getId());
-        ArrayList<Cart> carts = new ArrayList<>();
-        carts = cartMapper.getAllCartBooks2(user.getId());
-        for(int i=0;i<books.size();i++) {
-            books.get(i).setNum(carts.get(i).getNum());
+
+        ArrayList<Store> stores = new ArrayList<>();
+        stores=cartMapper.getAllCartStores(user.getId());
+        for(int i=0;i<stores.size();i++) {
+            ArrayList<Book> books = new ArrayList<>();
+            books=cartMapper.getAllCartBooks(user.getId(),stores.get(i).getStoreId(),user.getState());
+            for(int j=0;j<books.size();j++) {
+
+                Cart cart;
+                cart = cartMapper.getUserBookNum(user.getId(), books.get(j).getId());
+
+                books.get(j).setStoreName(storeMapper.getNameById(stores.get(i).getId()));
+                books.get(j).setCategoryName(categoryMapper.getNameById(books.get(j).getCategoryId()));
+                books.get(j).setNum(cart.getNum());
+            }
+            if(books.size()==0) {
+                stores.remove(i);
+                i--;
+            }
+            else
+                stores.get(i).setBooks(books);
         }
+
         HashMap<String, Object> data = new HashMap<>();
-        data.put("books", books);
+        data.put("storeList", stores);
         return data;
     }
 

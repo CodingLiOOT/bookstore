@@ -43,6 +43,7 @@ public class PasswordLoginImpl implements UserLoginInterface {
             {
                 put("token", jwtUtils.generateToken(userDetails));
                 put("userID", userDetails.getID());
+                put("state", String.valueOf(userDetails.getState()));
             }
         };
     }
