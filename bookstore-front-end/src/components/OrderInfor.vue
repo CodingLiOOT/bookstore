@@ -1,8 +1,33 @@
 <template>
   <el-container>
-    <el-main >
-      <el-card>
-        <el-steps :active="active" finish-status="success" align-center="align-center">
+    <el-dialog title="地址" :visible.sync="addressDialogVisible">
+      <el-table :data="tableData" border style="width: 100%">
+        <el-table-column fixed prop="address" label="地址" width="250">
+        </el-table-column>
+        <el-table-column prop="phone" label="手机号" width="180">
+        </el-table-column>
+        <el-table-column prop="consigneeName" label="收货人姓名" width="150">
+        </el-table-column>
+        <el-table-column label="操作" width="100">
+          <template slot-scope="scope">
+            <el-button
+              @click="selectAddr(scope.row.addressId)"
+              type="text"
+              size="small"
+              >选择</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button type="primary" @click="addAddress">添加或修改地址</el-button>
+    </el-dialog>
+    <el-main>
+      <el-card class="orderCard">
+        <el-steps
+          :active="active"
+          finish-status="success"
+          align-center="align-center"
+        >
           <el-step title="查看购物车"></el-step>
           <el-step title="拍下商品"></el-step>
           <el-step title="付款"></el-step>
@@ -11,107 +36,197 @@
         </el-steps>
       </el-card>
       <el-card>
-        <el-form ref="form"  model="form" label-width="150px">
+        <el-form ref="form" model="form" label-width="150px">
           <el-form-item label="确定收货地址：">
-            <el-select v-model="form.region" placeholder="请选择收货地址">
-              <el-option label="北京市北京市上园村三号" value="beijing"></el-option>
-              <el-option label="北京市北京市上园村" value="beijing"></el-option>
-            </el-select>
-            <el-button>管理收货地址</el-button>
+            <div v-if="this.tableData.length > 0">
+              <el-row>
+                <el-col :span="12" :offset="2">
+                  <el-card>
+                    <el-row> 地址：{{ this.address.address }} </el-row>
+                    <el-row> 收件人：{{ this.address.consigneeName }} </el-row>
+                    <el-row> 联系方式：{{ this.address.phone }} </el-row>
+                  </el-card>
+                </el-col>
+                <el-col :span="3" :offset="1">
+                  <el-button @click="manage">管理收货地址</el-button>
+                </el-col>
+              </el-row>
+            </div>
+            <div v-else>
+              <el-button @click="manage">管理收货地址</el-button>
+            </div>
           </el-form-item>
           <el-form-item label="选择支付方式：">
-            <el-radio-group v-model="form.resource">
-              <el-radio :label="3">微信</el-radio>
-              <el-radio :label="6">支付宝</el-radio>
-            </el-radio-group>
+            <el-radio v-model="pay" :label="1">微信</el-radio>
+            <el-radio v-model="pay" :label="2">支付宝</el-radio>
           </el-form-item>
-          <el-form-item label="确认订单信息：">
-            <el-table ref="filterTable" :data="orderInfor" style="width: 100%">
-              <!--      下拉框信息列表-->
-              <el-table-column type="expand">
-                <template slot-scope="scope">
-                  <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="详细信息：">
-                      <el-table :data="orderInfor[scope.$index].detailData" style="width: 100%">
-                        <el-table-column prop="bookId" label="图书编号" width="180"></el-table-column>
-                        <el-table-column prop="shopName" label="店铺" width="180"></el-table-column>
-                        <el-table-column prop="category" label="所属分类" width="180"></el-table-column>
-                        <el-table-column prop="price" label="单价" width="180"></el-table-column>
-                        <el-table-column prop="bookNum" label="数量" width="180"></el-table-column>
-                      </el-table>
-                    </el-form-item>
-                  </el-form>
-                </template>
-              </el-table-column>
-              <el-table-column prop="orderId" label="订单编号" sortable width="180" column-key="orderId">
-              </el-table-column>
-              <el-table-column prop="date" label="创建日期" sortable width="180" column-key="date">
-              </el-table-column>
-              <el-table-column prop="num" label="总数" width="100">
-              </el-table-column>
-              <el-table-column prop="sum" label="总价" width="100">
-              </el-table-column>
-              <el-table-column prop="state" label="订单状态" width="100">
-              </el-table-column>
+          <el-form-item label="总价：">
+            {{ this.$route.query.total }}
+          </el-form-item>
+          <el-form-item label="订单详情">
+            <el-table :data="this.detailData" style="width: 100%">
+              <el-table-column
+                prop="id"
+                label="图书编号"
+                width="180"
+              ></el-table-column>
+              <el-table-column
+                prop="bookName"
+                label="图书名称"
+                width="180"
+              ></el-table-column>
+              <el-table-column
+                prop="price"
+                label="单价"
+                width="180"
+              ></el-table-column>
+              <el-table-column
+                prop="bookNum"
+                label="数量"
+                width="180"
+              ></el-table-column>
+              <el-table-column
+                prop="bookTotal"
+                label="金额"
+                width="180"
+              ></el-table-column>
             </el-table>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  @click="onSubmit">提交订单</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="submit">提交订单</el-button>
+            <el-button @click="returnPage">取消</el-button>
           </el-form-item>
-
         </el-form>
-
       </el-card>
     </el-main>
-
   </el-container>
-
 </template>
 
 <script>
 export default {
-  name: "OrderInfor",
+  name: 'OrderInfor',
   data() {
     return {
+      pay: 1,
+      addressDialogVisible: false,
+      addressData: [],
       active: 1,
       radio: 2,
-      form: {
-      },
-      orderInfor: [{
-        orderId:'111222',
-        date: '2021-11-11',
-        num:'7',
-        sum:'77',
-        state: '待支付',
-        detailData:[{
-          bookName:'一本好书',
-          bookId:'001',
-          shopName:'新华书店',
-          category:'天文',
-          price:'23',
-          bookNum:'4'
-        },{
-          bookName:'很好书',
-          bookId:'002',
-          shopName:'新华书店',
-          category:'天文',
-          price:'23',
-          bookNum:'4'
-        }]
-      }]
-
-    };
+      tableData: [],
+      address: {},
+      form: {},
+      detailData: [
+        {
+          bookName: '一本好书',
+          id: '001',
+          shopName: '新华书店',
+          category: '天文',
+          price: '23',
+          bookNum: '4',
+          bookTotal: 0,
+        },
+        {
+          bookName: '很好书',
+          id: '002',
+          shopName: '新华书店',
+          category: '天文',
+          price: '23',
+          bookNum: '4',
+          bookTotal: 0,
+        },
+      ],
+    }
   },
   methods: {
+    addAddress() {
+      this.$router.push({ path: '/CenterPage' })
+    },
+    selectAddr(val) {
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (val === this.tableData[i].addressId) {
+          let td = this.tableData[i]
+          this.address.address = td.address
+          this.address.addressId = td.addressId
+          this.address.consigneeName = td.consigneeName
+          this.address.phone = td.phone
+        }
+      }
+      this.addressDialogVisible = false
+    },
+    manage() {
+      this.addressDialogVisible = true
+    },
     onSubmit() {
-      console.log('submit!');
-      if (this.active++ > 4) this.active = 0;
-    }
-  }
+      console.log('submit!')
+      if (this.active++ > 4) this.active = 0
+    },
+    getData() {
+      this.detailData = this.$route.query.bklist
+      this.$API
+        .p_getAddress({
+          userId: this.$store.state.userID,
+        })
+        .then((data) => {
+          for (let i = 0; i < data.length; i++) {
+            let s = data[i]
+            let temp = {
+              addressId: '',
+              address: '',
+              phone: '',
+              consigneeName: '',
+            }
+            temp.addressId = s.id
+            temp.address = s.address
+            temp.phone = s.phone
+            temp.consigneeName = s.consigneeName
+            this.tableData.push(temp)
+            console.log(this.tableData)
+          }
+          Object.assign(this.address, this.tableData[0])
+        })
+        .catch((err) => {})
+    },
+    returnPage() {
+      if (window.history.length <= 1) {
+        this.$router.push({ path: '/cart/settlement' })
+        return false
+      } else {
+        this.$router.go(-1)
+      }
+    },
+    submit(val) {
+      let bookList = this.$route.query.bookList
+      let total = this.$route.query.total
+      let orderId
+      this.$API
+        .p_confirmOrder({
+          userId: this.$store.state.userID,
+          shippingId: this.address.addressId,
+          bookList,
+          payType: '1',
+          totalPrice: total,
+        })
+        .then((data) => {
+          orderId = data.orderId
+          this.$router.push({
+            path: '/Paycode',
+            query: {
+              orderId: orderId,
+            },
+          })
+        })
+        .catch((err) => {})
+      console.log(val)
+    },
+  },
+  mounted() {
+    this.getData()
+  },
 }
 </script>
 
 <style scoped>
-
+.orderCard {
+  margin-top: 10%;
+}
 </style>

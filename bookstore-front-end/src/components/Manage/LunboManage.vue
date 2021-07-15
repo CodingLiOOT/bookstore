@@ -1,13 +1,13 @@
 <template>
   <el-container class="manage">
-    <el-header>久柒图书电商后台管理系统</el-header>
+    <!--    <el-header>久柒图书电商后台管理系统</el-header>-->
     <el-container>
       <el-aside width="200px">
         <el-menu :default-active="this.$router.path" router mode="vertical">
           <el-menu-item
-            v-for="(item, i) in navList"
-            :key="i"
-            :index="item.name"
+              v-for="(item, i) in navList"
+              :key="i"
+              :index="item.name"
           >
             {{ item.navItem }}
           </el-menu-item>
@@ -19,24 +19,24 @@
             <el-form :model="lunboForm">
               <el-form-item label="活动名称">
                 <el-input
-                  v-model="lunboForm.lunboName"
-                  autocomplete="off"
+                    v-model="lunboForm.lunboName"
+                    autocomplete="off"
                 ></el-input>
               </el-form-item>
               <el-form-item label="上传图片">
                 <el-upload
-                  class="upload-demo"
-                  action=""
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :on-success="handleSuccess"
-                  :before-remove="beforeRemove"
-                  multiple
-                  :limit="3"
-                  :on-exceed="handleExceed"
-                  :headers="myHeaders"
-                  :file-list="fileList"
-                  :http-request="uploadOk"
+                    class="upload-demo"
+                    action=""
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :on-success="handleSuccess"
+                    :before-remove="beforeRemove"
+                    multiple
+                    :limit="3"
+                    :on-exceed="handleExceed"
+                    :headers="myHeaders"
+                    :file-list="fileList"
+                    :http-request="uploadOk"
                 >
                   <el-button size="small" type="primary">选择文件</el-button>
                   <div slot="tip" class="el-upload__tip">
@@ -57,21 +57,22 @@
           </el-row>
           <el-row>
             <el-col
-              :span="8"
-              v-for="lunbo in this.lunbos"
-              :key="lunbo.lunboId"
-              :offset="index > 0 ? 2 : 0"
+                :span="8"
+                v-for="lunbo in this.lunbos"
+                :key="lunbo.lunboId"
+                :offset="index > 0 ? 2 : 0"
             >
               <el-card :body-style="{ padding: '0px' }">
-                <img src="lunbo.imgUrl" class="image" />
+                <img src="lunbo.imgUrl" class="image"/>
                 <div style="padding: 14px">
                   <span>{{ lunbo.lunboName }}</span>
                   <div class="bottom clearfix">
                     <el-button
-                      type="text"
-                      class="button"
-                      @click="deletePic(lunbo.lunboId)"
-                      >删除</el-button
+                        type="text"
+                        class="button"
+                        @click="deletePic(lunbo.lunboId)"
+                    >删除
+                    </el-button
                     >
                   </div>
                 </div>
@@ -86,16 +87,17 @@
 
 <script>
 import UserManage from './UserManage'
-import axios from 'axios'
+import OSS from 'ali-oss'
+
 export default {
   name: 'Manage',
   data() {
     return {
       index: '',
       navList: [
-        { name: '/userManage', navItem: '用户管理' },
-        { name: '/bookManage', navItem: '图书管理' },
-        // {name:'/LunboManage',navItem:'轮播管理'},
+        {name: '/userManage', navItem: '用户管理'},
+        {name: '/bookManage', navItem: '图书管理'},
+        {name: '/LunboManage', navItem: '轮播管理'},
       ],
       myHeaders: {
         token: this.$store.state.token,
@@ -109,21 +111,61 @@ export default {
         lunboName: '',
         imgUrl: '',
       },
+      onProgress: 0
     }
   },
   components: {
     UserManage,
   },
   methods: {
+    getUrl() {
+      // const OSS = require("ali-oss");
+      // aliyun.oss.endpoint=xiaoxueqi.oss-cn-beijing.aliyuncs.com   #域名地区
+      // aliyun.oss.accessKeyId=LTAI5tLD8bQBPdsaZswgxUG4   # 权限id
+      // aliyun.oss.secret=3RBPbn2lpoGRRGkMOS8CyBa2I13tmf  #秘钥
+      // aliyun.oss.bucket=xiaoxueqi  #bucket名称
+      let ossParameter = {
+        endpoint: 'xiaoxueqi.oss-cn-beijing.aliyuncs.com/',
+        region: "oss-cn-beijing",
+        accessKeyId: "LTAI5tLD8bQBPdsaZswgxUG4",
+        accessKeySecret: "3RBPbn2lpoGRRGkMOS8CyBa2I13tmf",
+        bucket: "xiaoxueqi",
+        secure : true
+      }
+      //生成上传oss
+      let store = new OSS(ossParameter);
+      //路径
+      let path = 'test/'+this.file.name
+
+      store
+          .multipartUpload(
+              path,
+              this.file,
+              {
+                //进度
+                // progress: this.onProgress
+              }
+          )
+          .then(result => {
+            alert("haha")
+            //生成访问地址
+            let url = store.signatureUrl(result.name, {
+              expires: 3153600000
+            });
+            alert(url)
+          })
+
+    },
     deletePic(val) {
       this.$API
-        .p_deleteLunbo({
-          lunboId: val,
-        })
-        .then((data) => {
-          this.getAllLunbos()
-        })
-        .catch((err) => {})
+          .p_deleteLunbo({
+            lunboId: val,
+          })
+          .then((data) => {
+            this.getAllLunbos()
+          })
+          .catch((err) => {
+          })
     },
     addLunbo() {
       this.send()
@@ -147,9 +189,9 @@ export default {
     },
     handleExceed(files, fileList) {
       this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
-          files.length + fileList.length
-        } 个文件`
+          `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+              files.length + fileList.length
+          } 个文件`
       )
     },
     beforeRemove(file, fileList) {
@@ -164,42 +206,30 @@ export default {
     uploadOk(val) {
       this.file = val.file
       this.filename = val.file.name
+      this.getUrl()
     },
     getAllLunbos() {
       this.$API
-        .p_getAllLunbos({})
-        .then((data) => {
-          for (let i = 0; i < data.lunboList.length; i++) {
-            let data = data.lunboList[i]
-            let temp = {
-              lunboId: '',
-              lunboName: '',
-              imgUrl: '',
+          .p_getAllLunbos({})
+          .then((data) => {
+            for (let i = 0; i < data.lunboList.length; i++) {
+              let data = data.lunboList[i]
+              let temp = {
+                lunboId: '',
+                lunboName: '',
+                imgUrl: '',
+              }
+              temp.lunboId = data.lunboId
+              temp.lunboName = data.lunboName
+              temp.imgUrl = data.imgUrl
+              this.lunbos.push(data)
             }
-            temp.lunboId = data.lunboId
-            temp.lunboName = data.lunboName
-            temp.imgUrl = data.imgUrl
-            this.lunbos.push(data)
-          }
-        })
-        .catch((err) => {})
+          })
+          .catch((err) => {
+          })
     },
     send() {
-      let fd = new FormData()
-      fd.append('lunboName', this.lunboForm.lunboName)
-      fd.append('file', this.file)
-      fd.append('fileName', this.file.name)
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-      axios.post('/lunbo/addToLunbo', fd, config).then((data) => {
-        if (data.code === 200) {
-          this.$message.info('成功上传')
-        }
-      })
-    },
+    }
   },
   mounted() {
     this.getAllLunbos()
@@ -215,9 +245,11 @@ export default {
   text-align: center;
   line-height: 60px;
 }
+
 .manage {
   margin-top: 65px;
 }
+
 .bottom {
   margin-top: 13px;
   line-height: 12px;

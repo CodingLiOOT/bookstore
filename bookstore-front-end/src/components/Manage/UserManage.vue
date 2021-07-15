@@ -1,8 +1,8 @@
 <template>
   <el-container class="manage">
-    <el-header>久柒图书电商后台管理系统</el-header>
+<!--    <el-header>久柒图书电商后台管理系统</el-header>-->
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" class="side">
         <el-menu :default-active="this.$router.path" router mode="vertical">
           <el-menu-item
             v-for="(item, i) in navList"
@@ -15,84 +15,86 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-tabs :tab-position="left">
-            <el-tab-pane label="正常用户">
-              <el-table :data="normalUsers" style="width: 100%">
-                <el-table-column
-                  fixed
-                  prop="username"
-                  label="用户名"
-                  width="320"
+          <el-card>
+            <el-tabs :tab-position="left">
+              <el-tab-pane label="正常用户">
+                <el-table :data="normalUsers" style="width: 100%">
+                  <el-table-column
+                      fixed
+                      prop="username"
+                      label="用户名"
+                      width="320"
+                  >
+                  </el-table-column>
+                  <el-table-column fixed prop="mail" label="邮箱" width="320">
+                  </el-table-column>
+                  <el-table-column
+                      prop="createdDate"
+                      label="注册时间"
+                      width="320"
+                  >
+                  </el-table-column>
+                  <el-table-column label="操作" width="300">
+                    <template slot-scope="scope">
+                      <el-button
+                          @click="invalid(scope.row.id)"
+                          type="text"
+                          size="small"
+                      >
+                        设为违规
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-pagination
+                    @current-change="handleValidChange"
+                    :current-page.sync="currentValid"
+                    :page-size="100"
+                    layout="prev, pager, next, jumper"
+                    :total="validTotal"
                 >
-                </el-table-column>
-                <el-table-column fixed prop="mail" label="邮箱" width="320">
-                </el-table-column>
-                <el-table-column
-                  prop="createdDate"
-                  label="注册时间"
-                  width="320"
+                </el-pagination>
+              </el-tab-pane>
+              <el-tab-pane label="违规用户">
+                <el-table :data="invalidUsers" style="width: 100%">
+                  <el-table-column
+                      fixed
+                      prop="username"
+                      label="用户名"
+                      width="320"
+                  >
+                  </el-table-column>
+                  <el-table-column fixed prop="mail" label="邮箱" width="320">
+                  </el-table-column>
+                  <el-table-column
+                      prop="createdDate"
+                      label="注册时间"
+                      width="320"
+                  >
+                  </el-table-column>
+                  <el-table-column label="操作" width="300">
+                    <template slot-scope="scope">
+                      <el-button
+                          @click="valid(scope.row.id)"
+                          type="text"
+                          size="small"
+                      >
+                        取消违规
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-pagination
+                    @current-change="handleInvalidChange"
+                    :current-page.sync="currentInvalid"
+                    :page-size="100"
+                    layout="prev, pager, next, jumper"
+                    :total="invalidTotal"
                 >
-                </el-table-column>
-                <el-table-column label="操作" width="300">
-                  <template slot-scope="scope">
-                    <el-button
-                      @click="invalid(scope.row.id)"
-                      type="text"
-                      size="small"
-                    >
-                      设为违规
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-pagination
-                @current-change="handleValidChange"
-                :current-page.sync="currentValid"
-                :page-size="100"
-                layout="prev, pager, next, jumper"
-                :total="validTotal"
-              >
-              </el-pagination>
-            </el-tab-pane>
-            <el-tab-pane label="违规用户">
-              <el-table :data="invalidUsers" style="width: 100%">
-                <el-table-column
-                  fixed
-                  prop="username"
-                  label="用户名"
-                  width="320"
-                >
-                </el-table-column>
-                <el-table-column fixed prop="mail" label="邮箱" width="320">
-                </el-table-column>
-                <el-table-column
-                  prop="createdDate"
-                  label="注册时间"
-                  width="320"
-                >
-                </el-table-column>
-                <el-table-column label="操作" width="300">
-                  <template slot-scope="scope">
-                    <el-button
-                      @click="valid(scope.row.id)"
-                      type="text"
-                      size="small"
-                    >
-                      取消违规
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-pagination
-                @current-change="handleInvalidChange"
-                :current-page.sync="currentInvalid"
-                :page-size="100"
-                layout="prev, pager, next, jumper"
-                :total="invalidTotal"
-              >
-              </el-pagination>
-            </el-tab-pane>
-          </el-tabs>
+                </el-pagination>
+              </el-tab-pane>
+            </el-tabs>
+          </el-card>
         </el-main>
       </el-container>
     </el-container>
@@ -109,7 +111,7 @@ export default {
       navList: [
         { name: '/userManage', navItem: '用户管理' },
         { name: '/bookManage', navItem: '图书管理' },
-        // {name:'/LunboManage',navItem:'轮播管理'},
+        {name:'/LunboManage',navItem:'轮播管理'},
       ],
       normalUsers: [],
       invalidUsers: [],
@@ -233,5 +235,8 @@ export default {
 }
 .manage {
   margin-top: 65px;
+}
+.side{
+  margin-top: 20px;
 }
 </style>

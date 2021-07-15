@@ -1,8 +1,8 @@
 <template>
   <el-container class="manage">
-    <el-header>久柒图书电商后台管理系统</el-header>
+<!--    <el-header>久柒图书电商后台管理系统</el-header>-->
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" class="side">
         <el-menu :default-active="this.$router.path" router mode="vertical">
           <el-menu-item
             v-for="(item, i) in navList"
@@ -30,7 +30,7 @@ export default {
       navList: [
         { name: '/userManage', navItem: '用户管理' },
         { name: '/bookManage', navItem: '图书管理' },
-        // {name:'/LunboManage',navItem:'轮播管理'},
+        {name:'/LunboManage',navItem:'轮播管理'},
       ],
     }
   },
@@ -50,5 +50,8 @@ export default {
 }
 .manage {
   margin-top: 65px;
+}
+.side{
+  margin-top: 20px;
 }
 </style>

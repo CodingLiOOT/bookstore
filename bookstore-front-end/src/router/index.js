@@ -2,6 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from "../vuex"
 import MainPage from "../components/MainPage/MainPage"
+import Cart from "../components/shoppingCart/Cart";
+import AllBook from "../components/AllBook/AllBook";
+import Manage from "../components/Manage/Manage";
+import UserManage from "../components/Manage/UserManage";
+import LunboManage from "../components/Manage/LunboManage";
+import bookManage from "../components/Manage/bookManage";
 
 Vue.use(Router)
 
@@ -11,48 +17,33 @@ Vue.use(Router)
 if (sessionStorage.getItem('token')) {
   store.commit('login', {
     userID: sessionStorage.getItem('userID'),
-    token: sessionStorage.getItem('token')
+    token: sessionStorage.getItem('token'),
+    state:sessionStorage.getItem('state'),
   })
 }
 
 const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path:'/mainPage',
       name:'mainPage',
       component: MainPage,
     },
-
+    {
+      path:'/AllBook',
+      name:'AllBook',
+      component: AllBook,
+    },
+    {
+      path:'/Cart',
+      name:'Cart',
+      component: Cart,
+    },
     {
       path: '/',
-      redirect: '/user/login'
+      redirect: '/mainPage'
     },
-      {
-          path:'/item',
-          name:'Item',
-          component: () => import("../components/Item")
-
-      },
-      {
-          path:'/CenterPage',
-          name:'CenterPage',
-          component: () => import("../components/Center/CenterPage")
-
-      },
-      {
-          path:'/OrderInfor',
-          name:'OrderInfor',
-          component: () => import("../components/OrderInfor")
-
-      },
-      {
-          path:'/Paycode',
-          name:'Paycode',
-          component: () => import("../components/Paycode")
-
-      },
-
     {
       path: '/user',
       name: 'landingPage',
@@ -75,6 +66,29 @@ const router = new Router({
           component: () => import('../components/forget.vue')
         }
       ]
+    },
+    {
+      path:'/item',
+      name:'Item',
+      component: () => import("../components/Item")
+
+    },
+    {
+      path:'/CenterPage',
+      name:'CenterPage',
+      component: () => import("../components/Center/CenterPage")
+
+    },
+    {
+      path:'/OrderInfor',
+      name:'OrderInfor',
+      component: () => import("../components/OrderInfor")
+
+    },
+    {
+      path:'/Paycode',
+      name:'Paycode',
+      component: () => import("../components/Paycode")
 
     },
     {
@@ -94,7 +108,32 @@ const router = new Router({
       path: '/fileDemo',
       name: 'fileDemo',
       component: () => import("../components/FileDemo")
-    }
+    },
+    {
+      path: '/Manage',
+      name: 'Manage',
+      component: Manage
+    },
+    {
+      path: '/userManage',
+      name: 'userManage',
+      component: UserManage
+    },
+    {
+      path: '/bookManage',
+      name: 'bookManage',
+      component: bookManage
+    },
+    {
+      path: '/LunboManage',
+      name: 'LunboManage',
+      component: LunboManage
+    },
+    {
+      path: '/activityPage',
+      name: 'activityPage',
+      component: () => import("../components/activityPage")
+    },
   ],
 })
 router.beforeEach((to, from, next) => {

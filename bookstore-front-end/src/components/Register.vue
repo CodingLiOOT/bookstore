@@ -1,62 +1,83 @@
 <template>
-  <div class="register-content">
-    <div class="register-main">
-      <router-link to="/user/login" style="float: right">返回登录</router-link>
-      <h2 class="register-main-title" align="left">注册</h2>
-      <el-form
-        :model="RegisterForm"
-        :rules="RegisterRule"
-        ref="RegisterForm"
-        @keyup.enter.native="register()"
-        status-icon
-      >
-        <el-form-item prop="userName">
-          <el-input
-            v-model="RegisterForm.userName"
-            placeholder="帐号"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            v-model="RegisterForm.password"
-            type="password"
-            placeholder="密码"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="confirmPassword">
-          <el-input
-            v-model="RegisterForm.confirmPassword"
-            type="password"
-            placeholder="确认密码"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="email">
-          <el-input v-model="RegisterForm.email" placeholder="邮箱"></el-input>
-        </el-form-item>
-        <el-form-item prop="emailCode" :inline="true">
-          <el-input
-            v-model="RegisterForm.emailCode"
-            placeholder="验证码"
-            style="width: 230px"
-          ></el-input>
-          <el-button
-            :disabled="disabled"
-            @click="sendCode"
-            class="sendcode"
-            style="width: 125px"
-            >{{ btnTxt }}</el-button
-          >
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            class="register-btn-submit"
-            type="primary"
-            @click="register()"
-            >注册</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="homepage-hero-module">
+    <div class="filter"></div>
+    <video
+      autoplay
+      loop
+      class="fillWidth"
+      src="../assets/video2_1.mp4"
+      v-on:canplay="canplay"
+      muted="muted"
+      width="100%"
+    ></video>
+    <el-row class="box-card">
+      <el-col :span="18" :offset="3">
+        <div class="register-content">
+          <div class="register-main">
+            <router-link to="/user/login" style="float: right; color: black"
+              >返回登录</router-link
+            >
+            <h2 class="register-main-title" align="left">注册</h2>
+            <el-form
+              :model="RegisterForm"
+              :rules="RegisterRule"
+              ref="RegisterForm"
+              @keyup.enter.native="register()"
+              status-icon
+            >
+              <el-form-item prop="userName">
+                <el-input
+                  v-model="RegisterForm.userName"
+                  placeholder="帐号"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  v-model="RegisterForm.password"
+                  type="password"
+                  placeholder="密码"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="confirmPassword">
+                <el-input
+                  v-model="RegisterForm.confirmPassword"
+                  type="password"
+                  placeholder="确认密码"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="email">
+                <el-input
+                  v-model="RegisterForm.email"
+                  placeholder="邮箱"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="emailCode" :inline="true">
+                <el-input
+                  v-model="RegisterForm.emailCode"
+                  placeholder="验证码"
+                  style="width: 230px"
+                ></el-input>
+                <el-button
+                  :disabled="disabled"
+                  @click="sendCode"
+                  class="sendcode"
+                  style="width: 125px"
+                  >{{ btnTxt }}</el-button
+                >
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  class="register-btn-submit"
+                  type="primary"
+                  @click="register()"
+                  >注册</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -210,11 +231,15 @@ export default {
       disabled: false,
       time: 30,
       btnTxt: '发送验证码',
+      vedioCanPlay: false,
     }
   },
   name: 'Register',
 
   methods: {
+    canplay() {
+      this.vedioCanPlay = true
+    },
     register() {
       this.$refs.RegisterForm.validate((valid) => {
         if (valid) {
@@ -237,8 +262,8 @@ export default {
 
     //发送邮箱验证码，30秒后重新发送
     sendCode() {
-      this.$refs.RegisterForm.validateField('email', (valid) => {
-        if (valid) {
+      this.$refs.RegisterForm.validateField('email', (error) => {
+        if (!error) {
           this.time = 30
           this.timer()
           this.$API
@@ -267,24 +292,61 @@ export default {
   },
 }
 </script>
-
 <style scoped>
-.register-content {
+.homepage-hero-module,
+.video-container .poster img,
+.video-container video {
+  z-index: 0;
   position: absolute;
+  height: 100%;
+  width: 100%;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
-  margin: auto;
-  height: 460px;
-  width: 400px;
-  background-color: #112234;
-  opacity: 0.8;
+}
+.filter {
+  z-index: 1;
+  position: absolute;
+  //background: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  width: 100%;
 }
 
-.register-main {
-  color: beige;
-  padding: 20px 20px 10px 20px;
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.box-card {
+  z-index: 10;
+  width: 480px;
+  position: absolute;
+  top: 30%;
+  left: 35%;
+  font-size: 50px;
+  background-color: rgba(236, 189, 157, 0.5);
+  border-radius: 0.2em;
+}
+h3 {
+  color: #0babeab8;
+  font-size: 24px;
+}
+
+hr {
+  background-color: #444;
+  margin: 20px auto;
+}
+
+a {
+  text-decoration: none;
+  color: #aaa;
+  font-size: 15px;
+}
+
+a:hover {
+  color: coral;
 }
 
 h3 {
@@ -306,8 +368,8 @@ a {
 a:hover {
   color: coral;
 }
-
-.register-btn-submit {
-  margin-top: 0;
+.register-main-title {
+  font-size: 30px;
+  color: black;
 }
 </style>

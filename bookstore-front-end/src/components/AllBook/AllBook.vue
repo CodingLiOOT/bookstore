@@ -18,7 +18,7 @@
               sortable
               width="120">
             <template slot-scope="scope">
-              　　　　    <img :src="scope.row.imgUrl" :alt="picture" class="image">
+              　　　　    <img :src="scope.row.imgUrl" :alt="picture" class="pic">
               　　</template>
           </el-table-column>
           <el-table-column
@@ -212,7 +212,7 @@ export default {
   margin-top: 65px;
 }
 .pic{
-  height: 80px;
+  height: 100px;
   width: 80px;
 }
 </style>

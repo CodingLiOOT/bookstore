@@ -1,8 +1,8 @@
 <template>
   <el-container class="manage">
-    <el-header>久柒图书电商后台管理系统</el-header>
+<!--    <el-header>久柒图书电商后台管理系统</el-header>-->
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" class="side">
         <el-menu :default-active="this.$router.path" router mode="vertical">
           <el-menu-item
             v-for="(item, i) in navList"
@@ -15,84 +15,86 @@
       </el-aside>
       <el-container>
         <el-main>
-          <el-tabs :tab-position="left">
-            <el-tab-pane label="正常图书">
-              <el-table :data="normalBooks" style="width: 100%">
-                <el-table-column prop="imgUrl" label="预览" width="200">
-                  <template slot-scope="scope">
-                    　　　　
-                    <img :src="scope.row.imgUrl" :alt="picture" class="image" />
-                    　　</template
-                  >
-                </el-table-column>
-                <el-table-column prop="name" label="书名" width="250">
-                </el-table-column>
-                <el-table-column prop="publisher" label="出版社" width="250">
-                </el-table-column>
-                <el-table-column prop="price" label="单价" sortable width="170">
-                </el-table-column>
-                <el-table-column prop="inventory" label="库存" width="170">
-                </el-table-column>
-                <el-table-column label="操作" width="170">
-                  <template slot-scope="scope">
-                    <el-button
-                      @click="invalid(scope.row.id)"
-                      type="text"
-                      size="small"
+          <el-card>
+            <el-tabs :tab-position="left">
+              <el-tab-pane label="正常图书">
+                <el-table :data="normalBooks" style="width: 100%">
+                  <el-table-column prop="imgUrl" label="预览" width="200">
+                    <template slot-scope="scope">
+                      　　　　
+                      <img :src="scope.row.imgUrl" :alt="picture" class="image" />
+                      　　</template
                     >
-                      设为违规
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-pagination
-                @current-change="handleValidChange"
-                :current-page.sync="currentValid"
-                :page-size="100"
-                layout="prev, pager, next, jumper"
-                :total="validTotal"
-              >
-              </el-pagination>
-            </el-tab-pane>
-            <el-tab-pane label="违规图书">
-              <el-table :data="invalidBooks" style="width: 100%">
-                <el-table-column prop="imgUrl" label="预览" width="200">
-                  <template slot-scope="scope">
-                    　　　　
-                    <img :src="scope.row.imgUrl" :alt="picture" class="image" />
-                    　　</template
-                  >
-                </el-table-column>
-                <el-table-column prop="name" label="书名" width="250">
-                </el-table-column>
-                <el-table-column prop="publisher" label="出版社" width="250">
-                </el-table-column>
-                <el-table-column prop="price" label="单价" sortable width="170">
-                </el-table-column>
-                <el-table-column prop="inventory" label="库存" width="170">
-                </el-table-column>
-                <el-table-column label="操作" width="170">
-                  <template slot-scope="scope">
-                    <el-button
-                      @click="valid(scope.row.id)"
-                      type="text"
-                      size="small"
+                  </el-table-column>
+                  <el-table-column prop="name" label="书名" width="250">
+                  </el-table-column>
+                  <el-table-column prop="publisher" label="出版社" width="250">
+                  </el-table-column>
+                  <el-table-column prop="price" label="单价" sortable width="170">
+                  </el-table-column>
+                  <el-table-column prop="inventory" label="库存" width="170">
+                  </el-table-column>
+                  <el-table-column label="操作" width="170">
+                    <template slot-scope="scope">
+                      <el-button
+                          @click="invalid(scope.row.id)"
+                          type="text"
+                          size="small"
+                      >
+                        设为违规
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-pagination
+                    @current-change="handleValidChange"
+                    :current-page.sync="currentValid"
+                    :page-size="100"
+                    layout="prev, pager, next, jumper"
+                    :total="validTotal"
+                >
+                </el-pagination>
+              </el-tab-pane>
+              <el-tab-pane label="违规图书">
+                <el-table :data="invalidBooks" style="width: 100%">
+                  <el-table-column prop="imgUrl" label="预览" width="200">
+                    <template slot-scope="scope">
+                      　　　　
+                      <img :src="scope.row.imgUrl" :alt="picture" class="image" />
+                      　　</template
                     >
-                      取消违规
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-pagination
-                @current-change="handleInvalidChange"
-                :current-page.sync="currentInvalid"
-                :page-size="100"
-                layout="prev, pager, next, jumper"
-                :total="invalidTotal"
-              >
-              </el-pagination>
-            </el-tab-pane>
-          </el-tabs>
+                  </el-table-column>
+                  <el-table-column prop="name" label="书名" width="250">
+                  </el-table-column>
+                  <el-table-column prop="publisher" label="出版社" width="250">
+                  </el-table-column>
+                  <el-table-column prop="price" label="单价" sortable width="170">
+                  </el-table-column>
+                  <el-table-column prop="inventory" label="库存" width="170">
+                  </el-table-column>
+                  <el-table-column label="操作" width="170">
+                    <template slot-scope="scope">
+                      <el-button
+                          @click="valid(scope.row.id)"
+                          type="text"
+                          size="small"
+                      >
+                        取消违规
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-pagination
+                    @current-change="handleInvalidChange"
+                    :current-page.sync="currentInvalid"
+                    :page-size="100"
+                    layout="prev, pager, next, jumper"
+                    :total="invalidTotal"
+                >
+                </el-pagination>
+              </el-tab-pane>
+            </el-tabs>
+          </el-card>
         </el-main>
       </el-container>
     </el-container>
@@ -109,7 +111,7 @@ export default {
       navList: [
         { name: '/userManage', navItem: '用户管理' },
         { name: '/bookManage', navItem: '图书管理' },
-        // {name:'/LunboManage',navItem:'轮播管理'},
+        {name:'/LunboManage',navItem:'轮播管理'},
       ],
       normalBooks: [],
       invalidBooks: [],
@@ -246,5 +248,8 @@ export default {
 .image {
   width: 100px;
   height: 130px;
+}
+.side{
+  margin-top: 20px;
 }
 </style>

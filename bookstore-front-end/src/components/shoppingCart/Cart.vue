@@ -17,13 +17,13 @@
                   ></label>
                   全选
                 </el-col>
-                <el-col :span="2" :offest="4">信息</el-col>
+                <el-col :span="2" :offest="2">信息</el-col>
                 <el-col :span="2" :offset="6">单价</el-col>
                 <el-col :span="2" :offset="2">数量</el-col>
                 <el-col :span="2" :offset="2">金额</el-col>
                 <el-col :span="2" :offset="2">操作</el-col>
               </el-row>
-              <div v-for="shop in this.fetchData.shops" :key="shop.shopId">
+              <div v-for="shop in this.fetchData.shops" :key="shop.storeName">
                 <el-row class="infoCard">
                   <div class="shopName">
                     <input type="checkbox" id="shop_a" class="shopChoice" />
@@ -33,13 +33,14 @@
                       :class="shop.check ? 'mark' : ''"
                       @click="shopchoose(shop)"
                     ></label>
-                    {{ shop.shopName }}
+                    {{ shop.storeName }}
                   </div>
                 </el-row>
                 <el-card
                   v-for="book in shop.books"
                   :key="book.bookId"
                   shadow="hover"
+                  class="cartBookCard"
                 >
                   <el-row>
                     <el-col :span="2" :offset="0">
@@ -61,14 +62,15 @@
                             :src="book.imgSrc"
                             :alt="picture"
                             class="image"
+                            @click="openBook(book.bookId)"
                           />
                         </el-col>
                       </el-row>
                     </el-col>
-                    <el-col :span="2" :offset="0">
+                    <el-col :span="3" :offset="0">
                       <div>{{ book.bookName }}</div>
                     </el-col>
-                    <el-col :span="2" :offset="6">
+                    <el-col :span="2" :offset="5">
                       <div>{{ book.single }}</div>
                     </el-col>
                     <el-col :span="2" :offset="2">
@@ -93,7 +95,9 @@
                 </el-card>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="已失效商品" name="second"> </el-tab-pane>
+            <el-tab-pane label="已失效商品" name="second">
+              <InvalidCart></InvalidCart>
+            </el-tab-pane>
           </el-tabs>
           <!-----底部------>
         </el-card>
@@ -132,9 +136,12 @@
 </template>
 
 <script>
+import InvalidCart from "./InvalidCart";
 export default {
   name: 'Cart',
-  components: {},
+  components: {
+    InvalidCart
+  },
   data() {
     return {
       disabled: true,
@@ -151,6 +158,14 @@ export default {
     }
   },
   methods: {
+    openBook(val) {
+      this.$router.push({
+        path: '/item',
+        query: {
+          bookId: val,
+        },
+      })
+    },
     determine() {
       if (this.fetchData.allnum !== 0 && this.fetchData.allnum !== undefined) {
         this.disabled = false
@@ -162,49 +177,55 @@ export default {
       this.fetchData = {
         shops: [],
         status: false,
-        allchoose: '',
-        allsum: '',
-        allnum: '',
+        allchoose: 0,
+        allsum: 0,
+        allnum: 0,
       }
       this.$API
         .p_getAllCart({
           id: this.$store.state.userID,
+          state:1
         })
         .then((data) => {
-          let shop = {
-            shopId: 1,
-            shopName: '久柒图书店',
-            books: [],
-            check: false, //店铺选中状态
-            choose: 0, //商品选中个数
-          }
-          for (let i = 0; i < data.books.length; i++) {
-            let temp = {
-              bookId: '',
-              bookName: '',
-              single: 0,
-              num: 0,
-              imgSrc: '',
-              total: 0,
-              checked: false, //商品选中状态
-              inventory: 0,
+          for(let j=0;j<data.storeList.length;j++){
+            let s=data.storeList[j]
+            let shop = {
+              storeName: '',
+              books: [],
+              check: false, //店铺选中状态
+              choose: 0, //商品选中个数
             }
-            let book = data.books[i]
-            temp.bookId = book.id
-            temp.bookName = book.name
-            temp.single = book.price
-            temp.num = book.num
-            temp.inventory = book.inventory
-            temp.imgSrc = book.imgUrl
-            temp.total = book.num * book.price
-            temp.checked = false
-            shop.books.push(temp)
+            shop.storeName=s.storeName;
+            for (let i = 0; i < s.books.length; i++) {
+              let temp = {
+                bookId: '',
+                bookName: '',
+                single: 0,
+                num: 0,
+                imgSrc: '',
+                total: 0,
+                checked: false, //商品选中状态
+                inventory: 0,
+              }
+              let book = s.books[i]
+              temp.bookId = book.id
+              temp.bookName = book.name
+              temp.single = book.price
+              temp.num = book.num
+              temp.inventory = book.inventory
+              temp.imgSrc = book.imgUrl
+              temp.total = book.num * book.price
+              temp.checked = false
+              shop.books.push(temp)
+            }
+            console.log(shop)
+            this.fetchData.shops.push(shop)
           }
           this.fetchData.status = false
           this.fetchData.allchoose = 0
           this.fetchData.allsum = 0
           this.fetchData.allnum = 0
-          this.fetchData.shops.push(shop)
+          console.log(this.fetchData)
         })
         .catch((err) => {})
       console.log(this.fetchData)
@@ -448,5 +469,8 @@ a:hover {
 }
 .footer {
   border-radius: 30px;
+}
+.cartBookCard:hover{
+  cursor: pointer;
 }
 </style>
