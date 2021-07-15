@@ -1,6 +1,6 @@
 <template>
   <el-container class="manage">
-<!--    <el-header>久柒图书电商后台管理系统</el-header>-->
+    <!--    <el-header>久柒图书电商后台管理系统</el-header>-->
     <el-container>
       <el-aside width="200px" class="side">
         <el-menu :default-active="this.$router.path" router mode="vertical">
@@ -22,7 +22,11 @@
                   <el-table-column prop="imgUrl" label="预览" width="200">
                     <template slot-scope="scope">
                       　　　　
-                      <img :src="scope.row.imgUrl" :alt="picture" class="image" />
+                      <img
+                        :src="scope.row.imgUrl"
+                        :alt="picture"
+                        class="image"
+                      />
                       　　</template
                     >
                   </el-table-column>
@@ -30,16 +34,21 @@
                   </el-table-column>
                   <el-table-column prop="publisher" label="出版社" width="250">
                   </el-table-column>
-                  <el-table-column prop="price" label="单价" sortable width="170">
+                  <el-table-column
+                    prop="price"
+                    label="单价"
+                    sortable
+                    width="170"
+                  >
                   </el-table-column>
                   <el-table-column prop="inventory" label="库存" width="170">
                   </el-table-column>
                   <el-table-column label="操作" width="170">
                     <template slot-scope="scope">
                       <el-button
-                          @click="invalid(scope.row.id)"
-                          type="text"
-                          size="small"
+                        @click="invalid(scope.row.id)"
+                        type="text"
+                        size="small"
                       >
                         设为违规
                       </el-button>
@@ -47,11 +56,11 @@
                   </el-table-column>
                 </el-table>
                 <el-pagination
-                    @current-change="handleValidChange"
-                    :current-page.sync="currentValid"
-                    :page-size="100"
-                    layout="prev, pager, next, jumper"
-                    :total="validTotal"
+                  @current-change="handleValidChange"
+                  :current-page.sync="currentValid"
+                  :page-size="100"
+                  layout="prev, pager, next, jumper"
+                  :total="validBookTotal"
                 >
                 </el-pagination>
               </el-tab-pane>
@@ -60,7 +69,11 @@
                   <el-table-column prop="imgUrl" label="预览" width="200">
                     <template slot-scope="scope">
                       　　　　
-                      <img :src="scope.row.imgUrl" :alt="picture" class="image" />
+                      <img
+                        :src="scope.row.imgUrl"
+                        :alt="picture"
+                        class="image"
+                      />
                       　　</template
                     >
                   </el-table-column>
@@ -68,16 +81,21 @@
                   </el-table-column>
                   <el-table-column prop="publisher" label="出版社" width="250">
                   </el-table-column>
-                  <el-table-column prop="price" label="单价" sortable width="170">
+                  <el-table-column
+                    prop="price"
+                    label="单价"
+                    sortable
+                    width="170"
+                  >
                   </el-table-column>
                   <el-table-column prop="inventory" label="库存" width="170">
                   </el-table-column>
                   <el-table-column label="操作" width="170">
                     <template slot-scope="scope">
                       <el-button
-                          @click="valid(scope.row.id)"
-                          type="text"
-                          size="small"
+                        @click="valid(scope.row.id)"
+                        type="text"
+                        size="small"
                       >
                         取消违规
                       </el-button>
@@ -85,11 +103,11 @@
                   </el-table-column>
                 </el-table>
                 <el-pagination
-                    @current-change="handleInvalidChange"
-                    :current-page.sync="currentInvalid"
-                    :page-size="100"
-                    layout="prev, pager, next, jumper"
-                    :total="invalidTotal"
+                  @current-change="handleInvalidChange"
+                  :current-page.sync="currentInvalid"
+                  :page-size="100"
+                  layout="prev, pager, next, jumper"
+                  :total="invalidTotal"
                 >
                 </el-pagination>
               </el-tab-pane>
@@ -111,12 +129,12 @@ export default {
       navList: [
         { name: '/userManage', navItem: '用户管理' },
         { name: '/bookManage', navItem: '图书管理' },
-        {name:'/LunboManage',navItem:'轮播管理'},
+        { name: '/LunboManage', navItem: '轮播管理' },
       ],
       normalBooks: [],
       invalidBooks: [],
       currentValid: 0,
-      validTotal: 0,
+      validBookTotal: 0,
       currentInvalid: 0,
       invalidTotal: 0,
       picture: '书预览图',
@@ -175,7 +193,7 @@ export default {
           startNum: this.currentValid,
         })
         .then((data) => {
-          this.validTotal = data.allNum
+          this.validBookTotal = data.allNum
           for (let i = 0; i < data.bookList.length; i++) {
             let user = data.bookList[i]
             let temp = {
@@ -204,7 +222,7 @@ export default {
           startNum: this.currentValid,
         })
         .then((data) => {
-          this.validTotal = data.allNum
+          this.invalidTotal = data.allNum
           for (let i = 0; i < data.bookList.length; i++) {
             let user = data.bookList[i]
             let temp = {
@@ -249,7 +267,7 @@ export default {
   width: 100px;
   height: 130px;
 }
-.side{
+.side {
   margin-top: 20px;
 }
 </style>

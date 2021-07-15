@@ -1,56 +1,70 @@
 <template>
   <div class="homepage-hero-module">
-    <div  class="filter"></div>
-    <video  autoplay loop class="fillWidth" src="../assets/video2_1.mp4" v-on:canplay="canplay" muted="muted" width="100%">
-    </video>
+    <div class="filter"></div>
+    <video
+      autoplay
+      loop
+      class="fillWidth"
+      src="../assets/video2_1.mp4"
+      v-on:canplay="canplay"
+      muted="muted"
+      width="100%"
+    ></video>
     <el-row class="box-card">
       <el-col :span="18" :offset="3">
         <div class="forgetPassword-content">
           <div class="forgetPassword-main">
-            <router-link to="/user/login" style="float: right; color: black">返回登录</router-link>
+            <router-link to="/user/login" style="float: right; color: black"
+              >返回登录</router-link
+            >
             <div class="forgetPassword-main-title" align="left">忘记密码</div>
             <el-form
-                :model="ForgetForm"
-                :rules="ForgetRule"
-                ref="ForgetForm"
-                @keyup.enter.native="forgetPassword()"
-                status-icon>
+              :model="ForgetForm"
+              :rules="ForgetRule"
+              ref="ForgetForm"
+              @keyup.enter.native="forgetPassword()"
+              status-icon
+            >
               <el-form-item prop="email">
-                <el-input v-model="ForgetForm.email" placeholder="邮箱"></el-input>
+                <el-input
+                  v-model="ForgetForm.email"
+                  placeholder="邮箱"
+                ></el-input>
               </el-form-item>
               <el-form-item prop="newPassword">
                 <el-input
-                    v-model="ForgetForm.newPassword"
-                    type="password"
-                    placeholder="新密码"
+                  v-model="ForgetForm.newPassword"
+                  type="password"
+                  placeholder="新密码"
                 ></el-input>
               </el-form-item>
               <el-form-item prop="confirmNewPassword">
                 <el-input
-                    v-model="ForgetForm.confirmNewPassword"
-                    type="password"
-                    placeholder="确认新密码"
+                  v-model="ForgetForm.confirmNewPassword"
+                  type="password"
+                  placeholder="确认新密码"
                 ></el-input>
               </el-form-item>
               <el-form-item prop="emailCode" :inline="true">
                 <el-input
-                    v-model="ForgetForm.emailCode"
-                    placeholder="验证码"
-                    style="width: 230px"
+                  v-model="ForgetForm.emailCode"
+                  placeholder="验证码"
+                  style="width: 230px"
                 ></el-input>
                 <el-button
-                    :disabled="disabled"
-                    @click="sendCode"
-                    class="sendcode"
-                    style="width: 125px"
-                >{{ btnTxt }}</el-button>
+                  :disabled="disabled"
+                  @click="sendCode"
+                  class="sendcode"
+                  style="width: 125px"
+                  >{{ btnTxt }}</el-button
+                >
               </el-form-item>
               <el-form-item>
                 <el-button
-                    class="forgetPassword-btn-submit"
-                    type="primary"
-                    @click="forgetPassword()"
-                >提交</el-button
+                  class="forgetPassword-btn-submit"
+                  type="primary"
+                  @click="forgetPassword()"
+                  >提交</el-button
                 >
               </el-form-item>
             </el-form>
@@ -78,7 +92,7 @@ export default {
         const regPass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
         if (!regPass.test(value)) {
           callback(
-              new Error('至少八位字符，包含大小写字母和数字，不含特殊字符')
+            new Error('至少八位字符，包含大小写字母和数字，不含特殊字符')
           )
         }
         callback()
@@ -141,7 +155,7 @@ export default {
     }
 
     return {
-      vedioCanPlay:false,
+      vedioCanPlay: false,
       ForgetForm: {
         userName: '',
         newPassword: '',
@@ -229,16 +243,16 @@ export default {
       this.$refs.ForgetForm.validate((valid) => {
         if (valid) {
           this.$API
-              .p_Forget({
-                newPassword: this.ForgetForm.newPassword,
-                mail: this.ForgetForm.email,
-                verifyCode: this.ForgetForm.emailCode,
-              })
-              .then((res) => {
-                alertSuccess('修改成功')
-                this.$router.replace('/login')
-              })
-              .catch({})
+            .p_Forget({
+              newPassword: this.ForgetForm.newPassword,
+              mail: this.ForgetForm.email,
+              verifyCode: this.ForgetForm.emailCode,
+            })
+            .then((res) => {
+              alertSuccess('修改成功')
+              this.$router.replace('/user/login')
+            })
+            .catch({})
         } else {
           return false
         }
@@ -252,12 +266,12 @@ export default {
           this.time = 30
           this.timer()
           this.$API
-              .p_SendCode({
-                mail: this.ForgetForm.email,
-              })
-              .then((data) => {
-                alertSuccess()
-              })
+            .p_SendCode({
+              mail: this.ForgetForm.email,
+            })
+            .then((data) => {
+              alertSuccess()
+            })
         }
       })
     },
@@ -285,16 +299,15 @@ export default {
   z-index: 0;
   position: absolute;
   height: 100%;
-  width : 100%;
+  width: 100%;
   top: 0;
   left: 0;
 }
 .filter {
   z-index: 1;
   position: absolute;
-//background: rgba(0, 0, 0, 0.4);
   height: 100%;
-  width : 100%;
+  width: 100%;
 }
 
 .text {
@@ -354,7 +367,7 @@ a {
 a:hover {
   color: coral;
 }
-.forgetPassword-main-title{
+.forgetPassword-main-title {
   margin-top: 10%;
   font-size: 30px;
   color: black;

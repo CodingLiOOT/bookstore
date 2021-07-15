@@ -16,6 +16,10 @@ public interface BookMapper {
     @Select("select * from book where state=#{state} LIMIT #{n}, #{m}")
     ArrayList<Book> getRightBooks(int state, int n, int m);
 
+    //    找到所有正常的书或者违规的书的数目
+    @Select("select count(*) from book where state=#{state}")
+    int getRightNum(int state);
+
     //    管理员修改书的状态
     @Update("update book set state=#{state} where id=#{id}")
     int changeBookState(int state, String id);

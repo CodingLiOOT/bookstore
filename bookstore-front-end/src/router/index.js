@@ -2,12 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from "../vuex"
 import MainPage from "../components/MainPage/MainPage"
-import Cart from "../components/shoppingCart/Cart";
-import AllBook from "../components/AllBook/AllBook";
-import Manage from "../components/Manage/Manage";
-import UserManage from "../components/Manage/UserManage";
-import LunboManage from "../components/Manage/LunboManage";
-import bookManage from "../components/Manage/bookManage";
+import Cart from "../components/shoppingCart/Cart"
+import AllBook from "../components/AllBook/AllBook"
+import Manage from "../components/Manage/Manage"
+import UserManage from "../components/Manage/UserManage"
+import LunboManage from "../components/Manage/LunboManage"
+import bookManage from "../components/Manage/bookManage"
 
 Vue.use(Router)
 
@@ -18,26 +18,34 @@ if (sessionStorage.getItem('token')) {
   store.commit('login', {
     userID: sessionStorage.getItem('userID'),
     token: sessionStorage.getItem('token'),
-    state:sessionStorage.getItem('state'),
+    state: sessionStorage.getItem('state'),
   })
 }
 
 const router = new Router({
   mode: 'hash',
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    else {
+      return { x: 0, y: 0 }
+    }
+  },
   routes: [
     {
-      path:'/mainPage',
-      name:'mainPage',
+      path: '/mainPage',
+      name: 'mainPage',
       component: MainPage,
     },
     {
-      path:'/AllBook',
-      name:'AllBook',
+      path: '/AllBook',
+      name: 'AllBook',
       component: AllBook,
     },
     {
-      path:'/Cart',
-      name:'Cart',
+      path: '/Cart',
+      name: 'Cart',
       component: Cart,
     },
     {
@@ -68,26 +76,26 @@ const router = new Router({
       ]
     },
     {
-      path:'/item',
-      name:'Item',
+      path: '/item',
+      name: 'Item',
       component: () => import("../components/Item")
 
     },
     {
-      path:'/CenterPage',
-      name:'CenterPage',
+      path: '/CenterPage',
+      name: 'CenterPage',
       component: () => import("../components/Center/CenterPage")
 
     },
     {
-      path:'/OrderInfor',
-      name:'OrderInfor',
+      path: '/OrderInfor',
+      name: 'OrderInfor',
       component: () => import("../components/OrderInfor")
 
     },
     {
-      path:'/Paycode',
-      name:'Paycode',
+      path: '/Paycode',
+      name: 'Paycode',
       component: () => import("../components/Paycode")
 
     },

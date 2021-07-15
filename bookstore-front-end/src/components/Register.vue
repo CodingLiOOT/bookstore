@@ -251,7 +251,7 @@ export default {
               verifyCode: this.RegisterForm.emailCode,
             })
             .then((res) => {
-              this.$router.replace('/login')
+              this.$router.replace('/user/login')
             })
             .catch({})
         } else {
@@ -306,7 +306,6 @@ export default {
 .filter {
   z-index: 1;
   position: absolute;
-  //background: rgba(0, 0, 0, 0.4);
   height: 100%;
   width: 100%;
 }

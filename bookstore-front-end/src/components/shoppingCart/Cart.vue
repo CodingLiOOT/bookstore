@@ -71,7 +71,7 @@
                       <div>{{ book.bookName }}</div>
                     </el-col>
                     <el-col :span="2" :offset="5">
-                      <div>{{ book.single }}</div>
+                      <div>${{ book.single }}</div>
                     </el-col>
                     <el-col :span="2" :offset="2">
                       <div>
@@ -86,7 +86,7 @@
                       </div>
                     </el-col>
                     <el-col :span="2" :offset="2">
-                      <div>{{ book.total }}</div>
+                      <div>${{ book.total }}</div>
                     </el-col>
                     <el-col :span="2" :offset="2">
                       <el-button type="text">删除</el-button>
@@ -136,11 +136,11 @@
 </template>
 
 <script>
-import InvalidCart from "./InvalidCart";
+import InvalidCart from './InvalidCart'
 export default {
   name: 'Cart',
   components: {
-    InvalidCart
+    InvalidCart,
   },
   data() {
     return {
@@ -184,18 +184,18 @@ export default {
       this.$API
         .p_getAllCart({
           id: this.$store.state.userID,
-          state:1
+          state: 1,
         })
         .then((data) => {
-          for(let j=0;j<data.storeList.length;j++){
-            let s=data.storeList[j]
+          for (let j = 0; j < data.storeList.length; j++) {
+            let s = data.storeList[j]
             let shop = {
               storeName: '',
               books: [],
               check: false, //店铺选中状态
               choose: 0, //商品选中个数
             }
-            shop.storeName=s.storeName;
+            shop.storeName = s.storeName
             for (let i = 0; i < s.books.length; i++) {
               let temp = {
                 bookId: '',
@@ -424,6 +424,7 @@ export default {
 <style scoped>
 .card {
   margin-top: 65px;
+  margin-bottom: 65px;
 }
 .infoCard {
   margin-top: 2%;
@@ -470,7 +471,7 @@ a:hover {
 .footer {
   border-radius: 30px;
 }
-.cartBookCard:hover{
+.cartBookCard:hover {
   cursor: pointer;
 }
 </style>

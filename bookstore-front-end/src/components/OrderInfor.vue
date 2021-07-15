@@ -16,10 +16,46 @@
               size="small"
               >选择</el-button
             >
+            <el-button
+              @click="modifyAddr(scope.row.addressId)"
+              type="text"
+              size="small"
+              >修改</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
-      <el-button type="primary" @click="addAddress">添加或修改地址</el-button>
+      <el-button type="primary" @click="addAddressVisible = true"
+        >添加地址</el-button
+      >
+    </el-dialog>
+    <el-dialog title="添加地址" :visible.sync="addAddressVisible">
+      <el-form ref="form" :model="addForm" label-width="80px">
+        <el-form-item label="地址">
+          <el-input v-model="addForm.address"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="addForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="收件人">
+          <el-input v-model="addForm.consigneeName"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" @click="addAddress">确认添加</el-button>
+    </el-dialog>
+    <el-dialog title="修改地址" :visible.sync="modifyAddressVisible">
+      <el-form ref="form" :model="modifyForm" label-width="80px">
+        <el-form-item label="地址">
+          <el-input v-model="modifyForm.address"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="modifyForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="收件人">
+          <el-input v-model="modifyForm.consigneeName"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" @click="submitModify">确认修改</el-button>
     </el-dialog>
     <el-main>
       <el-card class="orderCard">
@@ -108,7 +144,9 @@ export default {
   data() {
     return {
       pay: 1,
+      addAddressVisible: false,
       addressDialogVisible: false,
+      modifyAddressVisible: false,
       addressData: [],
       active: 1,
       radio: 2,
@@ -135,11 +173,61 @@ export default {
           bookTotal: 0,
         },
       ],
+      addForm: {
+        address: '',
+        phone: '',
+        consigneeName: '',
+      },
+      modifyForm: {
+        address: '',
+        phone: '',
+        consigneeName: '',
+        addressId: '',
+      },
     }
   },
   methods: {
+    submitModify() {
+      this.$API
+        .p_modifyAddress({
+          userId: this.$store.state.userID,
+          id: this.modifyForm.addressId,
+          consigneeName: this.modifyForm.consigneeName,
+          phone: this.modifyForm.phone,
+          address: this.modifyForm.address,
+        })
+        .then((data) => {
+          this.modifyAddressVisible = false
+          this.getData()
+        })
+        .catch((err) => {})
+    },
+    modifyAddr(val) {
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (val === this.tableData[i].addressId) {
+          let td = this.tableData[i]
+          this.modifyForm.address = td.address
+          this.modifyForm.addressId = td.addressId
+          this.modifyForm.consigneeName = td.consigneeName
+          this.modifyForm.phone = td.phone
+        }
+      }
+      this.modifyAddressVisible = true
+    },
     addAddress() {
-      this.$router.push({ path: '/CenterPage' })
+      this.$API
+        .p_addAddress({
+          userId: this.$store.state.userID,
+          consigneeName: this.addForm.consigneeName,
+          phone: this.addForm.phone,
+          address: this.addForm.address,
+        })
+        .then((data) => {
+          this.addForm = {}
+          this.addAddressVisible = false
+          this.getData()
+        })
+        .catch((err) => {})
     },
     selectAddr(val) {
       for (let i = 0; i < this.tableData.length; i++) {
@@ -161,6 +249,7 @@ export default {
       if (this.active++ > 4) this.active = 0
     },
     getData() {
+      this.tableData = []
       this.detailData = this.$route.query.bklist
       this.$API
         .p_getAddress({

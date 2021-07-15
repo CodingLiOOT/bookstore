@@ -52,6 +52,7 @@
                         closable
                         class="word-tag"
                         :type="search.type"
+                        @click.native="searchTag(search.name)"
                         @close="closeHandler(search)"
                         >{{ search.name }}</el-tag
                       >
@@ -184,6 +185,15 @@ export default {
     }
   },
   methods: {
+    searchTag(val) {
+      this.$router.push({
+        path: '/AllBook',
+        query: {
+          t: 'book',
+          val: val,
+        },
+      })
+    },
     searchCategory(val) {
       this.$router.push({
         path: '/AllBook',
@@ -335,6 +345,7 @@ export default {
 }
 .word-tag {
   float: left;
+  cursor: pointer;
 }
 .search-title {
   color: #bdbaba;

@@ -11,7 +11,9 @@ import Moment from 'moment'
 //axios.defaults.baseURL='http://localhost:8090/api'
 Vue.prototype.$API = api
 Vue.config.productionTip = false
-Vue.prototype.moment = Moment
+Vue.filter('dateYMDHMSFormat', function (dateStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
+  return moment(dateStr).format(pattern)
+})
 
 /* eslint-disable no-new */
 new Vue({

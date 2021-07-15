@@ -5,6 +5,7 @@ import com.bjtu.bookstore.entity.Order;
 import com.bjtu.bookstore.entity.Order_book;
 import com.bjtu.bookstore.mapper.*;
 import com.bjtu.bookstore.service.OrderService;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,43 +31,43 @@ public class OrderServiceImpl implements OrderService {
     private CategoryMapper categoryMapper;
 
     @Override
-    public List<HashMap<String,Object>> getOrderList(Order order) {
-        List<HashMap<String,Object>>  list=new ArrayList<>();
+    public List<HashMap<String, Object>> getOrderList(Order order) {
+        List<HashMap<String, Object>> list = new ArrayList<>();
 
         List<Order> orderList = orderMapper.getOrderList(order);
         System.out.println(orderList.size());
 
-        for(int i=0;i<orderList.size();i++){
-            HashMap<String,Object>  map=new HashMap<>();
+        for (int i = 0; i < orderList.size(); i++) {
+            HashMap<String, Object> map = new HashMap<>();
             Order order1 = orderList.get(i);
-            map.put("orderId",order1.getId());
-            map.put("date",order1.getCreatedTime());
-            map.put("sum",order1.getTotalPrice());
-            map.put("shippingId",order1.getShippingId());
-            map.put("state",order1.getState());
-            int num=0;
+            map.put("orderId", order1.getId());
+            map.put("date", DateFormatUtils.format(order1.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+            map.put("sum", order1.getTotalPrice());
+            map.put("shippingId", order1.getShippingId());
+            map.put("state", order1.getState());
+            int num = 0;
             List<Order_book> byOrderId = order_bookMapper.getByOrderId(order1.getId());
-            List<HashMap<String,Object>>  detailData=new ArrayList<>();
-            for(int j=0;j<byOrderId.size();j++){
-                HashMap<String,Object> datadetailItem =new HashMap<>();
+            List<HashMap<String, Object>> detailData = new ArrayList<>();
+            for (int j = 0; j < byOrderId.size(); j++) {
+                HashMap<String, Object> datadetailItem = new HashMap<>();
                 Order_book order_book = byOrderId.get(j);
                 String bookId = order_book.getBookId();
                 ArrayList<Book> detail = bookMapper.getDetail(bookId);
                 Book book = detail.get(0);
-                num+=order_book.getAmount();
+                num += order_book.getAmount();
 
-                datadetailItem.put("bookName",book.getName());
-                datadetailItem.put("bookId",book.getId());
-                datadetailItem.put("storeName",storeMapper.getNameById(book.getStoreId()));
-                datadetailItem.put("category",categoryMapper.getNameById(book.getCategoryId()));
-                datadetailItem.put("price",book.getPrice());
-                datadetailItem.put("bookNum",order_book.getAmount());
+                datadetailItem.put("bookName", book.getName());
+                datadetailItem.put("bookId", book.getId());
+                datadetailItem.put("storeName", storeMapper.getNameById(book.getStoreId()));
+                datadetailItem.put("category", categoryMapper.getNameById(book.getCategoryId()));
+                datadetailItem.put("price", book.getPrice());
+                datadetailItem.put("bookNum", order_book.getAmount());
 
                 detailData.add(datadetailItem);
             }
 
-            map.put("num",num);
-            map.put("detailData",detailData);
+            map.put("num", num);
+            map.put("detailData", detailData);
             list.add(map);
         }
 
@@ -75,22 +76,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void changestate(Order order) {
-          orderMapper.changestate(order.getId(), order.getState());
+        orderMapper.changestate(order.getId(), order.getState());
     }
 
     @Override
-    public HashMap<String,Object> confirmOrder(Order order) {
+    public HashMap<String, Object> confirmOrder(Order order) {
 
-         order.setId(UUID.randomUUID().toString());
-         order.setState(1);
-         order.setCreatedTime(new Timestamp(new Date().getTime()));
+        order.setId(UUID.randomUUID().toString());
+        order.setState(1);
+        order.setCreatedTime(new Timestamp(new Date().getTime()));
 
-         orderMapper.confirmOrder(order);
+        orderMapper.confirmOrder(order);
 
         List<Book> bookList = order.getBookList();
         for (Book book : bookList) {
 
-            Order_book order_book=new Order_book();
+            Order_book order_book = new Order_book();
             order_book.setOrderId(order.getId());
             order_book.setBookId(book.getId());
             order_book.setAmount(book.getNum());
@@ -100,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
 
             bookMapper.updateDealNum(book.getId());
         }
-        HashMap<String,Object> datas = new HashMap<>();
+        HashMap<String, Object> datas = new HashMap<>();
         datas.put("orderId", order.getId());
         return datas;
     }

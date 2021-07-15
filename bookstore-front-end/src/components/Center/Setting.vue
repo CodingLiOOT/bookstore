@@ -38,7 +38,6 @@
       <el-tab-pane label="地址管理" name="2">
         <Address></Address>
       </el-tab-pane>
-      <el-tab-pane label="安全设置" name="3"> </el-tab-pane>
     </el-tabs>
   </el-row>
 </template>

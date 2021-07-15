@@ -37,7 +37,7 @@
             <div>{{ book.bookName }}</div>
           </el-col>
           <el-col :span="2" :offset="6">
-            <div>{{ book.single }}</div>
+            <div>${{ book.single }}</div>
           </el-col>
         </el-row>
       </el-card>
@@ -375,8 +375,5 @@ a:hover {
 }
 .footer {
   border-radius: 30px;
-}
-.cartBookCard:hover {
-  cursor: pointer;
 }
 </style>

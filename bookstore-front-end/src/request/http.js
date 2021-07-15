@@ -9,7 +9,8 @@ import store from "../vuex"
 // } else if (process.env.NODE_ENV === 'production') {
 //
 // }
-axios.defaults.baseURL = 'http://127.0.0.1:8090/api'
+// axios.defaults.baseURL = 'http://127.0.0.1:8090/api'
+axios.defaults.baseURL = 'http://121.36.51.151:8090/api'
 
 //请求超时时间
 axios.defaults.timeout = 10000

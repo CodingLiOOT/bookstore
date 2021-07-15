@@ -1,6 +1,5 @@
 package com.bjtu.bookstore.mapper;
 
-import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Role;
 import com.bjtu.bookstore.entity.User;
 import org.apache.ibatis.annotations.Insert;
@@ -19,6 +18,10 @@ public interface UserMapper {
     // 返回所有正常用户或者是违规用户
     @Select("select * from user where state = #{state} LIMIT #{n}, #{m}")
     ArrayList<User> getRightUsers(int state, int n, int m);
+
+    // 找到所有正常用户或者是违规用户的数目
+    @Select("select count(*) from user where state=#{state}")
+    int getRightNum(int state);
 
     // 管理员修改用户的状态
     @Update("update user set state=#{state} where id=#{id}")
@@ -51,25 +54,24 @@ public interface UserMapper {
 
     //通过用户id获取用户的用户名、注册日期，邮箱，用户头像地址，手机号，性别，生日
     @Select("<script>"
-            +"select username,submission_date,mail,avatar,phone,gender,birthday from user where id=#{userId}"
-             +"</script>"
+            + "select username,submission_date,mail,avatar,phone,gender,birthday from user where id=#{userId}"
+            + "</script>"
     )
     User getInformation(String userId);
 
 
-
     //修改个人信息
     @Update("<script>"
-            +"update user  "
-            +"<set>"
-            +" <if test=\"username != null\">username=#{username},</if>"
-            +" <if test=\"birthday != null\">birthday=#{birthday},</if>"
-            +" <if test=\"gender != null\">gender=#{gender},</if>"
-            +" <if test=\"phone != null\">phone=#{phone}</if>"
-            +"</set>"
-            +"where id=#{id}"
-            +"</script>"
+            + "update user  "
+            + "<set>"
+            + " <if test=\"username != null\">username=#{username},</if>"
+            + " <if test=\"birthday != null\">birthday=#{birthday},</if>"
+            + " <if test=\"gender != null\">gender=#{gender},</if>"
+            + " <if test=\"phone != null\">phone=#{phone}</if>"
+            + "</set>"
+            + "where id=#{id}"
+            + "</script>"
     )
-    void modifyInformation(User  user);
+    void modifyInformation(User user);
 
 }

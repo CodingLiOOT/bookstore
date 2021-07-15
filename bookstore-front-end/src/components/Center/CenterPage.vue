@@ -36,7 +36,7 @@
               {{ book.comment }}
             </el-form-item>
             <el-form-item label="评分">
-              <el-rate v-model="book.rate" :colors="colors"  disabled> </el-rate>
+              <el-rate v-model="book.rate" :colors="colors" disabled> </el-rate>
             </el-form-item>
           </el-form>
         </el-row>
@@ -114,11 +114,10 @@
                   >
                   </el-table-column>
                   <el-table-column
-                    prop="moment(date).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')"
+                    prop="date|dateYMDHMSFormat"
                     label="创建日期"
                     sortable
                     width="180"
-                    column-key="date"
                   >
                   </el-table-column>
                   <el-table-column prop="num" label="总数" width="100">
@@ -533,6 +532,7 @@ export default {
             message: '取消支付成功',
             type: 'success',
           })
+
           this.getUnPay()
         })
         .catch((err) => {})
@@ -737,6 +737,7 @@ export default {
           state: '',
           detailData: [],
         }
+        alert(d.date)
         order.orderId = d.orderId
         order.date = d.date
         order.num = d.num

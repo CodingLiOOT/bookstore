@@ -1,6 +1,5 @@
 package com.bjtu.bookstore.service.impl;
 
-import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.User;
 import com.bjtu.bookstore.mapper.UserMapper;
 import com.bjtu.bookstore.service.UserLoginInterface;
@@ -112,7 +111,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public HashMap<String, Object> getRightUsers(User user) {
         HashMap<String, Object> datas = new HashMap<>();
-        datas.put("userList", userMapper.getRightUsers(user.getState(), user.getStartNum()-1, 20));
+        datas.put("userList", userMapper.getRightUsers(user.getState(), user.getStartNum() - 1, 20));
+        datas.put("allNum", userMapper.getRightNum(user.getState()));
         return datas;
     }
 
