@@ -55,6 +55,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/mainPage/getNewBooks").permitAll()
                 .antMatchers("/api/book/getAllBooksByCategory").permitAll()
                 .antMatchers("/api/book/getDetail").permitAll()
+                .antMatchers("/api/lunbo/getAllLunbos").permitAll()
+                .antMatchers("/api/lunbo/getOneLunbo").permitAll()
+                .antMatchers("/api/mainPage/getCloud").permitAll()
                 .antMatchers("/static/**").permitAll()
 
 

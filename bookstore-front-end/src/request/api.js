@@ -64,7 +64,7 @@ export default class api {
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_getLunBo = p => post('/mainPage/getLunBo', p)
+  static p_getLunBo = p => post('/lunbo/getAllLunbos', p)
 
   /**
    * 获取用户信息接口
@@ -129,12 +129,12 @@ export default class api {
    */
   static p_changestate = p => post('/order/changestate', p)
 
-    /**
-     * 提交订单
-     * @param {Object} p [发送的参数：]
-     * @returns {Promise<unknown>}
-     */
-    static p_confirmOrder = p => post('/order/confirmOrder', p)
+  /**
+   * 提交订单
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_confirmOrder = p => post('/order/confirmOrder', p)
 
   /**
    * 修改个人信息
@@ -260,7 +260,7 @@ export default class api {
    * @param {Object} p [发送的参数：]
    * @returns {Promise<unknown>}
    */
-  static p_deleteLunbo = p => post('/lunbo/deleteLunbo', p)
+  static p_deleteLunbo = p => post('/lunbo/deleteFromLunbo', p)
 
   /**
    * 增加轮播信息
@@ -268,5 +268,19 @@ export default class api {
    * @returns {Promise<unknown>}
    */
   static p_addLunbo = p => post('/lunbo/addToLunbo', p)
+
+  /**
+   * 获取某个轮播信息
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getOneLunbo = p => post('/lunbo/getOneLunbo', p)
+
+  /**
+   * 获取某个轮播信息
+   * @param {Object} p [发送的参数：]
+   * @returns {Promise<unknown>}
+   */
+  static p_getCloud = p => post('/mainPage/getCloud', p)
 
 }

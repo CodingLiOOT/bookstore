@@ -1,16 +1,12 @@
 package com.bjtu.bookstore.controller;
 
+import com.bjtu.bookstore.entity.BehaviorItem;
 import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Cart;
-import com.bjtu.bookstore.entity.User;
-import com.bjtu.bookstore.mapper.BookMapper;
 import com.bjtu.bookstore.service.BookService;
-import com.bjtu.bookstore.service.MailService;
-import com.bjtu.bookstore.service.UserService;
 import com.bjtu.bookstore.utils.resultUtils.ResponseResultBody;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,10 +22,10 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping(value = "/getDetail")
-    public HashMap<String, Object> getDetail(@RequestBody Book book) {
-        Preconditions.checkNotNull(book.getId());
+    public HashMap<String, Object> getDetail(@RequestBody BehaviorItem myRecommendedItem) {
+//        Preconditions.checkNotNull(myRecommendedItem.getUserId());
 
-        return bookService.getDetail(book);
+        return bookService.getDetail(myRecommendedItem);
     }
 
     @PostMapping(value = "/getAllBooksByCategory")

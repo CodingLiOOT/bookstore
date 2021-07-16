@@ -37,7 +37,7 @@ public class EmailLoginImpl implements UserLoginInterface {
         return new HashMap<String, String>() {
             {
                 put("token", jwtUtils.generateToken(userDetails));
-                put("userID", userDetails.getID());
+                put("userID", String.valueOf(userDetails.getID()));
                 put("state", String.valueOf(userDetails.getState()));
             }
         };

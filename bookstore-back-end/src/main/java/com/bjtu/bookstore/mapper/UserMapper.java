@@ -23,9 +23,13 @@ public interface UserMapper {
     @Select("select count(*) from user where state=#{state}")
     int getRightNum(int state);
 
+    // 找到所有用户最大
+    @Select("select max(id) from user")
+    int getMaxId();
+
     // 管理员修改用户的状态
     @Update("update user set state=#{state} where id=#{id}")
-    int changeUserState(int state, String id);
+    int changeUserState(int state, Long id);
 
     @Select("select * from user where username = #{username}")
     User selectUserByUserName(String username);
@@ -57,7 +61,7 @@ public interface UserMapper {
             + "select username,submission_date,mail,avatar,phone,gender,birthday from user where id=#{userId}"
             + "</script>"
     )
-    User getInformation(String userId);
+    User getInformation(Long userId);
 
 
     //修改个人信息

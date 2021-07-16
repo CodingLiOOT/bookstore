@@ -6,9 +6,9 @@ import lombok.Data;
 public class Order_book {
     private String orderId;
 
-    private String bookId;
+    private Long bookId;
 
-    private Integer  amount;
+    private Integer amount;
 
     private String storeId;
 

@@ -11,7 +11,10 @@ import com.bjtu.bookstore.utils.verifyCodeUtils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -53,7 +56,8 @@ public class UserServiceImpl implements UserService {
                     throw new DefinitionException(ErrorEnum.ERROR_VERIFY_CODE);
                 });
 
-        user.setId(UUID.randomUUID().toString());
+//        user.setId(5L);
+        user.setId((long) (userMapper.getMaxId() + 1));
         user.setPassword(encodeUtil.genCode(user.getPassword(), user.getMail()));
         userMapper.register(user);
     }

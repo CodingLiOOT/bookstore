@@ -8,9 +8,9 @@ import java.util.Date;
 @Data
 public class Comment {
     private String commentId;
-    private String userId;
+    private Long userId;
     private String userName;
-    private String bookId;
+    private Long bookId;
     private String bookName;
     private String orderId;
     private String comment;

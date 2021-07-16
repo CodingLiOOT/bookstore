@@ -18,7 +18,7 @@ public class ShippingServiceimpl implements ShippingService {
 
 
     @Override
-    public List<Shipping> getAddress(String uid) {
+    public List<Shipping> getAddress(Long uid) {
 
         List<Shipping> address = shippingMapper.getAddress(uid);
         Preconditions.checkNotNull(address);
@@ -36,14 +36,13 @@ public class ShippingServiceimpl implements ShippingService {
 
     @Override
     public void modifyAddress(Shipping shipping) {
-         shippingMapper.modifyAddress(shipping);
+        shippingMapper.modifyAddress(shipping);
     }
-
 
 
     @Override
     public void deleteAddress(Shipping shipping) {
-       shippingMapper.deleteAddress(shipping);
+        shippingMapper.deleteAddress(shipping);
 
 
     }

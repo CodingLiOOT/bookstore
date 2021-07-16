@@ -2,8 +2,6 @@ package com.bjtu.bookstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -24,7 +22,7 @@ public class User implements Serializable {
 
     private String verifyCode;
 
-    private String id;
+    private Long id;
 
     private String avatar;
 

@@ -90,7 +90,8 @@
               <el-table-column prop="rate" label="评分">
                 <template slot-scope="scope">
                   　　　　
-                  <el-rate v-model="scope.row.rate" :colors="colors"  disabled> </el-rate>
+                  <el-rate v-model="scope.row.rate" :colors="colors" disabled>
+                  </el-rate>
                 </template>
               </el-table-column>
               <el-table-column prop="userName" label="买家"> </el-table-column>
@@ -140,48 +141,44 @@ export default {
       return bookList
     },
     buy() {
-      if(this.disabled===true){
+      if (this.disabled === true) {
         this.$router.push({
           path: '/user/login',
-          query: {
-          },
+          query: {},
         })
-      }
-      else{
+      } else {
         let bkl = this.getBookList()
         this.$API
-            .p_settlement(bkl)
-            .then((data) => {
-              let bklist = [
-                {
-                  id: this.$route.query.bookId,
-                  bookName: this.book.bookName,
-                  price: this.book.price,
-                  bookNum: this.num,
-                },
-              ]
-              let total = this.book.price * this.num
-              this.$router.push({
-                path: '/orderInfor',
-                query: {
-                  bklist: bklist,
-                  bookList: bkl,
-                  total: total,
-                },
-              })
+          .p_settlement(bkl)
+          .then((data) => {
+            let bklist = [
+              {
+                id: this.$route.query.bookId,
+                bookName: this.book.bookName,
+                price: this.book.price,
+                bookNum: this.num,
+              },
+            ]
+            let total = this.book.price * this.num
+            this.$router.push({
+              path: '/orderInfor',
+              query: {
+                bklist: bklist,
+                bookList: bkl,
+                total: total,
+              },
             })
-            .catch((err) => {})
+          })
+          .catch((err) => {})
       }
     },
     addToCart() {
-      if(this.disabled===true){
+      if (this.disabled === true) {
         this.$router.push({
           path: '/user/login',
-          query: {
-          },
+          query: {},
         })
-      }
-      else{
+      } else {
         let books = [
           {
             id: this.$route.query.bookId,
@@ -189,16 +186,16 @@ export default {
           },
         ]
         this.$API
-            .p_addToCart({
-              userId: this.$store.state.userID,
-              books,
+          .p_addToCart({
+            userId: this.$store.state.userID,
+            books,
+          })
+          .then((data) => {
+            this.$router.push({
+              path: '/cart',
             })
-            .then((data) => {
-              this.$router.push({
-                path: '/cart',
-              })
-            })
-            .catch((err) => {})
+          })
+          .catch((err) => {})
       }
     },
     onSubmit() {
@@ -210,7 +207,8 @@ export default {
     getDetail() {
       this.$API
         .p_bookDetail({
-          id: this.$route.query.bookId,
+          bookId: this.$route.query.bookId,
+          userId: this.$store.state.userID,
         })
         .then((data) => {
           for (let i = 0; i < data.bookDetail.length; i++) {
@@ -246,7 +244,7 @@ export default {
   mounted() {
     this.getDetail()
     this.getComment()
-    this.disabled = this.$store.state.userID === undefined;
+    this.disabled = this.$store.state.userID === undefined
   },
 }
 </script>

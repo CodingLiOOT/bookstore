@@ -1,7 +1,6 @@
 package com.bjtu.bookstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.google.common.collect.ListMultimap;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -21,7 +20,7 @@ public class Order {
 
     private String shippingId;
 
-    private String userId;
+    private Long userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createdTime;

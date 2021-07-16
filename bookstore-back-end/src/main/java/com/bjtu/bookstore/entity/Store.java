@@ -18,7 +18,7 @@ public class Store {
 
     private String storeId;
 
-    private String userId;
+    private Long userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createdTime;
@@ -39,11 +39,11 @@ public class Store {
         this.storeId = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

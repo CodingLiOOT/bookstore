@@ -27,9 +27,9 @@ public class UserServiceTest extends FrameworkApplicationTests {
     @Test
     public void md5Test() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encode = passwordEncoder.encode("Ljz123hhh" + "CodingLiOOT" + "gk2018bingo@sina.com");
+        String encode = passwordEncoder.encode("123456" + "CodingLiOOT" + "12345");
         System.out.println(encode);
-        boolean matches = passwordEncoder.matches("Ljz123hhh" + "CodingLiOOT" + "gk2018bingo@sina.com", encode);
+        boolean matches = passwordEncoder.matches("123456" + "CodingLiOOT" + "12345", encode);
         System.out.println(matches);
     }
 

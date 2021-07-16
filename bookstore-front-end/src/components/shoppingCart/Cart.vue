@@ -89,7 +89,9 @@
                       <div>${{ book.total }}</div>
                     </el-col>
                     <el-col :span="2" :offset="2">
-                      <el-button type="text">删除</el-button>
+                      <el-button type="text" @click="deleteBooks"
+                        >删除</el-button
+                      >
                     </el-col>
                   </el-row>
                 </el-card>

@@ -1,5 +1,6 @@
 package com.bjtu.bookstore.service.impl;
 
+import com.bjtu.bookstore.entity.BehaviorItem;
 import com.bjtu.bookstore.entity.Book;
 import com.bjtu.bookstore.entity.Cart;
 import com.bjtu.bookstore.mapper.BookMapper;
@@ -22,10 +23,15 @@ public class BookServiceImpl implements BookService {
     private CategoryMapper categoryMapper;
 
     @Override
-    public HashMap<String, Object> getDetail(Book book) {
+    public HashMap<String, Object> getDetail(BehaviorItem myRecommendedItem) {
 
         ArrayList<Book> books = new ArrayList<>();
-        books = bookMapper.getDetail(book.getId());
+        books = bookMapper.getDetail(myRecommendedItem.getBookId());
+        String categoryId = bookMapper.getCategory(myRecommendedItem.getBookId());
+        if (myRecommendedItem.getUserId() != null) {
+            bookMapper.addUserBookClick(myRecommendedItem.getUserId(), categoryId);
+        }
+
         for (int i = 0; i < books.size(); i++) {
             books.get(i).setStoreName(storeMapper.getNameById(books.get(i).getStoreId()));
             books.get(i).setCategoryName(categoryMapper.getNameById(books.get(i).getCategoryId()));

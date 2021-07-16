@@ -4,7 +4,7 @@
       <el-col :span="20" :offset="2">
         <el-container>
           <el-row>
-            <el-col :span="3" :offset="2">
+            <el-col :span="5" :offset="2">
               <el-image
                 :src="require('@/assets/lo.png')"
                 style="width: 260px; height: 90px"
@@ -89,7 +89,7 @@
         <el-card class="card1">
           <el-row class="first">
             <!--            图书类别-->
-            <el-col :span="11" :offset="1">
+            <el-col :span="8" :offset="1">
               <el-card class="card2">
                 <div class="bookCat">图书类别</div>
                 <!--                    <el-divider >图书类别</el-divider>-->
@@ -109,7 +109,7 @@
               </el-card>
             </el-col>
             <!--            轮播图图书推荐-->
-            <el-col :span="11" :offset="0">
+            <el-col :span="7" :offset="1">
               <div class="block">
                 <span class="demonstration"></span>
                 <el-carousel
@@ -118,17 +118,39 @@
                   width="400px"
                   class="ca"
                 >
-                  <el-carousel-item v-for="item in imgList" :key="item.id">
+                  <el-carousel-item v-for="item in lunbos" :key="item.lunboId">
                     <img
-                      :src="item.idView"
+                      :src="item.imgUrl"
                       class="adImage"
                       alt="推荐"
-                      @click="intoLunbo"
+                      @click="intoLunbo(item.lunboId)"
                     />
                     <!--                    <el-image :src="item.idView" class="image" :fit="fit">-->
                     <!--                    </el-image>-->
                   </el-carousel-item>
                 </el-carousel>
+              </div>
+            </el-col>
+            <el-col :span="6" :offset="0">
+              <div class="svgHover">
+                <svg
+                  :width="width"
+                  :height="height"
+                  @mousemove="listener($event)"
+                  @click="goToLike"
+                >
+                  <a :href="tag.href" v-for="(tag, index) in tags" :key="index">
+                    <text
+                      :x="tag.x"
+                      :y="tag.y"
+                      :font-size="20 * (600 / (600 - tag.z))"
+                      :fill-opacity="(400 + tag.z) / 600"
+                      class="cloud"
+                    >
+                      {{ tag.text }}
+                    </text>
+                  </a>
+                </svg>
               </div>
             </el-col>
           </el-row>
@@ -138,7 +160,7 @@
               <Top></Top>
             </div>
           </el-row>
-          <el-row class="information">
+          <el-row class="information" id="like">
             <Like></Like>
           </el-row>
           <el-row class="information">
@@ -170,6 +192,13 @@ export default {
   },
   data() {
     return {
+      width: 300, //svg宽度
+      height: 300, //svg高度
+      tagsNum: 20, //标签数量
+      RADIUS: 80, //球的半径
+      speedX: Math.PI / 720, //球一帧绕x轴旋转的角度
+      speedY: Math.PI / 720, //球-帧绕y轴旋转的角度
+      tags: [],
       kindList: ['教育', '小说', '名著'],
       imgList: [],
       search: '', //当前输入框的值
@@ -182,9 +211,46 @@ export default {
       bannerHeight: '',
       flag: false,
       parent: [],
+      lunbos: [],
     }
   },
   methods: {
+    goToLike() {
+      document.getElementById('like').scrollIntoView()
+    },
+    rotateX(angleX) {
+      var cos = Math.cos(angleX)
+      var sin = Math.sin(angleX)
+      for (let tag of this.tags) {
+        var y1 = (tag.y - this.CY) * cos - tag.z * sin + this.CY
+        var z1 = tag.z * cos + (tag.y - this.CY) * sin
+        tag.y = y1
+        tag.z = z1
+      }
+    },
+    rotateY(angleY) {
+      var cos = Math.cos(angleY)
+      var sin = Math.sin(angleY)
+      for (let tag of this.tags) {
+        var x1 = (tag.x - this.CX) * cos - tag.z * sin + this.CX
+        var z1 = tag.z * cos + (tag.x - this.CX) * sin
+        tag.x = x1
+        tag.z = z1
+      }
+    },
+    listener(event) {
+      //响应鼠标移动
+      var x = event.clientX - this.CX
+      var y = event.clientY - this.CY
+      this.speedX =
+        x * 0.0001 > 0
+          ? Math.min(this.RADIUS * 0.00002, x * 0.0001)
+          : Math.max(-this.RADIUS * 0.00002, x * 0.0001)
+      this.speedY =
+        y * 0.0001 > 0
+          ? Math.min(this.RADIUS * 0.00002, y * 0.0001)
+          : Math.max(-this.RADIUS * 0.00002, y * 0.0001)
+    },
     searchTag(val) {
       this.$router.push({
         path: '/AllBook',
@@ -204,22 +270,24 @@ export default {
       })
     },
     getLunBo() {
-      let t = [
-        { id: 0, idView: require('../../assets/p1.jpg') },
-        { id: 1, idView: require('../../assets/p2.jpg') },
-        { id: 2, idView: require('../../assets/p3.jpg') },
-        { id: 3, idView: require('../../assets/p4.jpg') },
-      ]
-      for (let i = 0; i < t.length; i++) {
-        let lb = t[i]
-        let temp = {
-          id: '',
-          idView: '',
-        }
-        temp.id = i + 1
-        temp.idView = lb.idView
-        this.imgList.push(temp)
-      }
+      this.$API
+        .p_getLunBo({})
+        .then((data) => {
+          for (let i = 0; i < data.lunboList.length; i++) {
+            let lunbo = data.lunboList[i]
+            let temp = {
+              lunboName: '',
+              imgUrl: '',
+              lunboId: '',
+            }
+            temp.lunboName = lunbo.lunboName
+            temp.imgUrl = lunbo.imgUrl
+            temp.lunboId = lunbo.lunboId
+            this.lunbos.push(temp)
+            console.log(this.lunbos)
+          }
+        })
+        .catch((err) => {})
     },
     getFlag() {
       if (this.$store.state.userID === undefined) {
@@ -300,10 +368,12 @@ export default {
         })
         .catch((err) => {})
     },
-    intoLunbo() {
+    intoLunbo(val) {
       this.$router.push({
         path: '/activityPage',
-        query: {},
+        query: {
+          lunboId: val,
+        },
       })
     },
   },
@@ -321,8 +391,20 @@ export default {
       // 通过浏览器宽度(图片宽度)计算高度
       this.bannerHeight = (400 / 1920) * this.screenWidth
     },
+    CX() {
+      //球心x坐标
+      return this.width / 2
+    },
+    CY() {
+      //球心y坐标
+      return this.height / 2
+    },
   },
   mounted() {
+    setInterval(() => {
+      this.rotateX(this.speedX)
+      this.rotateY(this.speedY)
+    }, 17)
     this.getLunBo()
     this.getFlag()
     this.getCategories()
@@ -335,6 +417,39 @@ export default {
       this.setSize()
     }
   },
+  created() {
+    //初始化标签位置
+    let tags = []
+    this.$API
+      .p_getCloud({
+        id: this.$store.state.userID,
+      })
+      .then((data) => {
+        for (let i = 0; i < data.tagList.length; i++) {
+          let tag = {}
+          let k = -1 + (2 * (i + 1) - 1) / this.tagsNum
+          let a = Math.acos(k)
+          let b = a * Math.sqrt(this.tagsNum * Math.PI) //计算标签相对于球心的角度
+          tag.text = data.tagList[i]
+          tag.x = this.CX + this.RADIUS * Math.sin(a) * Math.cos(b) //根据标签角度求出标签的x,y,z坐标
+          tag.y = this.CY + this.RADIUS * Math.sin(a) * Math.sin(b)
+          tag.z = this.RADIUS * Math.cos(a)
+          // tag.href = 'https://imgss.github.io';//给标签添加链接
+          tags.push(tag)
+        }
+        this.tags = tags //让vue替我们完成视图更新
+      })
+      .catch((err) => {})
+  },
+  render(h) {
+    return h('div', {
+      attrs: { id: 'word_cloud_view_id' },
+      style: {
+        height: '400px',
+        width: '400px',
+      },
+    })
+  },
 }
 </script>
 
@@ -346,6 +461,9 @@ export default {
 .word-tag {
   float: left;
   cursor: pointer;
+}
+.cloud {
+  color: red;
 }
 .search-title {
   color: #bdbaba;
@@ -425,5 +543,8 @@ export default {
   margin-left: 0;
   margin-right: 0;
   font-weight: bold;
+}
+.svgHover:hover {
+  cursor: pointer;
 }
 </style>

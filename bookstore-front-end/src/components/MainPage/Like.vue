@@ -41,7 +41,9 @@ export default {
   methods: {
     getLikeBooks() {
       this.$API
-        .g_getLikes({})
+        .g_getLikes({
+          id: this.$store.state.userID,
+        })
         .then((data) => {
           for (let i = 0; i < data.length; i++) {
             let book = data[i]

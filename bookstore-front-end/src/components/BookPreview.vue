@@ -86,8 +86,7 @@ export default {
       })
     },
     addToCart(val) {
-      console.log(this.$store.state.userID === undefined)
-      if (this.$store.state.userId === undefined) {
+      if (this.$store.state.userID === undefined) {
         this.$router.push({
           path: '/user/login',
         })

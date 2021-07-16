@@ -11,7 +11,7 @@ import lombok.Data;
  **/
 @Data
 public class Shipping {
-    private String userId;
+    private Long userId;
 
     private String consigneeName;
 

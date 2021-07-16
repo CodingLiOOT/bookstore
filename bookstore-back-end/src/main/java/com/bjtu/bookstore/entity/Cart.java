@@ -9,7 +9,7 @@ public class Cart {
 
     private String cartId;
 
-    private String userId;
+    private Long userId;
 
     private ArrayList<Book> books;
 

@@ -737,7 +737,6 @@ export default {
           state: '',
           detailData: [],
         }
-        alert(d.date)
         order.orderId = d.orderId
         order.date = d.date
         order.num = d.num

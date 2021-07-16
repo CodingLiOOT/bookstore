@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
             for (int j = 0; j < byOrderId.size(); j++) {
                 HashMap<String, Object> datadetailItem = new HashMap<>();
                 Order_book order_book = byOrderId.get(j);
-                String bookId = order_book.getBookId();
+                Long bookId = order_book.getBookId();
                 ArrayList<Book> detail = bookMapper.getDetail(bookId);
                 Book book = detail.get(0);
                 num += order_book.getAmount();
