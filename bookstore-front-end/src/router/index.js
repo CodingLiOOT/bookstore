@@ -36,7 +36,7 @@ const router = new Router({
     {
       path: '/mainPage',
       name: 'mainPage',
-      component: MainPage,
+      component: () => import('../components/HtTest.vue'),
     },
     {
       path: '/AllBook',

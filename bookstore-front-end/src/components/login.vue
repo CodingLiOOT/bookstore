@@ -159,6 +159,10 @@ export default {
       this.vedioCanPlay = true
     },
     login() {
+      var dm = new ht.DataModel()
+      var gv = new ht.graph.GraphView(dm)
+      console.log(dm)
+      console.log(gv)
       if (this.type === '0') {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
